@@ -1,0 +1,48 @@
+@import url(/font/【EN】TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Bold.ttf);
+@import url(/font/【EN】TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Light.ttf);
+@import url(/font/【EN】TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Regular.ttf);
+@import url(/font/【EN】TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Thin.ttf);
+@import url(/font/arudjingxiheipe1xg30_hv.ttf);
+@import url(/font/arudjingxiheipe1xg30_md.ttf);
+
+@font-face {
+  font-family: 'BMWTypeNextLatinTT-Bold';
+  src: local(BMWTypeNext Latin TT Bold),
+    local(BMWTypeNextLatinTT-Bold),
+    url(font/EN_TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Bold.ttf);
+}
+
+@font-face {
+  font-family: 'BMWTypeNextLatinTT-Light';
+  src: local(BMWTypeNext Latin TT Light),
+    local(BMWTypeNextLatinTT-Light),
+    url(font/EN_TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Light.ttf);
+}
+
+@font-face {
+  font-family: 'BMWTypeNextLatinTT-Regular';
+  src: local(BMWTypeNext Latin TT Regular),
+    local(BMWTypeNextLatinTT-Regular),
+    url(font/EN_TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'BMWTypeNextLatinTT-Thin';
+  src: local(BMWTypeNext Latin TT Thin),
+    local(BMWTypeNextLatinTT-Thin),
+    url(font/EN_TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Thin.ttf);
+}
+
+@font-face {
+  font-family: 'arudjingxiheipe1xg30_md';
+  src: local(文鼎UD晶熙黑體 Regular),
+    local(arudjingxiheipe1xg30_md),
+    url(font/arudjingxiheipe1xg30_md.ttf);
+}
+
+@font-face {
+  font-family: 'arudjingxiheipe1xg30_hv';
+  src: local(文鼎UD晶熙黑體 Bold),
+    local(arudjingxiheipe1xg30_hv),
+    url(font/arudjingxiheipe1xg30_hv.ttf);
+}

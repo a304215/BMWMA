@@ -1,0 +1,538 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0" action="{!checkIsLogin}">
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- css -->
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main-mobile.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/font.css'}" />
+
+  <!-- lity lightbox -->
+  <link href="{! $Resource.linePageLity + '/lity/dist/lity.css'}" rel="stylesheet"/>
+  <script src="{! $Resource.linePageLity + '/lity/vendor/jquery.js'}"></script>
+  <script src="{! $Resource.linePageLity + '/lity/dist/lity.js'}"></script>
+
+  <!-- icon font -->
+  <link href="{! $Resource.linePageWebFont + '/webfont/css/all.css'}" rel="stylesheet"/>
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    
+  <style type="text/css">
+      @font-face {
+        font-family: titleFont;
+        src: url("{!URLFOR($Resource.linePageFont_EN + '/EN_TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Bold.ttf')}");
+        src: url("{!URLFOR($Resource.linePageFont_md + '/arudjingxiheipe1xg30_md.ttf')}");
+        font-size:5000px;
+        #content { font-family: titleFont; !important }
+      }
+    
+      @font-face {
+        font-family: subtitleFont;
+        src: url("{!URLFOR($Resource.linePageFont_EN + '/EN_TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Bold.ttf')}");
+        src: url("{!URLFOR($Resource.linePageFont_hv + '/arudjingxiheipe1xg30_hv.ttf')}");
+        font-size:5000px;
+        #content { font-family: subtitleFont; !important }
+      }
+    
+      @font-face {
+        font-family: infoFont;
+        src: url("{!URLFOR($Resource.linePageFont_EN + '/EN_TTF_OpenType-TT_Office-Web/BMWTypeNextLatinTT-Regular.ttf')}");
+        src: url("{!URLFOR($Resource.linePageFont_md + '/arudjingxiheipe1xg30_md.ttf')}");
+        font-size:5000px;
+        #content { font-family: infoFont; !important }
+      }
+    
+    body {
+font-family: infoFont;
+}
+      
+      .memberinfotop{
+          width: auto;
+          height: 55px;
+          font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          color: #8e8e8e;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: solid 1px #d6d6d6;
+          background-color: rgba(0, 0, 0, 0);
+      }
+    
+      .memberinfobtm{
+          width: 567px;
+          height: 55px;
+          font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          color: #8e8e8e;
+          margin: 0 ;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: solid 1px #d6d6d6;
+          background-color: rgba(0, 0, 0, 0);
+      }
+    
+      .editbtn{
+          width: 115px;
+          height: 40px;
+          background-color: #1c69d4;
+          color: #fff;
+          outline: none;
+          border: solid 2px #1c69d4;
+          font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          font-size: 15px;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.67;
+          letter-spacing: 1.5px;
+          text-align: center;
+          margin-right: 10px;
+          margin-top: 20px;
+          display: flex;
+          align-items: center;
+          padding-left: 12px;
+          justify-content: center;
+      }
+    
+      .editmemberinfotop{
+          font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          width: 80px;
+          height: 40px;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: solid 1px #d6d6d6;
+          color: #8e8e8e;
+          background-color: rgba(0, 0, 0, 0);
+      }
+    
+    .savebtn {
+        width: 250px;
+        height: 40px;
+        background-color: #1c69d4;
+        color: #fff;
+        outline: none;
+        border: solid 2px #1c69d4;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+            "Noto Sans TC";
+        font-size: 15px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 1.5px;
+        text-align: center;
+        margin-right: 10px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        //padding-left: 12px;
+        justify-content: center;
+    }
+    
+    .cancelbtn {
+        width: 250px;
+        height: 40px;
+        border: solid 2px #1c69d4;
+        outline: none;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+            "Noto Sans TC";
+        font-size: 15px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 1.5px;
+        text-align: center;
+        color: #1c69d4;
+        background-color: #fff;
+        margin-right: 10px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        //padding-left: 12px;
+        justify-content: center;
+    }
+    
+  </style>
+  <style type="text/css" media=" screen and (max-width:376px)">
+      .memberinfotop{
+          width: auto;
+          height: 55px;
+          font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          color: #8e8e8e;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: solid 1px #d6d6d6;
+          background-color: rgba(0, 0, 0, 0);
+      }
+    
+      .memberinfobtm{
+          width: 312px;
+          height: 55px;
+          font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          color: #8e8e8e;
+          margin: 0 ;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: solid 1px #d6d6d6;
+          background-color: rgba(0, 0, 0, 0);
+      }
+    
+      .editbtn{
+          width: 115px;
+          height: 40px;
+          background-color: #1c69d4;
+          color: #fff;
+          outline: none;
+          border: solid 2px #1c69d4;
+          font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          font-size: 15px;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.67;
+          letter-spacing: 1.5px;
+          text-align: center;
+          margin-right: 10px;
+          display: flex;
+          align-items: center;
+          padding-left: 12px;
+          justify-content: center;
+      }
+    
+      .editmemberinfotop{
+          font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          width: 80px;
+          height: 40px;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: solid 1px #d6d6d6;
+          color: #8e8e8e;
+          background-color: rgba(0, 0, 0, 0);
+      }
+    
+    .savebtn {
+        width: 250px;
+        height: 40px;
+        background-color: #1c69d4;
+        color: #fff;
+        outline: none;
+        border: solid 2px #1c69d4;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+            "Noto Sans TC";
+        font-size: 15px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 1.5px;
+        text-align: center;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        //padding-left: 12px;
+        justify-content: center;
+    }
+    
+    .cancelbtn {
+        width: 250px;
+        height: 40px;
+        border: solid 2px #1c69d4;
+        outline: none;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+            "Noto Sans TC";
+        font-size: 15px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 1.5px;
+        text-align: center;
+        color: #1c69d4;
+        background-color: #fff;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        //padding-left: 12px;
+        justify-content: center;
+    }
+    
+  </style>
+
+</head>
+
+<body>
+  <apex:form >
+  <!-- container-->
+  <div class="w_G-51-">
+    <!-- svg -->
+    <div class="member-header-pattern-copy">
+      <img src="{! $Resource.linePage + '/img/bmw-white-logo.svg'}" class="BMW_White_Logo" />
+      <p class="header-tittle" style="font-family: titleFont">會員資料</p>
+    </div>
+    <div class="Rectangle">
+      <div class="main">
+        <ul class="main-tittle" id="toptittle">
+          <li><a href="#member" style="font-family: subtitleFont">基本資料</a>
+          </li>
+          <li><a href="#lovecars">
+              <apex:commandLink action="{!gotoLineAsset}" value=" 愛車資料" style="font-family: subtitleFont; text-decoration:none"/></a>
+          </li>
+        </ul>
+        <!-- 愛車資料..新增車牌號碼..點新增才會打開-->
+        <ul class="main-go-back-tittle" style="display: none;">
+          <a href="w_G5.1.html">
+            <li><i class="fas fa-chevron-left" style="margin-right: 10px;"></i>返回</li>
+          </a>
+        </ul>
+
+        <!-- 基本資料-->
+        <apex:outputPanel layout="none" rendered="{!isEdit==false}" id="sectionX">
+        <div class="lovecars" id="member">
+          <div class="member">
+            <div class="member-information">
+              <div class="a1">
+                <label for="lastname" style="font-family: infoFont">姓氏</label>
+                    <span class = "memberinfotop" style="font-family: infoFont">
+                    <apex:outputField id="lastname" value="{!loginCustomer.LastName__c}" /></span></div>
+              <div class="a2">
+                <label for="firstname" style="font-family: infoFont">名字</label>
+                    <span class = "memberinfotop" style="font-family: infoFont">
+                    <apex:outputField id="firstname" value="{!loginCustomer.FirstName__c}" /></span></div>
+              <div class="a3">
+                <label for="male" style="font-family: infoFont">性別</label>
+                    <span class = "memberinfotop" style="font-family: infoFont">
+                    <apex:outputField value="{!loginCustomer.Gender__c}" /></span>
+              </div>
+            </div>
+            <div class="member-information-2">
+              <div class="a4">
+                <label for="birthday" style="font-family: infoFont">生日</label>
+                    <span class = "memberinfobtm" style="font-family: infoFont">
+                    <apex:outputField value="{!loginCustomer.Birthday__c}" /></span></div>
+              <div class="a5">
+                    <label for="email" ><p style="font-family: infoFont">E-mail</p></label>
+                    <span class = "memberinfobtm" style="font-family: infoFont">
+                    <apex:outputField value="{!loginCustomer.Email__c}" /></span></div>
+              <div class="a6">
+                <label for="add" style="font-family: infoFont">地址</label>
+                    <span class = "memberinfobtm" style="font-family: infoFont">
+                    <apex:outputField value="{!loginCustomer.Address__c}" /></span></div>
+            </div>
+          </div>
+          <!-- 按鈕要再改-->
+          <div class="buttons">
+                    <apex:commandLink styleclass="editbtn" id="member-edit" action="{!EditMe}" value="編輯" style="font-family: infoFont">
+                    <apex:image id="theImage" value="{! $Resource.linePage + '/img/edit.svg'}"/>
+                    </apex:commandLink>
+                    <!--
+                    <button class="edit" id="member-edit"><img src="{! $Resource.linePage + '/img/edit.svg'}" id="edit"/><img src="{! $Resource.linePage + '/img/edit.svg'}"
+                    id="edit-hover"/><a>編輯</a></button>
+                    -->
+          </div>
+        </div>
+        </apex:outputPanel>
+                    
+        <apex:outputPanel layout="none" rendered="{!and(isEdit, loginCustomer.Birthday__c !=null)}">
+        <div class="lovecars" id="member">
+          <div class="member">
+            <div class="member-information">
+              <div class="a1">
+                <label for="lastname" style="font-family: infoFont; color:black">姓氏</label>
+                    <div>
+                    <apex:inputText id="Editlastname" value="{!loginCustomer.LastName__c}" styleclass="editmemberinfotop" style="font-size: 15px; font-family: infoFont; color:black" /></div></div>
+              <div class="a2">
+                <label for="firstname" style="font-family: infoFont; color:black">名字</label>
+                    <div>
+                    <apex:inputText id="Editfirstname" value="{!loginCustomer.FirstName__c}" styleclass="editmemberinfotop" style="font-size: 15px; font-family: infoFont; color:black" /></div></div>
+              <div class="a3">
+                <label for="male" style="font-family: infoFont; color:black">性別</label>
+                    <div>
+                    <apex:selectList id="Gender" value="{!loginCustomer.Gender__c}" size="1" styleclass="editmemberinfotop" style="font-size: 15px; height: 50px; font-family: infoFont; color:black" >
+                        <apex:selectOptions value="{!GenderList}"/>
+                    </apex:selectList></div>
+              </div>
+            </div>
+            <div class="member-information-2">
+              <div class="a4">
+                <label for="birthday" style="font-family: infoFont">生日</label>
+                    <span class = "memberinfobtm">
+                    <apex:outputField value="{!loginCustomer.Birthday__c}" style="font-family: infoFont"/></span></div>
+              <div class="a5">
+                <label for="email" style="font-family: infoFont; color:black">E-mail</label>
+                    <apex:inputText value="{!loginCustomer.Email__c}" styleclass="memberinfobtm" style="font-size: 15px; font-family: infoFont; color:black" /></div>
+              <div class="a6">
+                <label for="add" style="font-family: infoFont; color:black">地址</label>
+                    <apex:inputText value="{!loginCustomer.Address__c}" styleclass="memberinfobtm" style="font-size: 15px; font-family: infoFont; color:black" /></div>
+            </div>
+          </div>
+          <div class="buttons">
+            <apex:commandlink styleclass="savebtn" value="儲存" action="{!SaveRegisterMember}" style="font-family: infoFont"/>
+            <apex:commandlink styleclass="cancelbtn" value="取消" action="{!gotoLineModify}" style="font-family: infoFont"/>
+          </div>
+        </div>
+        </apex:outputPanel>            
+               
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/> 
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+            <script type="text/javascript">
+                window.onload = function (e) {
+                    liff.init({liffId: '{!LIFFID}'}, function () {
+                         checkLiffLogin(liff.getContext().userId);
+                    });
+                };
+
+                function checkLiffLogin(mLineID)
+                 {
+                     document.getElementById('{!$Component.userLineID}').value = mLineID;
+                     Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.Line_webBase.checkLinkLine}',
+                        mLineID,
+                        function(result, event){
+                             if(event.status){
+                                 if(result === "NO_CustomerUser")
+                                   {
+                                       //document.getElementById('needLoginDiv').style.display = '';
+                                       //document.getElementById('myDiv').style.display = '';
+                                       alert('請先登入會員');
+                                       //window.location = 'lineLogin?loginStep=1';   
+                                   }
+                                   else if(result === "NOPwd")
+                                   {
+                                       alert('您尚未設定密碼, 請先設定密碼'); 
+                                       window.location = 'LinePassword'; 
+                                   }
+                                   else
+                                   {
+                                       var d = new Date();
+                                       d.setTime(d.getTime()+(1*24*60*60*1000));
+                                       var expires = "expires="+d.toGMTString();
+                                       //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+                                       //網頁關掉就清掉cookies
+                                       document.cookie = "apex__sessionID="+result+"; path=/";
+                                       var sid =setInterval(function(){ 
+                                           clearInterval(sid); 
+                                       window.location = 'LineModify'; 
+                                                             }, 350);
+                                       
+                                   }
+                            }
+                        },
+                            {escape: true}
+                        );
+                    }
+                              
+                   function closeLIFF()
+                   {
+                      liff.closeWindow();
+                   }
+            </script>
+        </apex:outputPanel>
+
+        <!--jq hide buttons, and add attr-->
+        <script>
+          $("#member-edit").click(function () {
+            $("#member-cancel, #member-save").show();
+            $("#member-edit").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', false);
+          });
+
+          $("#member-save, #member-cancel").click(function () {
+            $("#member-edit").show();
+            $("#member-save, #member-cancel").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', true);
+          });
+
+          $(document).ready(function () {
+            $("#car-1, #car-2, #car-3").click(function () {
+              $(".system-notice").fadeToggle('slow');
+            });
+            $("#toptittle, #add-car").click(function () {
+              $(".system-notice").hide();
+            });
+          });
+
+          $("#add-car").click(function () {
+            $(".main-go-back-tittle, #addcar-number").show();
+            $(".main-tittle, #member, #lovecars").hide();
+          });
+
+
+          $(".main-go-back-tittle").click(function () {
+            $(".main-tittle, #member, #lovecars").show();
+            $(".main-go-back-tittle, #addcar-number").hide();
+          });
+
+          $("#car-edit").click(function () {
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").show();
+            $("#car-edit").hide();
+          });
+          $("#carmove-cancel, #sandout").click(function () {
+            $("#car-edit").show();
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").hide();
+          });
+        </script>
+
+      </div>
+    </div>
+    <!--footer -->
+    <footer><a class="BMW-" style="font-family: infoFont">BMW台灣總代理 汎德</a>
+      <ul class="BMW">
+        <li><a href="#" style="font-family: infoFont">BMW官網</a></li>
+        <li><a href="#" style="font-family: infoFont">全台展示中心</a></li>
+        <li><a href="#" style="font-family: infoFont">預約賞車</a></li>
+        <li><a href="#" style="font-family: infoFont">網站聲明</a></li>
+      </ul>
+    </footer>
+    <script>
+      $(function () {
+        var $li = $('ul.main-tittle li');
+        $($li.eq(0).addClass('active').find('a').attr('href')).siblings('.lovecars').hide();
+
+        $li.click(function () {
+          $($(this).find('a').attr('href')).show().siblings('.lovecars').hide();
+          $(this).addClass('active').siblings('.active').removeClass('active');
+        });
+      });
+    </script>
+</div>
+</apex:form>
+</body>
+
+</html>
+</apex:page>

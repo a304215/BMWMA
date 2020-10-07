@@ -1,0 +1,300 @@
+<aura:component controller="HandoverProcessController" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    <aura:attribute name="Handovers" type="opportunity[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="AccountLabels" type="map"/>
+    <aura:attribute name="oppt" type="Opportunity" default="{ 'sobjectType': 'Opportunity' }"/>
+
+    <div class="slds-page-header headermargin" style="">    
+        <h1 class="slds-page-header__title slds-truncate slds-align-middle" 
+            title="選擇要進行交車手續的有望客戶">選擇要進行交車手續的有望客戶</h1>
+        <p class="slds-text-body_small slds-line-height_reset">
+            目前共有 n 個有望客戶可進行交車</p>
+    </div>
+
+    <div class="slds-panel slds-gutters slds-grid slds-wrap slds-grid_vertical-align-start headermargin">
+        <aura:iteration items="{!v.Handovers}" var="oppt">
+            <div class="slds-col slds-card slds-size_1-of-2 cardtopmargin">
+                <!-- header -->
+                <div class="slds-grid slds-einstein-header slds-card__header">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-grid slds-grid_vertical-align-center">
+                            <div class="slds-media__body">
+                                <h2 class="slds-truncate" title="Einstein (10+)">
+                                    <a href="javascript:void(0);" class="slds-card__header-link" title="Einstein (10+)">
+                                      <span class="slds-text-heading_small">車牌號碼 RAP-3928</span>
+                                    </a>
+                                </h2>
+                            </div>
+                      </div>
+                      <div class="slds-einstein-header__figure"></div>
+                    </header>
+                </div>
+                <!-- body -->
+                <div class="slds-card__body slds-card__body_inner">
+                    <p class="slds-truncate">{!oppt.Name}&nbsp;</p>
+                    車身號碼 5E9876
+                </div>
+                <!-- footer -->
+                <footer aura:id="aaa" class="slds-card__footer" onclick="{!c.chooseIt}">
+                    選擇
+                </footer>
+            </div>
+        </aura:iteration>
+    </div>
+    
+    <div class="slds-page-header headermargin" style="">
+        <h1 class="slds-page-header__title slds-truncate slds-align-middle" 
+            title="填寫用車人資訊">填寫用車人資訊</h1>
+		<p class="slds-text-body_small slds-line-height_reset">
+            汎德原廠的相關車主服務將依此資訊進行提供</p>
+    </div>
+
+    <div class="slds-panel slds-gutters slds-grid" style="padding:1rem;">
+        <div class="slds-col slds-size_1-of-1" style="">
+            <div class="slds-form slds-form_compound"> 
+                <fieldset class="slds-form-element">
+
+                        <!-- 使用車主性質 -->
+                        <div class="slds-form-element__row">
+                            <label class="slds-text-heading_small">使用車主性質</label>
+                        </div>
+                        <div class="slds-form-element__row">
+                            <div class="slds-radio_button-group">
+                                    <span class="slds-button slds-radio_button">
+                                        <input type="radio" name="radio" id="person" value="on" />
+                                        <label class="slds-radio_button__label" for="person">
+                                            <span class="slds-radio_faux">個人</span>
+                                        </label>
+                                    </span>
+                                    <span class="slds-button slds-radio_button">
+                                        <input type="radio" name="radio" id="company" value="on" />
+                                        <label class="slds-radio_button__label" for="company">
+                                            <span class="slds-radio_faux">公司</span>
+                                        </label>
+                                    </span>
+                                    <span class="slds-button slds-radio_button">
+                                        <input type="radio" name="radio" id="leasing" value="on" />
+                                        <label class="slds-radio_button__label" for="leasing">
+                                            <span class="slds-radio_faux">租賃公司</span>
+                                        </label>
+                                    </span>
+                                </div>
+                        </div>
+                        <!-- 公司統編 -->
+                        <div class="slds-form-element__row">
+                            <label class="slds-text-heading_small" for="input-id-01">公司統編</label>
+                        </div>
+                        <div class="slds-form-element__row">
+                            <input type="text" id="input-id-01" class="slds-input" placeholder="請填入公司統編..." />
+                        </div>
+
+                </fieldset>
+                <fieldset class="slds-form-element">
+                    <!-- 使用人性別 -->
+                    <div class="slds-form-element__row">
+	                    <label class="slds-text-heading_small">使用人性別</label>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element__control">
+                            <div class="slds-radio_button-group">
+                                <span class="slds-button slds-radio_button">
+                                    <input type="radio" name="radio" id="male" value="on" />
+                                    <label class="slds-radio_button__label" for="male">
+                                        <span class="slds-radio_faux">男性</span>
+                                    </label>
+                                </span>
+                                <span class="slds-button slds-radio_button">
+                                    <input type="radio" name="radio" id="female" value="on" />
+                                    <label class="slds-radio_button__label" for="female">
+                                        <span class="slds-radio_faux">女性</span>
+                                    </label>
+                                </span>
+                                <span class="slds-button slds-radio_button">
+                                    <input type="radio" name="radio" id="unknown" value="on" />
+                                    <label class="slds-radio_button__label" for="unknown">
+                                        <span class="slds-radio_faux">保留</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="slds-form-element">
+                    <!-- 車輛使用人名稱 -->
+                    <legend class="slds-text-heading_small">車輛使用人名稱</legend>
+                    <div class="slds-form-element__group">
+                        <div class="slds-form-element__row">
+                            <div class="slds-form-element">
+                                <label class="slds-text-title" for="input-id-01">{!v.AccountLabels.lastname}</label>
+                                <input type="text" id="input-id-01" class="slds-input" placeholder="請填寫您的姓氏..." />
+                            </div>
+                            <div class="slds-form-element">
+                                <label class="slds-text-title" for="input-id-02">{!v.AccountLabels.firstname}</label>
+                                <input type="text" id="input-id-02" class="slds-input" placeholder="請填寫您的名字..." />
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="slds-form-element">
+                    <!-- 備註 -->
+                    <div class="slds-form-element__row">
+	                    <label class="slds-text-heading_small" for="input-id-02">備註</label>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <textarea id="input-id-02" class="slds-textarea" placeholder="..."></textarea>
+                    </div>
+                </fieldset><br />
+
+            	<!-- 聯絡電話 行動, 住宅, 公司, 傳真 -->
+                <fieldset class="slds-form-element">
+                    <!-- 聯絡電話 -->
+                    <legend class="slds-text-heading_small">聯絡電話</legend>
+
+                    <label class="slds-text-title" for="input-id-01">行動</label>
+                    <div class="slds-form-element">
+                        <input type="text" id="input-id-01" class="slds-input" placeholder="請填寫您的行動電話..." />
+                    </div>
+                    <label class="slds-text-title" for="input-id-02">住宅</label>
+                    <div class="slds-form-element">
+                        <input type="text" id="input-id-02" class="slds-input" placeholder="請填寫您的住宅電話..." />
+                    </div>
+                    <label class="slds-text-title" for="input-id-01">公司</label>
+                    <div class="slds-form-element">
+                        <input type="text" id="input-id-01" class="slds-input" placeholder="請填寫您的公司電話..." />
+                    </div>
+                    <label class="slds-text-title" for="input-id-02">傳真</label>
+                    <div class="slds-form-element">
+                        <input type="text" id="input-id-02" class="slds-input" placeholder="請填寫您的傳真電話..." />
+                    </div>
+                </fieldset><br />
+            	<!-- 婚姻狀況, 出生日期, 有無子女 -->
+            	<fieldset class="slds-form-element">
+                    <div class="slds-form-element__row">
+                    	<label class="slds-text-heading_small" for="input-id-01">婚姻狀況</label>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <div class="slds-select_container">
+                            <select class="slds-select" id="select-01">
+                                <option value="">Please select</option>
+                                <option>Option One</option>
+                                <option>Option Two</option>
+                                <option>Option Three</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="slds-form-element__row">
+	                    <label class="slds-text-heading_small" for="input-id-01">出生日期</label>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <input type="text" id="input-id-02" class="slds-input" placeholder="出生日期..." />
+                    </div>
+                    <div class="slds-form-element__row">
+	                    <label class="slds-text-heading_small" for="input-id-01">有無子女</label>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <div class="slds-select_container">
+                            <select class="slds-select" id="select-01">
+                                <option value="">Please select</option>
+                                <option>Option One</option>
+                                <option>Option Two</option>
+                                <option>Option Three</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 電子郵件信箱 -->
+                    <div class="slds-form-element__row">
+	                    <label class="slds-text-heading_small" for="input-id-01">電子郵件信箱</label>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <input type="text" id="input-id-02" class="slds-input" placeholder="電子郵件信箱" />
+                    </div>
+                </fieldset><br />
+                <!-- 地址資訊 -->
+                <fieldset class="slds-form-element">
+                    <legend class="slds-text-heading_small">地址資訊</legend>
+                    
+                    <label class="slds-text-title" for="input-id-01">{!v.AccountLabels.homecity__c}</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <select class="slds-select" id="select-01">
+                                <option value="">Please select</option>
+                                <option>Option One</option>
+                                <option>Option Two</option>
+                                <option>Option Three</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label class="slds-text-title" for="input-id-01">{!v.AccountLabels.homedistrict__c}</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <select class="slds-select" id="select-01">
+                                <option value="">Please select</option>
+                                <option>Option One</option>
+                                <option>Option Two</option>
+                                <option>Option Three</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label class="slds-text-title" for="input-id-01">{!v.AccountLabels.homepostcode__c}</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <select class="slds-select" id="select-01">
+                                <option value="">Please select</option>
+                                <option>Option One</option>
+                                <option>Option Two</option>
+                                <option>Option Three</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label class="slds-text-title" for="input-id-01">{!v.AccountLabels.homestreet__c}</label>
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-id-01" class="slds-input" placeholder="Placeholder Text" />
+                    </div>
+                </fieldset>
+
+                <br/>
+                <lightning:button class="slds-button slds-button_stateful slds-not-selected slds-button_brand " 
+                                  label="送出" variant="neutral"/>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="slds-page-header headermargin" style="">
+        <h1 class="slds-page-header__title slds-truncate slds-align-middle" 
+            title="關係人資訊提供">關係人資訊提供</h1>
+		<p class="slds-text-body_small slds-line-height_reset">
+            關係人資訊可提供更完善的原廠服務</p>
+    </div>
+
+    <div class="slds-panel slds-gutters slds-grid" style="padding:1rem;">
+        <div class="slds-col slds-size_1-of-1" style="">
+            <div class="slds-form-element">
+
+                <label class="slds-form-heading_small" for="select-01">車輛使用人</label>
+                <force:inputField value="{!v.oppt.AccountId }" />
+                
+                <label class="slds-form-heading_small" for="select-01">領牌人</label>
+                <force:inputField value="{!v.oppt.unknown_custom_field }" />
+                
+                <label class="slds-form-heading_small" for="select-01">與車輛使用人關係</label>
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <select class="slds-select" id="select-01">
+                            <option value="">Please select</option>
+                            <option>Option One</option>
+                            <option>Option Two</option>
+                            <option>Option Three</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <lightning:button class="slds-button slds-button_stateful slds-not-selected slds-button_brand " 
+                              label="送出" variant="neutral"/>
+        </div>     
+    </div>    
+</aura:component>

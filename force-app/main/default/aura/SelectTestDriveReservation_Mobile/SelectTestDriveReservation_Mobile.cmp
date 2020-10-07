@@ -1,0 +1,145 @@
+<aura:component controller="SelectTestDriveReservationController">
+	<ltng:require scripts="{!join(',', $Resource.AnyEventCal + '/moment.min.js', $Resource.AnyEventCal + '/moment-timezone.min.js')}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.scriptsLoaded}"/>
+    <aura:registerEvent name="passMySurvey" type="c:PassSurvey" />
+    <aura:attribute name="reservationList" type="TestDriveReservation__c[]"/>
+    <aura:attribute name="selectedReservation" type="TestDriveReservation__c"/>
+    <aura:attribute name="selectedReservationOPPId" type="string"/>
+    <aura:attribute name="tempWorkLog" type="WorkLog__c" default="{'sobjectType': 'WorkLog__c'}"/>
+    <aura:attribute name="selectedSubjectValue" type="string"/>
+    <aura:attribute name="nextSubjectList" type="string[]"/>
+    <aura:attribute name="isSaved" type="boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+
+    <aura:if isTrue="{!v.errorMessage!=''}">
+        <ui:message aura:id="errorMessage" title="錯誤" severity="error">
+            <aura:unescapedHtml value="{!v.errorMessage}" />
+        </ui:message>
+	</aura:if>
+	
+    <span style="{!if(v.selectedReservation ==null, '', 'display:none;')}">
+        <div class="slds-has-dividers_around-space" style="boarder:1px; ">
+            <aura:iteration items="{!v.reservationList}" var="loopReser">
+                <div class="slds-item" style="padding: 5px; margin: 2px;">
+                    <dl class="slds-list_horizontal slds-wrap">
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="有望客戶">
+                            有望客戶:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="{!loopReser.Opportunity__r.Name}">
+                            {!loopReser.Opportunity__r.Name}
+                        </dd>
+                        
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="試駕車輛">
+                            試駕車輛:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="{!loopReser.TestCar__r.Name}">
+                            {!loopReser.TestCar__r.Name}
+                        </dd>
+                        
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="車型">
+                            車型:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="{!loopReser.CarType__c}">
+                            {!loopReser.CarType__c}
+                        </dd>
+                        
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="車輛用途">
+                            車輛用途:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="{!loopReser.CarUseType__c}">
+                            {!loopReser.CarUseType__c}
+                        </dd>
+                        
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="預約時間">
+                            預約時間:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="{!loopReser.StartTime__c}">
+                            <ui:outputDateTime format="yyyy-MM-dd HH:mm:ss" value="{!loopReser.StartTime__c}"/>
+                        </dd>
+                        
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="結束時間">
+                            結束時間:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="{!loopReser.EndTime__c}">
+                            <ui:outputDateTime format="yyyy-MM-dd HH:mm:ss" value="{!loopReser.EndTime__c}"/>
+                        </dd>
+                        
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="試駕狀況">
+                            試駕狀況:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="{!loopReser.TestDriveStatus__c}">
+                            {!loopReser.TestDriveStatus__c}
+                        </dd>
+                        
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="下一步">
+                            下一步:
+                        </dt>
+                        <dd class="slds-item_detail slds-truncate" title="下一步">
+                            <button class="slds-button slds-button_neutral" type="button" onclick="{!c.chooseReservation2}" id="{!loopReser.Id}" oid="{!loopReser.Opportunity__c}">下一步</button>
+                        </dd>
+                    </dl>
+                </div>
+            </aura:iteration>
+        </div>
+    </span>
+    <span style="{!if(v.selectedReservation !=null, '', 'display:none;')}">
+        <div class="slds-page-header">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity">
+                                <img src="/img/icon/t4v35/standard/opportunity_120.png" title="有望客戶" width="32"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1>
+                                {!v.selectedReservation.Opportunity__r.Name}
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-has-dividers_around-space" >
+                <div style="padding-top: 5px; margin: 2px;">
+                    <p >
+                        {!v.selectedReservation.TestCar__r.Name} <br/>
+                        {!v.selectedReservation.CarType__c} <br/>
+                        {!v.selectedReservation.CarUseType__c} <br/> 
+                        <ui:outputDateTime format="yyyy-MM-dd HH:mm:ss" value="{!v.selectedReservation.StartTime__c}"/> ~ <br/>
+                        <ui:outputDateTime format="yyyy-MM-dd HH:mm:ss" value="{!v.selectedReservation.EndTime__c}"/>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <span style="{!if(v.isSaved, 'display:none;', '')}"> 
+            <div style="padding: 8px 15px 0px 15px;">
+                還車日期
+                <br/>
+                <ui:outputDateTime value="{!v.selectedReservation.ReturnTime__c}" format="YYYY-MM-DD"/>
+                <br/>
+                <span class="required ">*</span>
+                客戶級別
+                <ui:inputSelect aura:id="customerRating" class="dynamic" />
+                <span class="required ">*</span>
+                洽談內容
+                <force:inputField aura:id="contactDescription" value="{!v.tempWorkLog.Description__c}"/>
+                
+                <span class="required ">*</span>
+                下次聯繫日期
+                <force:inputField aura:id="nextDate" value="{!v.tempWorkLog.ExpectedNextDueDate__c}" />
+                <span class="required ">*</span>
+                下次聯繫主題
+                <ui:inputSelect aura:id="nextSubject" class="dynamic"/>
+                不做檢核
+                <force:inputField aura:id="noCheck" value="{!v.tempWorkLog.NoCheck__c}"/>
+                不做檢核原因
+                <force:inputField aura:id="noCheckReason" value="{!v.tempWorkLog.ReasonOfNonCheck__c}"/>
+                <div>&nbsp;</div>
+                <button class="slds-button slds-button_neutral" type="button" onclick="{!c.save}">下一步</button>
+                <div>&nbsp;</div>
+            </div>
+        </span>
+    </span>
+</aura:component>

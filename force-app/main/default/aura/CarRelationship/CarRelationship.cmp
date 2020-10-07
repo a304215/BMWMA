@@ -1,0 +1,28 @@
+<aura:component controller="CarRelationshipController">
+    
+	<aura:handler event="c:PassMyOPP" action="{!c.getResult}"/>
+    <aura:registerEvent name="passMySurvey" type="c:PassSurvey" />
+    <aura:registerEvent name="passMyRelation" type="c:PassOPPforRelation"/>
+	
+    
+    <aura:attribute name="Opportunity" type="Opportunity" />
+    <aura:attribute name="ContactPersonRelation" type="Relationship__c" default="{ 'sobjectType': 'Relationship__c' }"/>
+    <aura:attribute name="LicensePersonRelation" type="Relationship__c" default="{ 'sobjectType': 'Relationship__c' }"/>
+    <aura:attribute name="isRead" type="boolean" default="false"/>
+    <aura:attribute name="isSame" type="boolean" default="false"/>
+    
+    <span style="{!if(v.isRead, '', 'display:none;')}">
+        <!--
+        <c:CarUserRelation MyPersonRelation="{!v.ContactPersonRelation}" /><br/>
+        -->
+        <h3>請輸入使用人與有望客戶的關係</h3><br/>
+        使用人：{!v.Opportunity.Driver__r.Name} <br/>
+        <aura:if isTrue="{!v.isSame}">
+            本人 <br/>
+            <aura:set attribute="else">
+                <c:CarUserRelation MyPersonRelation="{!v.LicensePersonRelation}" /><br/>
+			</aura:set>
+		</aura:if>
+        <button class="slds-button slds-button_neutral" type="button" onclick="{!c.save}">下一步</button>
+    </span>
+</aura:component>

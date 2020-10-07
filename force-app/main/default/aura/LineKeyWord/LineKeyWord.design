@@ -1,0 +1,5 @@
+<design:component >
+    <design:attribute name="GCPSettingName" label="GCP Setting Name" description="The GCP Account want to choose" />
+    <design:attribute name="GCPBucket" label="GCP Bucket" description="The GCP Bucket" />
+    <design:attribute name="GCPFolder" label="GCP Folder" description="The GCP Folder" />
+</design:component>

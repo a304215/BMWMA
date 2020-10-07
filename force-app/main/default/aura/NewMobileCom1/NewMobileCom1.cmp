@@ -1,0 +1,213 @@
+<aura:component controller="MobileTestDriveController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<!--init function which is call on component load -->
+    <ltng:require scripts="{!$Resource.AnyEventCal + '/moment.min.js'}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:PassTestDriveChangeDate" action="{!c.changeMyDate}"/>
+    <aura:handler name="change" value="{!v.myOPPId}" action="{!c.myOPPCHANGE}"/>
+    
+    <aura:attribute name="CurrentRoot0" type="String"/>
+    <aura:attribute name="CurrentRoot1" type="String"/>
+    <aura:attribute name="CurrentRoot2" type="String"/>
+   
+    <aura:attribute name="allMap" type="map" description="store controller(key)--> dependent(values) picklist value as a map." />
+    <aura:attribute name="allBranch" type="string[]" description="all branch" />
+    <aura:attribute name="allCar" type="TestCar__c[]" description="store controller(key)--> dependent(values) picklist value as a map." />
+    
+    <aura:attribute name="chooseDay" type="Date"/>
+    <aura:attribute name="chooseCar" type="string"/>
+    
+    <aura:attribute name="thisDayReservation" type="TestDriveReservation__c[]" description="store controller(key)--> dependent(values) picklist value as a map." />
+    
+    <aura:attribute name="TestDriveReservation" type="TestDriveReservation__c" default="{ 'sobjectType': 'TestDriveReservation__c' }"/>
+    <aura:attribute name="reservationLabels" type="Map"/>
+    <aura:attribute name="testCarLabels" type="Map"/>
+    <aura:attribute name="idVal" type="String"/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+    <aura:attribute name="isLocked" type="boolean" default="false"/>
+    <aura:attribute name="OpportunityID" type="String"/>
+    <aura:attribute name="isActing" type="boolean" default="false"/>
+    <aura:attribute name="isClosed" type="boolean" default="false"/>
+    <aura:attribute name="myOPPId" type="string"/>
+	
+    <div class="slds">
+        <div class="slds-card">
+            <div style="padding:25px;">
+                <aura:if isTrue="{!v.CurrentRoot0!=null}">
+                    <a href="javascript:void(0);" class="slds-text-link_reset" onclick="{!c.setDefault}">
+                        {!v.CurrentRoot0}
+                    </a>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.CurrentRoot1!=null}">
+                    >
+                    <a href="javascript:void(0);" class="slds-text-link_reset" onclick="{!c.chooseBranch}" name="{!v.CurrentRoot1}">
+                        {!v.CurrentRoot1}
+                    </a>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.CurrentRoot2!=null}">
+                    >
+                    <span>{!v.CurrentRoot2}</span>
+                </aura:if>
+                <aura:if isTrue="{!v.CurrentRoot1==null}">
+                    <ul>
+                        <aura:iteration items="{!v.allBranch}" var="loopBranch">
+                            <li style="padding: 5px;">
+                                <a href="javascript:void(0);" class="slds-text-link_reset" onclick="{!c.chooseBranch}" name="{!loopBranch}">
+                                    {!loopBranch}
+                                </a>
+                            </li>
+                        </aura:iteration>
+                    </ul>
+                </aura:if>
+                
+                <aura:if isTrue="{!and((v.CurrentRoot2==null),(v.CurrentRoot1 != null))}">
+                    <ul>
+                        <aura:iteration items="{!v.allCar}" var="loopCar">
+                            <li style="padding: 5px;">
+                                <a href="javascript:void(0);" class="slds-text-link_reset" onclick="{!c.chooseTestCar}" name="{!loopCar.Id}">
+                                    {!loopCar.CarGeneration__c}, {!loopCar.CarType__c}, {!loopCar.CarColor__c}, {!loopCar.Name}, {!loopCar.UseStatus__c} 
+                                </a>
+                            </li>
+                        </aura:iteration>
+                    </ul>
+                </aura:if>
+                <br/>
+                <span style="{!if(v.CurrentRoot2!=null, '', 'display:none;')}">
+                    <c:SimpleCalendar />
+                </span>
+            </div>
+        </div>
+    </div>
+    <span style="{!if(v.CurrentRoot2!=null, '', 'display:none;')}">
+    <div class="slds">
+        <div class="slds-card">
+            <div style="padding:25px;">
+                <div style="position: relative;width: 100%;;margin: 0 auto;">
+                    <div style="position: relative; z-index: 2;">
+                        <table id="myTable">
+                            <tr><td style="width:50px;">07:00</td><td data-value="07:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>07:30</td><td data-value="07:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>08:00</td><td data-value="08:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>08:30</td><td data-value="08:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>09:00</td><td data-value="09:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>09:30</td><td data-value="09:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>10:00</td><td data-value="10:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>10:30</td><td data-value="10:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>11:00</td><td data-value="11:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>11:30</td><td data-value="11:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>12:00</td><td data-value="12:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>12:30</td><td data-value="12:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>13:00</td><td data-value="13:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>13:30</td><td data-value="13:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>14:00</td><td data-value="14:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>14:30</td><td data-value="14:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>15:00</td><td data-value="15:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>15:30</td><td data-value="15:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>16:00</td><td data-value="16:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>16:30</td><td data-value="16:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>17:00</td><td data-value="17:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>17:30</td><td data-value="17:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>18:00</td><td data-value="18:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>18:30</td><td data-value="18:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>19:00</td><td data-value="19:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>19:30</td><td data-value="19:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>20:00</td><td data-value="20:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>20:30</td><td data-value="20:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>21:00</td><td data-value="21:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>21:30</td><td data-value="21:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>22:00</td><td data-value="22:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>22:30</td><td data-value="22:30" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>23:00</td><td data-value="23:00" onclick="{!c.showNewRES}"></td></tr>
+                            <tr><td>23:30</td><td data-value="23:30" onclick="{!c.showNewRES}"></td></tr>
+                        </table>
+                    </div>
+                    <div style="position: absolute;z-index: 3;top: 0;left: 0;right: 0;">
+                        <table id="myTable2">
+                            <tr>
+                                <td style="width:50px;"></td>
+                             	<!-- 產生在這個td 裡面。 -->
+                                <td>
+                                    <div class="fc-content-col">
+                                        <div class="fc-event-container fc-helper-container"></div>
+                                        <div class="fc-event-container">
+                                            <aura:iteration items="{!v.thisDayReservation}" var="loopRes">
+                                                <!--
+                                                <a style="background-color: lightblue;color:rgb(0, 57, 107);top:100px;bottom:-200px;z-index: 1;left: 0%;right: 0%;" class="fc-time-grid-event fc-v-event fc-event fc-start fc-end">
+                                                -->
+                                                <aura:if isTrue="{!or(loopRes.TestDriveStatus__c == '已預約', loopRes.TestDriveStatus__c == '使用中')}">
+                                                    <a style="{!loopRes.Title__c}" onclick="{!c.showEvent}" class="fc-time-grid-event fc-v-event fc-event fc-start fc-end" name="{!loopRes.Id}" data-value="{!loopRes.Id}">
+                                                        <div class="fc-content">
+                                                            <div class="fc-title">{!loopRes.OwnerName__c}</div>
+                                                        </div>
+                                                        <div class="fc-bg"></div>
+                                                    </a>
+                                                </aura:if>
+                                            </aura:iteration>
+                                        </div>
+                                        <div class="fc-highlight-container"></div>
+                                        <div class="fc-bgevent-container"></div>
+                                        <div class="fc-business-container"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div aura:id="modal" class="slds-modal">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <lightning:buttonIcon size="large" iconName="utility:close" variant="bare" onclick="{!c.closeModal}" alternativeText="Close window." class="slds-modal__close" />
+                        <h2 id="header43" class="slds-text-heading--medium">預約試駕&nbsp;</h2>
+                    </div>
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <div class="slds-form--stacked">
+                            <aura:if isTrue="{!v.errorMessage!=''}">
+                                <ui:message aura:id="errorMessage" title="錯誤" severity="error">
+                                    <aura:unescapedHtml value="{!v.errorMessage}" />
+                                </ui:message>
+                            </aura:if>
+                            
+                            <c:strike_lookup aura:id="myTestCar" label="{!v.reservationLabels.testcar__c+' '}" object="TestCar__c" searchField="Name" placeholder="{!'搜尋'+v.reservationLabels.testcar__c}"
+                                             iconName="custom:custom31" subtitleField="Brand__c" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true" disabled="{!v.isLocked}"/>
+                            
+                            <c:strike_lookup aura:id="myOPP" label="{!v.reservationLabels.opportunity__c+' '}" object="Opportunity" searchField="Name" placeholder="{!'搜尋'+v.reservationLabels.opportunity__c}"
+                                             iconName="standard:opportunity" subtitleField="SearchDisplay__c" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true" disabled="{!v.isLocked}"
+                                             value="{!v.myOPPId}"/>
+                            
+                            <ui:inputText aura:id="drivePerson" label="{!v.reservationLabels.testdriveperson__c+' '}" value="{!v.TestDriveReservation.TestDrivePerson__c}" disabled="{!v.isClosed}"/>
+                            {!v.reservationLabels.carusetype__c+' '}
+                            <span style="{!if(v.isClosed, '', 'display:none;')}">
+                                <ui:inputSelect label="" disabled="{!v.isClosed}">
+                                    <ui:inputSelectOption text="{!v.TestDriveReservation.CarUseType__c}" label="{!v.TestDriveReservation.CarUseType__c}" value="true"/>
+                                </ui:inputSelect>
+                            </span>
+                            <span style="{!if(v.isClosed, 'display:none;', '')}">
+                                <force:inputField aura:id="carType" value="{!v.TestDriveReservation.CarUseType__c}"/>
+                            </span>
+                            <ui:inputTextArea aura:id="description" label="{!v.reservationLabels.description__c+' '}" value="{!v.TestDriveReservation.Description__c}" rows="3" disabled="{!v.isClosed}"/>
+                            {!v.reservationLabels.starttime__c+' '}
+                            <ui:outputDate value="{!v.TestDriveReservation.StartTime__c}" format="YYYY-MM-DD"/>
+                            <ui:inputSelect label="" class="dynamic" aura:id="InputSelectDynamic1" disabled="{!v.isClosed}"/>
+                            
+                            {!v.reservationLabels.endtime__c+' '}
+                            <ui:outputDate value="{!v.TestDriveReservation.EndTime__c}" format="YYYY-MM-DD"/>
+                            <ui:inputSelect label="" class="dynamic" aura:id="InputSelectDynamic2" disabled="{!v.isClosed}"/>
+                        </div>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <span style="{!if(and(v.idVal !='', v.TestDriveReservation.TestDriveStatus__c =='已預約'), '', 'display:none;')}">
+                            <lightning:button value="{!v.idVal}" onclick="{!c.cancelRecord}" label="取消預約" variant="destructive" class="slds-float--left slds-float_left" disabled="{!or(v.isActing, v.isClosed)}"/>
+                        </span>
+                        <lightning:button onclick="{!c.closeModal}" label="關閉視窗" variant="neutral" disabled="{!v.isActing}"/>
+                        <lightning:button value="{!v.idVal}" onclick="{!c.createRecord}" label="儲存" variant="brand" disabled="{!or(v.isActing, v.isClosed)}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop" aura:id="backdrop"></div>
+        </div>
+    </div>
+    </span>
+</aura:component>

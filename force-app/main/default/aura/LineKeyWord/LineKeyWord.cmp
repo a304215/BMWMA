@@ -1,0 +1,132 @@
+<aura:component controller="LineKeyWordController" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" access="global">
+    <!-- Attribute -->
+    <aura:attribute name="GCPSettingName" type="String" default="google"/>
+    <aura:attribute name="GCPBucket" type="String" default="pgmline"/>
+    <aura:attribute name="GCPFolder" type="String" default="keyword"/>
+
+    <aura:attribute name="LineKeyWordID" type="String"/>
+    <aura:attribute name="TheKeyWord" type="LineKeyWord__c"/>
+    <aura:attribute name="TheMessageList2" type="LineKeyWordController.msgObject[]"/>
+    <aura:attribute name="TheUserID" type="String"/>
+    <aura:attribute name="lineAccountList" type="Line_Account__c[]" />
+    <aura:attribute name="messageCount" type="Integer" default="0"/>
+
+    <aura:attribute name="showPreview" type="String" />
+    <aura:attribute name="previewText1" type="string" />
+    <aura:attribute name="previewText2" type="string" />
+    <aura:attribute name="previewText3" type="string" />
+    <aura:attribute name="previewText4" type="string" />
+    <aura:attribute name="previewText5" type="string" />
+    <aura:attribute name="IMOJIlist" type="string[]" />
+    <aura:attribute name="StickerList11537" type="string[]" />
+    <aura:attribute name="StickerList11538" type="string[]" />
+    <aura:attribute name="StickerList11539" type="string[]" />
+    <aura:attribute name="isSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="errMSG" type="string" default=""/>
+
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="passEvent" event="c:PassEvent" action="{!c.removeMe}"/>
+    <!-- Content -->
+    
+    <div style="padding: 15px; width:59%; float:left;">
+    	<div class="{!v.isSpinner ? 'demo-only demo--inverse' : 'slds slds-hide'}" style="height:6rem">
+			<div role="status" class="slds-spinner slds-spinner_medium">
+				<span class="slds-assistive-text">Loading</span>
+				<div class="slds-spinner__dot-a"></div>
+				<div class="slds-spinner__dot-b"></div>
+			</div>
+		</div>
+        <div class="slds">
+            <span class="LargeFonts">請設定關鍵字</span><br/>
+            <ui:inputText class="slds-text" placeholder="請輸入關鍵字" value="{!v.TheKeyWord.Name}"></ui:inputText>
+            <br/>
+            <span class="LargeFonts">啟用</span><br/>
+            <ui:inputCheckbox class="slds-checkbox" value="{!v.TheKeyWord.Active__c}" ></ui:inputCheckbox>
+            <br/>
+            <span class="LargeFonts">Line Account</span><br/>
+            <ui:inputSelect class="single" aura:id="InputSelectSingle" change="{!c.onSingleSelectChange}">
+                <ui:inputSelectOption label="None" text=""/>
+                <aura:iteration items="{!v.lineAccountList}" var="loopRep">
+                    <ui:inputSelectOption label="{!loopRep.Name}" text="{!loopRep.Id}" value="{!v.TheKeyWord.Line_Account__c==loopRep.Id?'true':''}"/>
+                </aura:iteration>
+            </ui:inputSelect>
+            <ui:inputText class="slds-hide" aura:id="singleResult" value="{!v.TheKeyWord.Line_Account__c}" />
+            <br/>
+            <span class="LargeFonts">請設定關鍵字類型</span><br/>
+            <ui:inputSelect class="single" aura:id="InputSelectSingleType" change="{!c.onSingleSelectChangeType}">
+                <ui:inputSelectOption label="Message" text="Message" value="{!v.TheKeyWord.Type__c=='Message'?'true':''}"/>
+                <ui:inputSelectOption label="Default" text="Default" value="{!v.TheKeyWord.Type__c=='Default'?'true':''}"/>
+                <ui:inputSelectOption label="Welcome" text="Welcome" value="{!v.TheKeyWord.Type__c=='Welcome'?'true':''}"/>
+                <ui:inputSelectOption label="Postback" text="Postback" value="{!v.TheKeyWord.Type__c=='Postback'?'true':''}"/>
+                <ui:inputSelectOption label="No Message" text="No Message" value="{!v.TheKeyWord.Type__c=='No Message'?'true':''}"/>
+            </ui:inputSelect>
+            <br/>
+            <ui:inputText class="slds-hide" aura:id="singleResultType" value="{!v.TheKeyWord.Type__c}" />
+            <aura:if isTrue="{!v.TheKeyWord.Type__c=='No Message'}">
+                <br/>
+                <div style="padding-top: 15px;">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.saveAllMessage}">暫存</button>
+                </div>
+                <br/>
+            </aura:if>
+            <aura:if isTrue="{!v.TheKeyWord.Type__c=='Postback'}">
+                <br/>
+                <span class="LargeFonts">請設定Postback內容</span>
+                <ui:inputText class="slds-text" placeholder="請輸入Postback內容" value="{!v.TheKeyWord.PostbackData__c}"></ui:inputText>
+                <br/>
+                <div style="padding-top: 15px;">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.saveAllMessage}">暫存</button>
+                </div>
+                <br/>
+            </aura:if>
+            <aura:if isTrue="{!v.TheKeyWord.Type__c=='Message' || v.TheKeyWord.Type__c=='Default' || v.TheKeyWord.Type__c=='Welcome'}">
+                <br/>
+                <div style="padding-top: 15px;">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.addNewMessage}" disabled="{!v.messageCount>=5}">新增訊息</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.saveAllMessage}">暫存</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.previewMe}">預覽</button>
+                </div>
+                <br/>
+                <span class="LargeFonts">請設定訊息內容</span>
+                <br/>
+                <div>
+                    <aura:iteration items="{!v.TheMessageList2}" var="loopMessage">
+                        <c:LineMessage TheContent="{!loopMessage}" TheContentList="{!loopMessage.theContentList}" TheUserID="{!v.TheUserID}" IMOJIlist="{!v.IMOJIlist}"
+                        GCPSettingName="{!v.GCPSettingName}" GCPBucket="{!v.GCPBucket}" GCPFolder="{!v.GCPFolder}"
+                        StickerList11537="{!v.StickerList11537}" 
+                        StickerList11538="{!v.StickerList11538}" 
+                        StickerList11539="{!v.StickerList11539}"/>
+                    </aura:iteration>
+                    <div style="padding-top: 15px;">
+                        <button class="slds-button slds-button_neutral" onclick="{!c.addNewMessage}" disabled="{!v.messageCount>=5}">新增訊息</button>
+                        <button class="slds-button slds-button_neutral" onclick="{!c.saveAllMessage}">暫存</button>
+                        <button class="slds-button slds-button_neutral" onclick="{!c.previewMe}">預覽</button>
+                    </div>
+                </div>
+            </aura:if>
+        </div>
+    </div>
+
+    <div style="padding: 15px; width:39%; float:right;">
+        <div class="slds">
+            <span class="LargeFonts">預覽</span><br/>
+            <div class="slds-page-header slds-page-header_object-home cLineChatWindow" data-aura-rendered-by="1115:0" data-aura-class="cLineChatWindow">
+                <div class="slds-grid" data-aura-rendered-by="1137:0">
+                       <div id="message_div" class="slds-textarea form-control message-font">
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText1}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText2}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText3}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText4}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText5}">
+                        </lightning:formattedRichText>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

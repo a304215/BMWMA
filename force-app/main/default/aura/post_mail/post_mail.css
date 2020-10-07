@@ -1,0 +1,93 @@
+.THIS {
+    background-color: #f5fcff;
+}
+.THIS .font-20{
+    font-size: 20px;
+}
+.THIS .font-16{
+    font-size: 16px;
+}
+.THIS .errorMe{
+    border-left: 1px solid rgb(194, 57, 52); 
+    border-right: 1px solid rgb(194, 57, 52); 
+    border-bottom: 1px solid rgb(194, 57, 52); 
+    border-top: 1px solid rgb(194, 57, 52);
+}
+.THIS .label-hidden.label-hidden.label-hidden.label-hidden > label {
+    display: none;
+}
+.THIS input.uiInput--checkbox {
+    display: inline-block;
+}
+.THIS .lockContainer {
+    border-radius: 15px;
+    position: relative;
+    color: black;
+    background-color:#e9f5f4;
+}
+.THIS .lockContainer .logoImg {
+    position: absolute;
+    top: 26px;
+    left: 3%;
+    width: 28px;
+    height: 28px;
+  }
+  .THIS .lockContainer .pushTime {
+      position: absolute;
+      top: 26px;
+      right: 3%;
+  }
+  .THIS .lockContainer .titlePosition {
+      position: relative;
+      left: 10%;
+      font-size: 19px;
+      padding-top: 25px;
+      padding-bottom: 8px;
+  }
+  .THIS .lockContainer .textPosition {
+      position: relative;
+      left: 4%;
+      font-size: 19px;
+      width: 80%;
+      padding-bottom: 30px;
+  }
+  .THIS .lockContainer .pushImg {
+      position: absolute;
+      top: 65px;
+      right: 4%;
+      width: 46px;
+      height: 46px;
+  }
+  
+  .THIS .innerContainer {
+      position: relative;
+      color: black;
+      background-color:#eaeaea;
+  }
+  .THIS .innerContainer .titlePosition {
+      color: #acacac;
+      position: relative;
+      left: 10%;
+      font-size: 19px;
+  }
+  .THIS .innerContainer ul{
+      margin-left: 0%;
+  }
+  .THIS .innerContainer ul li{
+      color: red;
+      font-weight: bold;
+  }
+  .THIS .innerContainer ul li span{
+      font-weight: 300;
+      color: black;
+      vertical-align: top;
+  }
+  .THIS .innerContainer .textPosition{
+      color: black;
+      position: relative;
+      left: 6%;
+      font-size: 19px;
+      font-weight: 300;
+      width: 80%;
+      padding-bottom: 30px;
+  }

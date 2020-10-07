@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- css -->
+  <link rel="stylesheet" href="main_login.css" />
+  <link rel="stylesheet" href="main_login-mobile.css" />
+  <link rel="stylesheet" href="font.css">
+
+  <!-- lity lightbox -->
+  <link href="lity/dist/lity.css" rel="stylesheet">
+  <script src="lity/vendor/jquery.js"></script>
+  <script src="lity/dist/lity.js"></script>
+
+  <!-- icon font -->
+  <link href="webfont/css/all.css" rel="stylesheet">
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</head>
+
+<body>
+  <!-- container-->
+  <div class="container">
+    <div class="welcome">
+      <!-- svg -->
+      <img src="img/bmw-white-logo.svg" class="BMW_White_Logo" />
+      <p class="hello-tittle">
+        BMW會員登入 </p>
+      <p class="hello-tittle_m" style="display: none;">
+        BMW會員登入
+      </p>
+    </div>
+
+    <div class="right_login">
+      <div class="main">
+        <div class="main-tittle">
+          <div id="tittle-5">請輸入註冊時的手機號碼與密碼，就可開始體驗服務旅程</div>
+        </div>
+        <!-- step-1 -->
+        <div class="add-step" id="addinfo">
+          <div class="step1-input-1">
+            <label for"phonenumber">手機號碼</label>
+            <input type="text" id="phonenumber" name="phonenumber" placeholder="0911-111-111"><span
+              class="redwords">手機號碼錯誤，請重新輸入！</span></div>
+          <div class="step1-input-2">
+            <label for"password">密碼</label>
+            <input type="text" id="password" name="password" placeholder="請輸入密碼"><img src="img/show.svg"
+              id="memberlogin-passwordshow" style="display: none;"><img src="img/hide.svg"
+              id="memberlogin-passwordhide"></div>
+
+          <script>
+            $("#memberlogin-passwordhide").click(function () {
+              $("#memberlogin-passwordshow").show();
+              $("#memberlogin-passwordhide").hide();
+            });
+          </script>
+
+        </div>
+        <div class="already"><a href="#"
+            style="color:#1c69d4;border-bottom: solid 1px #1c69d4;text-decoration: none;">忘記密碼？</a>
+        </div>
+
+        <button id="checkok-1" type="submit" value="下一步，輸入驗證碼">登入</button>
+        <div class="already-yet">尚未註冊嗎？<a href="#"
+            style="color:#1c69d4;border-bottom: solid 1px #1c69d4;text-decoration: none;">註冊</a>
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <!--footer -->
+  <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+    <ul class="BMW">
+      <li><a href="#">BMW官網</a></li>
+      <li><a href="#">全台展示中心</a></li>
+      <li><a href="#">預約賞車</a></li>
+      <li><a href="#">網站聲明</a></li>
+    </ul>
+  </footer>
+
+
+</body>
+
+</html>

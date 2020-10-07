@@ -1,0 +1,19 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<aura:handler name="init" action="{!c.getMyRecordId}" value="{!this}" />
+    <aura:attribute name="OpportunityID" type="String"/>
+    <div class="slds">
+        <div class="slds-card">
+            <c:SelectOpportunity />
+        </div>
+    </div>
+    <div class="slds">
+        <div class="slds-card">
+            <c:SelectCarUser />
+            <div style="padding:0px 25px 25px 25px;">
+                <c:CarUserModified />
+                <c:SurveyComponent iframeUrl="https://pangerman.lightning.force.com/apex/takesurvey" surveyId="a077F000002jpJOQAY"/>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

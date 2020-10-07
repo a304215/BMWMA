@@ -1,0 +1,77 @@
+<aura:component controller="CarUserModifiedController">
+    
+    <aura:handler event="c:PassOpportunity" action="{!c.getResult}"/>
+    <aura:handler name="change" value="{!v.myAccountId}" action="{!c.myActionHandler}"/>
+    
+    <aura:registerEvent name="passMySurvey" type="c:PassSurvey" />
+    <aura:registerEvent name="passMyOpp" type="c:PassMyOPP" />
+    
+    <aura:attribute name="SelectedAccount" type="Account" default="{ 'sobjectType': 'Account' }"/>
+    <aura:attribute name="SelectedAccount1" type="Account" default="{ 'sobjectType': 'Account' }"/>
+    <aura:attribute name="SelectedAccount2" type="Account" default="{ 'sobjectType': 'Account' }"/>
+    
+    <aura:attribute name="isSaved" type="boolean" default="false"/>
+    <aura:attribute name="isChoosed" type="boolean" default="false"/>
+    <aura:attribute name="relatedOpportunity" type="string"/>
+    <aura:attribute name="selectedOpportunity" type="Opportunity" default="{ 'sobjectType': 'Opportunity' }"/>
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+    <aura:attribute name="isHomeCityNull" type="boolean" default="false"/>
+    <aura:attribute name="isHomeDistrictNull" type="boolean" default="false"/>
+    <aura:attribute name="isCompanyCityNull" type="boolean" default="false"/>
+    <aura:attribute name="isCompanyDistrictNull" type="boolean" default="false"/>
+    <aura:attribute name="myAccountId" type="string" />
+        
+    <aura:if isTrue="{!v.errorMessage!=''}">
+        <ui:message aura:id="errorMessage" title="錯誤" severity="error">
+            <aura:unescapedHtml value="{!v.errorMessage}" />
+        </ui:message>
+	</aura:if>
+
+    <span style="{!if(v.isSaved, 'display:none;', '')}">
+        <span style="{!if(v.isChoosed, '', 'display:none;')}">
+            <c:strike_lookup aura:id="myACC" label="使用人" object="Account" searchField="Name" placeholder="搜尋使用人"
+				iconName="standard:account" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+				value="{!v.myAccountId}"/>
+
+            <ui:inputText required="true" label="姓氏" aura:id="LastName" value="{!v.SelectedAccount.LastName}" />
+            <ui:inputText label="名字" aura:id="FirstName" value="{!v.SelectedAccount.FirstName}" />
+            <ui:inputText required="true" label="身份證字號/統一編號" aura:id="PersonalID" value="{!v.SelectedAccount.PersonalID__c}" />
+            <span class="required ">*</span>
+            性別
+            <force:inputField aura:id="Gender" value="{!v.SelectedAccount.Gender__pc}" />
+            <span class="required ">*</span>
+            生日
+            <force:inputField aura:id="PersonBirthdate" value="{!v.SelectedAccount.PersonBirthdate}" />
+            <span class="required ">*</span>
+            主要聯繫方式
+            <force:inputField aura:id="MainContact" value="{!v.SelectedAccount.ContactMethod__c}" />
+            <span class="required ">*</span>
+            主要聯繫電話
+            <force:inputField aura:id="MainPhone" value="{!v.SelectedAccount.MainContactNumber__c}" />
+            <ui:inputText label="行動電話" aura:id="PersonMobilePhone" value="{!v.SelectedAccount.PersonMobilePhone}" />
+            <ui:inputText label="公司電話" aura:id="CompanyPhone" value="{!v.SelectedAccount.CompanyPhone__c}" />
+            <ui:inputText label="住宅電話  " aura:id="Phone" value="{!v.SelectedAccount.Phone}" />
+            <ui:inputCheckbox label="無電子郵件  " aura:id="NoEmail" value="{!v.SelectedAccount.NoEmail__c}" />
+            <ui:inputText required="false" label="電子郵件" aura:id="PersonEmail" value="{!v.SelectedAccount.PersonEmail}" disabled="{!v.SelectedAccount.NoEmail__c}"/>
+            <span class="required ">*</span>
+            主要聯繫地址
+            <force:inputField aura:id="MainAddress" value="{!v.SelectedAccount.MainAddress__c}" />
+            <c:AccountHomeDependent SelectedAccount="{!v.SelectedAccount1}" isCityNull="{!v.isHomeCityNull}" isDistrictNull="{!v.isHomeDistrictNull}"/>
+            <ui:inputText label="住家街道" aura:id="HomeStreet" value="{!v.SelectedAccount.HomeStreet__c}" />
+            <c:AccountCompanyDependent SelectedAccount="{!v.SelectedAccount2}" isCityNull="{!v.isCompanyCityNull}" isDistrictNull="{!v.isCompanyDistrictNull}"/>
+            <ui:inputText label="公司街道" aura:id="CompanyStreet" value="{!v.SelectedAccount.CompanyStreet__c}" />
+            <span class="required ">*</span>
+            預計換車日
+            <force:inputField aura:id="ChageCarDate" value="{!v.selectedOpportunity.Estimateddateofnew__c}" />
+            <span class="required ">*</span>
+            交車日期
+            <force:inputField aura:id="DeliveryDate" value="{!v.selectedOpportunity.DeliveryDate__c}" />
+            <button class="slds-button slds-button_neutral" type="button" onclick="{!c.save}">下一步</button>
+        </span>
+    </span>
+    
+    <br/>
+    <c:CarRelationship />
+    
+</aura:component>

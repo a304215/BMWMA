@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Event template">
+    <aura:attribute name="PassOpportunity" type="String" />
+    <aura:attribute name="PassSObject" type="sObject" />
+</aura:event>

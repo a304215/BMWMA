@@ -1,0 +1,845 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-style: normal;
+  font-weight: 500;
+}
+
+p,
+a {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  text-decoration: none;
+}
+
+.w_G-51- {
+  width: 1440px;
+  height: auto;
+  margin: auto;
+  padding: 0;
+}
+
+.header-tittle {
+  width: 559px;
+  height: 52px;
+  font-size: 35px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.49;
+  letter-spacing: normal;
+  color: #262626;
+  margin: 0 auto 0 301px;
+}
+
+.BMW_White_Logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin: 0 0 0 60px;
+}
+
+.member-header-pattern-copy {
+  background: url(img/member-header-pattern-copy.svg) no-repeat center center;
+  width: 1440px;
+  height: 150px;
+  object-fit: contain;
+  background-position-x: 0px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.Rectangle {
+  width: 1440px;
+  height: auto;
+  margin: 0 auto;
+  padding-bottom: 50px;
+  background-color: #ffffff;
+}
+
+.main {
+  width: 1440px;
+  height: 703px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+/*------------------------------------------------------------------------選單*/
+
+ul.main-tittle {
+  width: 570px;
+  height: 74px;
+  margin: 6px auto 50px auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  color: #8e8e8e;
+}
+
+ul.main-tittle li {
+  width: 284px;
+  height: 74px;
+  border-bottom: solid 4px #d6d6d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ul.main-tittle li a {
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_hv",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.11;
+  letter-spacing: normal;
+  color: #8e8e8e;
+}
+
+ul.main-tittle li.active {
+  width: 284px;
+  height: 74px;
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_hv",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.11;
+  letter-spacing: normal;
+  color: #1c69d4;
+  border-bottom: solid 4px #1c69d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s;
+}
+
+ul.main-tittle li:hover {
+  width: 284px;
+  height: 74px;
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_hv",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.11;
+  letter-spacing: normal;
+  color: #1c69d4;
+  border-bottom: solid 4px #1c69d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+ul.main-tittle li.active a {
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_hv",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.11;
+  letter-spacing: normal;
+  color: #1c69d4;
+  transition: 0.5s;
+}
+
+ul.main-tittle li:hover a {
+  color: #1c69d4;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+/*------------------------------------------------------------------------基本資料區*/
+
+.member {
+  width: 570px;
+  height: 420px;
+}
+
+.member-information {
+  width: auto;
+  height: 80px;
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 18px;
+  color: #8e8e8e;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.member-information-2 {
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 18px;
+  color: #8e8e8e;
+  margin: 0 auto;
+}
+
+
+.a1,
+.a2,
+.a3 {
+  width: 176px;
+  height: 80px;
+  color: #8e8e8e;
+}
+
+.a4,
+.a5,
+.a6 {
+  color: #8e8e8e;
+  margin-top: 20px;
+  height: 80px;
+}
+
+.a1:focus-within,
+.a2:focus-within,
+.a3:focus-within,
+.a4:focus-within,
+.a5:focus-within,
+.a6:focus-within {
+  color: #262626;
+}
+
+#lastname,
+#firstname,
+#male {
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  width: 176px;
+  height: 40px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #d6d6d6;
+  color: #8e8e8e;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#birthday,
+#email,
+#address {
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  width: 570px;
+  height: 40px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #d6d6d6;
+  color: #8e8e8e;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#lastname:focus,
+#firstname:focus,
+#male:focus,
+#birthday:focus,
+#email:focus,
+#address:focus {
+  outline: none;
+}
+
+/*------------------------------------------------------------------------愛車資料區*/
+
+.member-lovecars {
+  width: 100%;
+  height: 420px;
+}
+
+.car-choice {
+  width: 570px;
+  height: 80px;
+  box-shadow: 0 1px 0 0 #d6d6d6;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.car-choice:hover {
+  cursor: pointer;
+}
+
+#chooce1,
+#chooce2,
+#chooce3 {
+  width: 36px;
+  height: 36px;
+  background-color: #1c69d4;
+}
+
+#chooce1:hover,
+#chooce2:hover,
+#chooce3:hover {
+  cursor: pointer;
+}
+
+.bmw-car {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.car-name {
+  width: 40px;
+  height: 26px;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.44;
+  letter-spacing: normal;
+  color: #262626;
+  margin-left: 38px;
+  margin-right: 10px;
+}
+
+.car-name-detail {
+  width: 100px;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.44;
+  letter-spacing: normal;
+  color: #262626;
+}
+
+.car-style {
+  width: 40px;
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.44;
+  letter-spacing: normal;
+  color: #262626;
+  margin-left: 30px;
+  margin-right: 10px;
+}
+
+.car-style-detail {
+  width: auto;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.44;
+  letter-spacing: normal;
+  color: #262626;
+}
+
+.add-car {
+  width: 570px;
+  height: 80px;
+  background-color: #f5f6f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  border: none;
+}
+
+.add-car:hover {
+  cursor: pointer;
+  outline: none;
+}
+
+.add-car a {
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 15px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: 1px;
+  text-align: center;
+  color: #1c69d4;
+  margin-left: 5px;
+}
+
+.addcar-image {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+
+/*------------------------------------------------------------------------下方按鈕區*/
+
+.buttons {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.edit,
+.delet {
+  width: 115px;
+  height: 40px;
+  background-color: #1c69d4;
+  color: #fff;
+  outline: none;
+  border: solid 2px #1c69d4;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 15px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  /**justify-content: center;**/
+}
+
+.edit img,
+.delet img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  margin-right: 0px;
+}
+
+#trashcan,
+#edit,
+#edit-2 {
+  display: none;
+}
+
+.edit:hover,
+.delet:hover {
+  background-color: #0653b6;
+  border: solid 2px #0653b6;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.delet:hover #trashcan,
+.edit:hover #edit,
+.edit:hover #edit-2 {
+  display: block;
+  transition: 0.5s;
+}
+
+.delet:hover #trashcan-hover,
+.edit:hover #edit-hover,
+.edit:hover #edit-hover-2 {
+  display: none;
+  transition: 0.5s;
+}
+
+.cancel {
+  width: 115px;
+  height: 40px;
+  border: solid 2px #1c69d4;
+  outline: none;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 15px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: 1.5px;
+  text-align: center;
+  color: #1c69d4;
+  background-color: #fff;
+}
+
+.cancel:hover {
+  border: solid 2px #0653b6;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.save {
+  width: 115px;
+  height: 40px;
+  background-color: #1c69d4;
+  color: #fff;
+  outline: none;
+  border: solid 2px #1c69d4;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 15px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  justify-content: center;
+}
+
+.save:hover {
+  background-color: #0653b6;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+/*------------------------------------------------------------------------新增車牌 or w_G4.1.html*/
+
+.main ul.main-go-back-tittle {
+  width: 570px;
+  font-size: 15px;
+  list-style: none;
+  text-align: left;
+  margin: 40px 0 50px 0;
+  padding: 0;
+}
+
+.main ul.main-go-back-tittle a {
+  color: #262626;
+}
+
+.main ul.main-go-back-tittle a:hover {
+  color: #1c69d4;
+  cursor: pointer;
+}
+
+.member-addcars {
+  width: 100%;
+  height: auto;
+}
+
+.a7 {
+  color: #262626;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+
+#updated-number {
+  font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  width: 570px;
+  height: 50px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #d6d6d6;
+  color: #262626;
+}
+
+#updated-number:focus-within {
+  outline: none;
+  color: #262626;
+}
+
+.updated {
+  width: 115px;
+  height: 40px;
+  background-color: #1c69d4;
+  color: #fff;
+  outline: none;
+  border: solid 2px #1c69d4;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 15px;
+  line-height: 1.67;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.updated:hover {
+  background-color: #0653b6;
+  border: solid 2px #0653b6;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+/*------------------------------------------------------------------------lity-inline-lightbox*/
+
+#inline .pressX {
+  color: #262626;
+  font-size: 20px;
+  display: block;
+  margin: 0 0 0 auto;
+}
+
+#inline .pressX:hover {
+  cursor: pointer;
+}
+
+#inline {
+  background: #fff;
+  width: 670px;
+  height: auto;
+  box-shadow: 0 10px 20px 0 rgba(5, 45, 84, 0.2);
+  border: solid 1px #d8dce0;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#inline p {
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+
+.checkboxinlity {
+  width: 557px;
+  display: flex;
+  align-items: center;
+}
+
+.whydelet {
+  width: auto;
+  margin-right: 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#whydelet-a,
+#whydelet-b,
+#whydelet-c {
+  width: 36px;
+  height: 36px;
+  margin-right: 10px;
+  background-color: #1c69d4;
+}
+
+#whydelet-a:hover,
+#whydelet-b:hover,
+#whydelet-c:hover {
+  cursor: pointer;
+}
+
+.whydelet-other {
+  margin-top: 30px;
+  color: #8e8e8e;
+}
+
+.whydelet-other:focus-within {
+  color: #262626;
+}
+
+.whydelet-other p {
+  margin-bottom: 20px !important;
+  font-size: 18px !important;
+}
+
+#whydelet-othertext {
+  width: 557px;
+  height: 95px;
+  border: solid 1px #8e8e8e;
+}
+
+#whydelet-othertext:focus {
+  width: 557px;
+  height: 95px;
+  border: solid 1px #262626;
+  outline: none;
+}
+
+.sandout {
+  width: 260px;
+  height: 50px;
+  border: solid 2px #1c69d4;
+  outline: none;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 18px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: 1.5px;
+  text-align: center;
+  color: #fff;
+  background-color: #1c69d4;
+  margin-top: 50px;
+}
+
+.sandout:hover {
+  background-color: #0653b6;
+  border: solid 2px #0653b6;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+/*------------------------------------------------------------------------前往預約服務*/
+
+.showoffflex {
+  display: flex;
+  width: 1440px;
+  height: auto;
+  margin-top: 30px;
+  position: absolute;
+  left: calc(50% - 720px);
+}
+
+.system-notice {
+  width: 530px;
+  height: auto;
+  background-color: #f2f1eb;
+  padding: 20px;
+  color: #262626;
+  font-size: 15px;
+  line-height: 1.67;
+  position: absolute;
+  left: calc(50% - 285px);
+}
+
+#go-to-book {
+  outline: none;
+  font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  color: #1c69d4;
+  letter-spacing: 1.5px;
+  font-size: 15px;
+  width: 260px;
+  height: 40px;
+  border: solid 2px #1c69d4;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 60px;
+  z-index: 0;
+}
+
+#go-to-book:hover {
+  border: solid 2px #0653b6;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+#go-to-book img {
+  width: 30px;
+  height: 30px;
+}
+
+#go-to-book #external-hover {
+  display: none;
+}
+
+#go-to-book:hover #external-hover {
+  display: block;
+  transition: 0.5s;
+}
+
+#go-to-book:hover #external {
+  display: none;
+  transition: 0.5s;
+}
+
+footer {
+  width: 1440px;
+  height: 66px;
+  margin: auto;
+  background-color: #384150;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.BMW- {
+  width: 159px;
+  height: 24px;
+  font-family: "BMWTypeNextLatinTT-Light", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  font-size: 16px;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  color: #d6d6d6;
+  margin-left: 60px;
+}
+
+.BMW {
+  font-family: "BMWTypeNextLatinTT-Light", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  list-style: none;
+  display: flex;
+  align-items: center;
+  float: right;
+  margin-right: 60px;
+}
+
+.BMW li {
+  border-right: solid 1px #d6d6d6;
+  text-align: center;
+}
+
+.BMW li a {
+  font-family: "BMWTypeNextLatinTT-Light", "arudjingxiheipe1xg30_md",
+    "Noto Sans TC";
+  color: #d6d6d6;
+  font-size: 16px;
+}
+
+.BMW li a:hover {
+  color: #ffffff;
+  transition: 0.5s;
+}
+
+.BMW li:nth-child(1) {
+  padding-right: 15px;
+}
+
+.BMW li:nth-child(2) {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.BMW li:nth-child(3) {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.BMW li:nth-child(4) {
+  padding-left: 15px;
+  border: none;
+  min-width: none;
+}
+
+.car_m {
+  display: none;
+}

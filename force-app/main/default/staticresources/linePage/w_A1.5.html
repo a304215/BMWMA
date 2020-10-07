@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- css -->
+  <link rel="stylesheet" href="main_login.css" />
+  <link rel="stylesheet" href="main_login-mobile.css" />
+  <link rel="stylesheet" href="font.css">
+
+  <!-- lity lightbox -->
+  <link href="lity/dist/lity.css" rel="stylesheet">
+  <script src="lity/vendor/jquery.js"></script>
+  <script src="lity/dist/lity.js"></script>
+
+  <!-- icon font -->
+  <link href="webfont/css/all.css" rel="stylesheet">
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="alert">
+    <img src="img/check.svg"><span>新增車輛成功！</span>
+  </div>
+
+  <!-- container-->
+  <div class="container">
+
+    <!-- 系統訊息 -->
+
+    <div class="welcome">
+      <!-- svg -->
+      <img src="img/bmw-white-logo.svg" class="BMW_White_Logo" />
+      <p class="hello-tittle">
+        你好！<br />
+        歡迎加入BMW會員
+      </p>
+      <p class="hello-tittle_m" style="display: none;">
+        你好！歡迎加入BMW會員
+      </p>
+    </div>
+
+    <div class="right_login">
+      <div class="main">
+        <div class="main-tittle">
+          <div id="tittle-1">註冊會員即可使用線上預約保養、活動報名等車主專屬禮遇</div>
+          <div id="tittle-2" style="display: none;">已發送驗證碼至以下號碼 <span>0912-•••-888</span></div>
+          <div id="tittle-3" style="display: none;"><span class="phoneok">手機驗證成功！</span><br>
+            <span>接下來，設定你的會員密碼，以後使用手機跟密碼就可以登入</span></div>
+          <div id="tittle-4" style="display: none;"><span class="passwordok">密碼設定成功！</span><br>
+            <span>最後一步了，填寫以下資料，未來就有機會獲得更多專屬好禮與驚喜喔！</span></div>
+        </div>
+        <ul class="step">
+          <li><img src="img/step-1-actived.svg" id="step1-active" />
+            <img src="img/step-1.svg" id="step1" style="display: none;"></li>
+          <div class="step-line"></div>
+          <li><img src="img/step-2-actived.svg" id="step2-active" style="display: none;" /><img src="img/step-2.svg" />
+          </li>
+          <div class="step-line"></div>
+          <li><img src="img/step-3-actived.svg" id="step3-active" style="display: none;" /><img src="img/step-3.svg" />
+          </li>
+          <div class="step-line"></div>
+          <li><img src="img/step-4-actived.svg" id="step4-active" style="display: none;" /><img src="img/step-4.svg" />
+          </li>
+        </ul>
+        <!-- step-1 -->
+        <div class="add-step" id="addinfo">
+          <div class="step1-input-1">
+            <label for"phonenumber">手機</label>
+            <input type="text" id="phonenumber" name="phonenumber" placeholder="請輸入手機號碼"><span
+              class="redwords">手機號碼錯誤，請重新輸入！</span></div>
+          <div class="step1-input-2">
+            <div class="add-information-2">
+              <div class="a1">
+                <label for"lastname">姓氏</label>
+                <input type="text" id="lastname" name="laster" placeholder=" "></div>
+              <div class="a2">
+                <label for"firstname">名字</label>
+                <input type="text" id="firstname" name="firstname" placeholder=" "> </div>
+              <div class="a3">
+                <label for"firstname">性別</label>
+                <select id="male" name="male">
+                  <option value=" male"></option>
+                  <option value=" male">男</option>
+                  <option value="femal">女</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="step1-input-3">
+            <label for"phonenumber">車牌號碼</label>
+            <input type="text" id="carnumber" name="carnumber" placeholder="請輸入車牌號碼"></div>
+          <div class="personal">
+            <input type="checkbox" value="1" name="chooce" id="chooce">
+            <div class="personal-2">我同意個資<a href="#"
+                style="border-bottom: solid 1px #262626;text-decoration: none;">蒐集告知</a></div>
+          </div>
+
+          <button id="checkok-1" type="submit" value="下一步，輸入驗證碼">下一步，輸入驗證碼</button>
+          <div class="already-1">已經是會員？<a href="#"
+              style="color:#1c69d4;border-bottom: solid 1px #1c69d4;text-decoration: none;">立即登入</a>
+          </div>
+        </div>
+
+        <!-- step-2 -->
+        <div class="add-step" id="addinfo-2" style="display: none;">
+          <div class="add-information-1-5">
+            <label for"checkcode">輸入6位數驗證碼</label>
+            <div class="checkcode">
+              <input type="text" name="phonenumber" placeholder="">
+              <input type="text" name="phonenumber" placeholder="">
+              <input type="text" name="phonenumber" placeholder="">
+              <input type="text" name="phonenumber" placeholder="">
+              <input type="text" name="phonenumber" placeholder="">
+              <input type="text" name="phonenumber" placeholder="">
+            </div>
+          </div>
+          <div class="systemcheck">
+            <span class="lastsecond" id="showtime">120秒</span><a class="resend" href="#"
+              style="text-decoration: none; display: none;">重新發送？</a>
+          </div>
+          <button id="checkok-2" type="submit" value="下一步，設定密碼">下一步，設定密碼</button>
+        </div>
+
+        <!-- step-3 -->
+        <div class="add-step" id="addinfo-3" style="display: none;">
+          <div class="add-information">
+            <div class="step3-input-1">
+              <label for"phonenumber2">手機號碼</label>
+              <input type="text" id="phonenumber2" name="phonenumber2" placeholder="0000-000-000" disabled>
+            </div>
+            <div class="step3-input-2">
+              <label for"password">密碼</label>
+              <input type="text" id="password" name="password" placeholder="輸入6-8位英數密碼"><img src="img/hide.svg"
+                id="passwordhide-1"><img src="img/show.svg" id="passwordshow-1" style="display: none;">
+            </div><span class="passwordmini">密碼需 6 - 8 碼，英數混合，不可包含特殊字元 ！@#$%& 等</span>
+            <div class="step3-input-3">
+              <label for"recheck-password">再次輸入密碼</label>
+              <input type="text" id="recheck-password" name="recheck-password" placeholder="再次輸入密碼"><img
+                src="img/hide.svg" id="passwordhide-2"><img src="img/show.svg" id="passwordshow-2"
+                style="display: none;">
+            </div>
+            <button id="checkok-3" type="submit" value="下一步，填寫基本資料">下一步，填寫基本資料</button>
+          </div>
+        </div>
+
+        <!-- step-4 -->
+        <div class="add-step" id="addinfo-4" style="display: none;">
+          <div class="add-information">
+            <div class="step4-input-1">
+              <label for"birthday">生日</label>
+              <input type="text" id="birthday" name="birthday" placeholder="輸入年月日，例如：19900101">
+            </div>
+            <div class="step4-input-2">
+              <label for"email">E-mail</label>
+              <input type="text" id="email" name="email" placeholder="輸入Email，例如：1234@abc.com">
+            </div>
+            <div class="step4-input-3">
+              <label for"address">地址</label>
+              <input type="text" id="address" name="address" placeholder="選填">
+            </div>
+            <button id="checkok-4" type="submit" value="完成送出" data-lity href="#inline">完成送出</button>
+          </div>
+        </div>
+
+        <!--lity hide box -->
+        <div id="inline" class="lity-hide">
+          <i class="fas fa-times pressX" data-lity-close></i>
+          <p>車牌號碼認證中</p>
+          <div class="lityinfo">您註冊的車牌號碼正在處理中，為提供給您更好的服務與個資保護，我們將會有服務專人與您聯繫確認相關事宜，感謝您的耐心等待！
+          </div>
+          <button id="waitfor" type="submit" value="完成送出" data-lity-close>等專人與我聯繫</button>
+          <a class="noneed" data-lity-close>暫時不用，下次再說</a>
+        </div>
+
+
+        <script>
+          $("#checkok-1").click(function () {
+            $("#tittle-2, #addinfo-2").show();
+            $("#tittle-1, #tittle-3, #tittle-4, #addinfo, #addinfo-3, #addinfo-4").hide();
+          });
+
+          $("#checkok-2").click(function () {
+            $("#tittle-3, #addinfo-3").show();
+            $("#tittle-1, #tittle-2, #tittle-4, #addinfo, #addinfo-2, #addinfo-4").hide();
+          });
+
+          $("#checkok-3").click(function () {
+            $("#tittle-4, #addinfo-4").show();
+            $("#tittle-1, #tittle-2, #tittle-3, #addinfo, #addinfo-2, #addinfo-3").hide();
+          });
+
+          $("#passwordhide-1").click(function () {
+            $("#passwordshow-1").show();
+            $("#passwordhide-1").hide();
+          });
+
+          $("#passwordhide-2").click(function () {
+            $("#passwordshow-2").show();
+            $("#passwordhide-2").hide();
+          });
+        </script>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!--footer -->
+  <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+    <ul class="BMW">
+      <li><a href="#">BMW官網</a></li>
+      <li><a href="#">全台展示中心</a></li>
+      <li><a href="#">預約賞車</a></li>
+      <li><a href="#">網站聲明</a></li>
+    </ul>
+  </footer>
+
+
+  <script>
+    $(function () {
+          var $li = $('ul.step li');
+          $($li.eq(0).addClass('active').siblings('.addstep').hide();
+
+            $li.click(function () {
+                $($(this).show().siblings('.addstep').hide(); $(this).addClass('active').siblings('.active')
+                  .removeClass('active');
+                });
+            });
+  </script>
+</body>
+
+</html>

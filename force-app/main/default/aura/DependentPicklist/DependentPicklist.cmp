@@ -1,0 +1,29 @@
+<aura:component controller="PicklistFieldController">
+    <!--init function which is call on component load -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+    <!--Using Attributes-->
+    <aura:attribute name="objInfo" type="string" default="Opportunity" description="store object Info." />
+    <aura:attribute name="depnedentFieldMap" type="map" description="store controller(key)--> dependent(values) picklist value as a map." />
+    <aura:attribute name="isDependentDisable" type="boolean" default="true" description="use for, make disbale depandent field." />
+    
+    <aura:registerEvent name="passMyCar" type="c:PassTestCar" />
+ 
+    <div style="padding:25px;">
+        <!--Controller Field-->
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="select-01">請選擇門市</label>
+            <div class="slds-select_container">
+                <ui:inputSelect aura:id="conCountry" class="slds-select" change="{!c.onControllerFieldChange}" />
+            </div>
+        </div>
+ 
+        <!--Dependent Field-->
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="select-01">請選擇試駕車</label>
+            <div class="slds-select_container">
+                <ui:inputSelect aura:id="conState" disabled="{!v.isDependentDisable}" class="slds-select" change="{!c.onDependentFieldChange}" />
+            </div>
+        </div>
+    </div>
+</aura:component>

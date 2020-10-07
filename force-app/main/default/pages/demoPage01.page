@@ -1,0 +1,82 @@
+<apex:page cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0">    
+    <html lang="zh-Hant-TW">
+    
+    <head>
+      <meta charset="utf-8" />
+      <title>BMW</title>
+      <meta name="description" content=" " />
+      <meta name="author" content=" " />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      <!-- css -->
+        <link rel="stylesheet" href="{! $Resource.linePage + '/main.css'}" />
+        <link rel="stylesheet" href="{! $Resource.linePage + '/font.css'}" />
+    
+      <!--google font
+            -->
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    </head>
+    
+    <body>
+      <!-- container-->
+      <div class="w_G-51-">
+        <!-- svg -->
+        <div class="member-header-pattern-copy">
+            <img src="{! $Resource.linePage + '/img/bmw-white-logo.svg'}" class="BMW_White_Logo" />
+          <p class="header-tittle">會員資料</p>
+        </div>
+        <div class="Rectangle">
+          <div class="main">
+            <div class="main-tittle">
+              <p>基本資料</p>
+              <p class="active">愛車資料</p>
+            </div>
+            <div class="car-choice">
+              <input type="checkbox" value="1" name="chooce" id="chooce1"/><br/>
+              <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <a class="car-name_m">車牌 AAA-1111 <br/> 車型 118i</a>
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">AAA-1111</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">118i</a>
+            </div>
+            <div class="car-choice">
+              <input type="checkbox" value="1" name="chooce" id="chooce2"/><br/>
+              <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <a class="car-name_m">車牌 AAA-1111 <br/> 車型 118i</a>
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">BBB-2222</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">118i</a>
+            </div>
+            <div class="car-choice">
+              <input type="checkbox" value="1" name="chooce" id="chooce3"/><br/>
+              <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <a class="car-name_m">車牌 AAA-1111 <br/> 車型 118i</a>
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">CCC-3333</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">i3s</a>
+            </div>
+    
+            <div class="add-car"><img src="{! $Resource.linePage + '/img/add.svg'}" class="addcar-image"/><a>新增車輛</a></div>
+            <div class="buttons">
+              <button class="delet"><img src="{! $Resource.linePage + '/img/trashcan.svg'}" id="trshcan"/><a>移除</a></button>
+              <button class="cancel">取消</button></div>
+    
+          </div>
+        </div>
+      </div>
+      <!--footer -->
+      <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+        <ul class="BMW">
+          <li>BMW官網</li>
+          <li>全台展示中心</li>
+          <li>預約賞車</li>
+          <li>網站聲明</li>
+        </ul>
+      </footer>
+    
+    </body>
+    
+    </html>
+</apex:page>

@@ -1,0 +1,90 @@
+<aura:component access="global" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller="SelectOpportunityController">
+    <aura:attribute name="OpportunityList" type="Opportunity[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.scriptsLoaded}"/>
+    <aura:registerEvent name="PassOpportunity" type="c:PassOpportunity" />
+    <aura:registerEvent name="PassAccount" type="c:PassAccount" />
+    <aura:attribute name="isSelected" type="boolean"/>
+    
+    <span style="{!if(v.isSelected , 'display:none;', '')}">
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+            <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col">
+                        <div class="slds-truncate" title="有望客戶名稱">有望客戶名稱</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="車身號碼">車身號碼</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="車牌號碼">車牌號碼</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="品牌">品牌</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="車型">車型</div>
+                    </th>
+                    <!--
+                    <th scope="col">
+                        <div class="slds-truncate" title="車系">車系</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="車色">車色</div>
+                    </th>
+					-->
+                    <th scope="col">
+                        <div class="slds-truncate" title="領牌人">領牌人</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="領牌日期">領牌日期</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="下一步">下一步</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.OpportunityList}" var="loopOpp">
+                    <tr>
+                        <th scope="row" data-label="有望客戶名稱">
+                            <div class="slds-truncate" title="{!loopOpp.Name}">{!loopOpp.Name}</div>
+                        </th>
+                        <td data-label="車身號碼">
+                            <div class="slds-truncate" title="{!loopOpp.SelectedCar__r.Name}">{!loopOpp.SelectedCar__r.Name}</div>
+                        </td>
+                        <td data-label="車牌號碼">
+                            <div class="slds-truncate" title="{!loopOpp.LicensePlate__c}">{!loopOpp.LicensePlate__c}</div>
+                        </td>
+                        <td data-label="品牌">
+                            <div class="slds-truncate" title="{!loopOpp.SelectedCar__r.Brand__c}">{!loopOpp.SelectedCar__r.Brand__c}</div>
+                        </td>
+                        <td data-label="車型">
+                            <div class="slds-truncate" title="{!loopOpp.CarType__c}">{!loopOpp.CarType__c}</div>
+                        </td>
+                        <!--
+                        <td data-label="車系">
+                            <div class="slds-truncate" title="{!loopOpp.CarGeneration__c}">{!loopOpp.CarGeneration__c}</div>
+                        </td>
+                        <td data-label="車色">
+                            <div class="slds-truncate" title="{!loopOpp.CarColor__c}">{!loopOpp.CarColor__c}</div>
+                        </td>
+						-->
+                        <td data-label="領牌人">
+                            <div class="slds-truncate" title="{!loopOpp.LicensingOfPeople__c}">{!loopOpp.LicensingOfPeople__c}</div>
+                        </td>
+                        <td data-label="領牌日期">
+                            <div class="slds-truncate" title="{!loopOpp.LicensingOfDate__c}">
+                                {!loopOpp.LicensingOfDate__c}
+                            </div>
+                        </td>
+                        <td data-label="下一步">
+                            <div class="slds-truncate" title="下一步">
+                                <button class="slds-button slds-button_neutral" type="button" onclick="{!c.chooseOpp}" id="{!loopOpp.Id}">下一步</button>
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </span>
+</aura:component>

@@ -1,0 +1,224 @@
+<aura:component controller="LineKeyWordController" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" access="global">
+    <!-- Attribute -->
+    <aura:attribute name="GCPSettingName" type="String"/>
+    <aura:attribute name="GCPBucket" type="String"/>
+    <aura:attribute name="GCPFolder" type="String"/>
+    
+    <aura:attribute name="TheContent" type="LineMessageContent__c"/>
+    <aura:attribute name="TheUserID" type="String"/>
+    <aura:attribute name="isSpinner" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="passEvent1" type="c:DeleteMessageContent"/>
+
+    <aura:if isTrue="{!v.TheContent.isDeleted__c==false}">
+        <div class="slds-col slds-size_1-of-2 slds-border_bottom" style="padding:5px;">
+            <div class="slds-card">
+                <div class="{!v.isSpinner ? 'demo-only demo--inverse' : 'slds slds-hide'}" style="height:6rem">
+                    <div role="status" class="slds-spinner slds-spinner_medium">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+                
+                <button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog" onclick="{!c.removeMe}">
+                    X
+                    <span class="slds-assistive-text">Remove</span>
+                </button>
+                
+                <div class="slds-p-around_medium">
+                    <div class="slds-border_top">
+                        {!v.TheContent.Index__c}:圖片:<br/>
+                        <div class="slds-file-selector slds-file-selector_files">
+                            <div class="slds-file-selector__dropzone"> 
+                                <lightning:fileUpload name="fileUploader1"
+                                                    accept=".png,.jpg"
+                                                    recordId="{!v.TheUserID}"
+                                                    onuploadfinished="{!c.handleUploadFinished}" 
+                                                    disabled="false" />
+                                <img class="ng-scope" src="{!v.TheContent.ImageURL__c}" width="240"></img>
+                            </div>
+                        </div>
+                        <br/>
+                        標題:<br/>
+                        <ui:inputTextArea rows="1" class="slds-textarea" placeholder="請輸入圖卡標題" value="{!v.TheContent.Title__c}" maxlength="255" ></ui:inputTextArea>
+
+                        文字:<br/>
+                        <ui:inputTextArea rows="2" class="slds-textarea" placeholder="請輸入圖卡文字" value="{!v.TheContent.Content__c}" maxlength="255" ></ui:inputTextArea>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-p-around_medium">
+                                    1類型：
+                                    <ui:inputSelect class="single" aura:id="InputSelectSingleActionA" change="{!c.onSingleSelectChangeActionA}">
+                                        <ui:inputSelectOption label="NONE" text="" />
+                                        <ui:inputSelectOption label="文字" text="文字"/>
+                                        <ui:inputSelectOption label="網址" text="網址"/>
+                                        <ui:inputSelectOption label="postback" text="postback"/>
+                                        <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                    </ui:inputSelect>
+                                    <br/>
+                                    1標籤：
+                                    <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕標籤" value="{!v.TheContent.ActionLabelA__c}" ></ui:inputText>
+                                    <br/>
+                                    1Data：
+                                    <aura:if isTrue="{!v.TheContent.ActionTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕文字/網址" value="{!v.TheContent.ActionDataA__c}" ></ui:inputText>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="TrackingA" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            allowNewRecords="true"
+                                            value="{!v.TheContent.TrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-p-around_medium">
+                                    2類型：
+                                    <ui:inputSelect class="single" aura:id="InputSelectSingleActionB" change="{!c.onSingleSelectChangeActionB}">
+                                        <ui:inputSelectOption label="NONE" text="" />
+                                        <ui:inputSelectOption label="文字" text="文字"/>
+                                        <ui:inputSelectOption label="網址" text="網址"/>
+                                        <ui:inputSelectOption label="postback" text="postback"/>
+                                        <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                    </ui:inputSelect>
+                                    <br/>
+                                    2標籤：
+                                    <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕標籤" value="{!v.TheContent.ActionLabelB__c}" ></ui:inputText>
+                                    <br/>
+                                    2Data：
+                                    <aura:if isTrue="{!v.TheContent.ActionTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕文字/網址" value="{!v.TheContent.ActionDataB__c}" ></ui:inputText>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="TrackingB" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            allowNewRecords="true"
+                                            value="{!v.TheContent.TrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-p-around_medium">
+                                    3類型：
+                                    <ui:inputSelect class="single" aura:id="InputSelectSingleActionC" change="{!c.onSingleSelectChangeActionC}">
+                                        <ui:inputSelectOption label="NONE" text="" />
+                                        <ui:inputSelectOption label="文字" text="文字"/>
+                                        <ui:inputSelectOption label="網址" text="網址"/>
+                                        <ui:inputSelectOption label="postback" text="postback"/>
+                                        <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                    </ui:inputSelect>
+                                    <br/>
+                                    3標籤：
+                                    <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕標籤" value="{!v.TheContent.ActionLabelC__c}" ></ui:inputText>
+                                    <br/>
+                                    3Data：
+                                    <aura:if isTrue="{!v.TheContent.ActionTypeC__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕文字/網址" value="{!v.TheContent.ActionDataC__c}" ></ui:inputText>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="TrackingC" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            allowNewRecords="true"
+                                            value="{!v.TheContent.TrackingTagC__c}"
+                                        />
+                                    </aura:if>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-p-around_medium">
+                                    4類型：
+                                    <ui:inputSelect class="single" aura:id="InputSelectSingleActionD" change="{!c.onSingleSelectChangeActionD}">
+                                        <ui:inputSelectOption label="NONE" text="" />
+                                        <ui:inputSelectOption label="文字" text="文字"/>
+                                        <ui:inputSelectOption label="網址" text="網址"/>
+                                        <ui:inputSelectOption label="postback" text="postback"/>
+                                        <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                    </ui:inputSelect>
+                                    <br/>
+                                    4標籤：
+                                    <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕標籤" value="{!v.TheContent.ActionLabelD__c}" ></ui:inputText>
+                                    <br/>
+                                    4Data：
+                                    <aura:if isTrue="{!v.TheContent.ActionTypeD__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕文字/網址" value="{!v.TheContent.ActionDataD__c}" ></ui:inputText>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="TrackingD" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            allowNewRecords="true"
+                                            value="{!v.TheContent.TrackingTagD__c}"
+                                        />
+                                    </aura:if>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-p-around_medium">
+                                    5類型：
+                                    <ui:inputSelect class="single" aura:id="InputSelectSingleActionE" change="{!c.onSingleSelectChangeActionE}">
+                                        <ui:inputSelectOption label="NONE" text="" />
+                                        <ui:inputSelectOption label="文字" text="文字"/>
+                                        <ui:inputSelectOption label="網址" text="網址"/>
+                                        <ui:inputSelectOption label="postback" text="postback"/>
+                                        <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                    </ui:inputSelect>
+                                    <br/>
+                                    5標籤：
+                                    <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕標籤" value="{!v.TheContent.ActionLabelE__c}" ></ui:inputText>
+                                    <br/>
+                                    5Data：
+                                    <aura:if isTrue="{!v.TheContent.ActionTypeE__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕文字/網址" value="{!v.TheContent.ActionDataE__c}" ></ui:inputText>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="TrackingE" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            allowNewRecords="true"
+                                            value="{!v.TheContent.TrackingTagE__c}"
+                                        />
+                                    </aura:if>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-p-around_medium">
+                                    6類型：
+                                    <ui:inputSelect class="single" aura:id="InputSelectSingleActionF" change="{!c.onSingleSelectChangeActionF}">
+                                        <ui:inputSelectOption label="NONE" text="" />
+                                        <ui:inputSelectOption label="文字" text="文字"/>
+                                        <ui:inputSelectOption label="網址" text="網址"/>
+                                        <ui:inputSelectOption label="postback" text="postback"/>
+                                        <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                    </ui:inputSelect>
+                                    <br/>
+                                    6標籤：
+                                    <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕標籤" value="{!v.TheContent.ActionLabelF__c}" ></ui:inputText>
+                                    <br/>
+                                    6Data：
+                                    <aura:if isTrue="{!v.TheContent.ActionTypeF__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            <ui:inputText class="slds-text" placeholder="請輸入圖卡按鈕文字/網址" value="{!v.TheContent.ActionDataF__c}" ></ui:inputText>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="TrackingF" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            allowNewRecords="true"
+                                            value="{!v.TheContent.TrackingTagF__c}"
+                                        />
+                                    </aura:if>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

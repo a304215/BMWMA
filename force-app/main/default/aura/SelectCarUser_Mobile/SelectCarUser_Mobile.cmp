@@ -1,0 +1,134 @@
+<aura:component access="global" controller="SelectCarUserController">
+    <ltng:require scripts="{!join(',', $Resource.AnyEventCal + '/moment.min.js', $Resource.AnyEventCal + '/moment-timezone.min.js', $Resource.AnyEventCal + '/jquery.min.js', $Resource.AnyEventCal + '/fullcalendar.min.js')}"/>
+    <ltng:require styles="{!$Resource.AnyEventCal + '/fullcalendar.min.css'}"/>
+    <aura:attribute name="Get_Result9" type="String" />
+	<aura:handler event="c:PassOpportunity" action="{!c.getResult}"/>
+    <aura:attribute name="SelectedOpp" type="Opportunity"/>
+    <aura:attribute name="CarUser" type="Account" default="{ 'sobjectType': 'Account' }"/>
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    
+    <span style="{!if(v.SelectedOpp !=null, '', 'display:none;')}">
+        <div class="slds-page-header">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity">
+                                <img src="/img/icon/t4v35/standard/opportunity_120.png" title="有望客戶" width="32"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1>
+                                {!v.SelectedOpp.Name}
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-has-dividers_around-space" >
+                <div style="padding-top: 5px; margin: 2px;">
+                    <p >
+                        {!v.SelectedOpp.SelectedCar__r.Name} <br/>
+                        {!v.SelectedOpp.LicensePlate__c} <br/>
+                        {!v.SelectedOpp.SelectedCar__r.Brand__c} <br/> 
+                        {!v.SelectedOpp.CarType__c} <br/> 
+                        {!v.SelectedOpp.CarGeneration__c} <br/> 
+                        {!v.SelectedOpp.CarColor__c} <br/> 
+                        {!v.SelectedOpp.LicensingOfPeople__c} <br/> 
+                        
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <!--
+        <div class="slds-page-header">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity">
+                                <img src="/img/icon/t4v35/standard/opportunity_120.png" title="有望客戶" width="32"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <nav>
+                                <ol class="slds-breadcrumb slds-line-height_reset">
+                                    <li class="slds-breadcrumb__item">
+                                        <span>有望客戶名稱</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                            <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate" title="{!v.SelectedOpp.Name}">
+                                {!v.SelectedOpp.Name}
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                </div>
+            </div>
+            <ul class="slds-grid slds-page-header__detail-row">
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="車身號碼">
+                        車身號碼
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.SelectedOpp.SelectedCar__r.Name}">
+                        {!v.SelectedOpp.SelectedCar__r.Name}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="車牌號碼">
+                        車牌號碼
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.SelectedOpp.LicensePlate__c}">
+                        {!v.SelectedOpp.LicensePlate__c}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="品牌">
+                        品牌
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.SelectedOpp.SelectedCar__r.Brand__c}">
+                        {!v.SelectedOpp.SelectedCar__r.Brand__c}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="車型">
+                        車型
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.SelectedOpp.CarType__c}">
+                        {!v.SelectedOpp.CarType__c}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="車系">
+                        車系
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.SelectedOpp.CarGeneration__c}">
+                        {!v.SelectedOpp.CarGeneration__c}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="車色">
+                        車色
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.SelectedOpp.CarColor__c}">
+                        {!v.SelectedOpp.CarColor__c}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="領牌人">
+                        領牌人
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.SelectedOpp.LicensingOfPeople__c}">
+                        {!v.SelectedOpp.LicensingOfPeople__c}
+                    </p>
+                </li>
+            </ul>
+        </div>
+		-->
+    </span>
+</aura:component>

@@ -1,0 +1,14 @@
+.THIS .cardtopmargin {
+    margin-top: 0rem;
+    margin-bottom: .1rem;
+}
+.THIS .headermargin {
+    padding:.2rem;
+    margin-top:.2rem;
+    margin-bottom:.2rem;
+}
+.THIS div.headermargin {
+    padding:.5rem;
+    margin-top:.75rem;
+    margin-bottom:.75rem;
+}

@@ -1,0 +1,36 @@
+<apex:page controller="QRcodeGenerator" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <title>BMW 活動報到系統</title> 
+    </head> 
+    
+    <style type="text/css">
+            body{
+            text-align: center;
+            }
+            html {
+            text-align: center;
+            }
+        </style>
+    
+    <body>
+        <apex:form >
+            <div>
+                以下為您的活動報到QR Code
+            </div>
+
+            <div style="margin-top:20px">
+                {!CampaignMember.LastName}<br/>
+            </div>
+                  
+            <div>
+                <img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&choe=UTF-8&chl={!CampaignMember.RegistrationURL__c}"/>
+            </div>
+          
+    </apex:form> 
+        
+  </body>   
+    
+</apex:page>

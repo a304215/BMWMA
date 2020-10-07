@@ -1,0 +1,210 @@
+<aura:component controller="SelectTestDriveReservationController">
+	<ltng:require scripts="{!join(',', $Resource.AnyEventCal + '/moment.min.js', $Resource.AnyEventCal + '/moment-timezone.min.js')}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.scriptsLoaded}"/>
+    <aura:registerEvent name="passMySurvey" type="c:PassSurvey" />
+    <aura:attribute name="reservationList" type="TestDriveReservation__c[]"/>
+    <aura:attribute name="selectedReservation" type="TestDriveReservation__c"/>
+    <aura:attribute name="selectedReservationOPPId" type="string"/>
+    <aura:attribute name="tempWorkLog" type="WorkLog__c" default="{'sobjectType': 'WorkLog__c'}"/>
+    <aura:attribute name="selectedSubjectValue" type="string"/>
+    <aura:attribute name="nextSubjectList" type="string[]"/>
+    <aura:attribute name="isSaved" type="boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+
+    <aura:if isTrue="{!v.errorMessage!=''}">
+        <ui:message aura:id="errorMessage" title="錯誤" severity="error">
+            <aura:unescapedHtml value="{!v.errorMessage}" />
+        </ui:message>
+	</aura:if>
+	
+    <span style="{!if(v.selectedReservation ==null, '', 'display:none;')}">
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+            <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col">
+                        <div class="slds-truncate" title="有望客戶名稱">有望客戶名稱</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="試駕車輛">試駕車輛</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="車型">車型</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="車輛用途">車輛用途</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="預約時間">預約時間</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="結束時間">結束時間</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="試駕狀況">試駕狀況</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="下一步">下一步</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.reservationList}" var="loopReser">
+                    <tr>
+                        <th scope="row" data-label="有望客戶名稱">
+                            <div class="slds-truncate" title="{!loopReser.Opportunity__r.Name}">{!loopReser.Opportunity__r.Name}</div>
+                        </th>
+                        <td data-label="試駕車輛">
+                            <div class="slds-truncate" title="{!loopReser.TestCar__r.Name}">{!loopReser.TestCar__r.Name}</div>
+                        </td>
+                        <td data-label="車型">
+                            <div class="slds-truncate" title="{!loopReser.CarType__c}">{!loopReser.CarType__c}</div>
+                        </td>
+                        <td data-label="車輛用途">
+                            <div class="slds-truncate" title="{!loopReser.CarUseType__c}">{!loopReser.CarUseType__c}</div>
+                        </td>
+                        <td data-label="預約時間">
+                            <div class="slds-truncate" title="{!loopReser.StartTime__c}">
+                                <ui:outputDateTime value="{!loopReser.StartTime__c}"/>
+                            </div>
+                        </td>
+                        <td data-label="結束時間">
+                            <div class="slds-truncate" title="{!loopReser.EndTime__c}">
+                                <ui:outputDateTime value="{!loopReser.EndTime__c}"/>
+                            </div>
+                        </td>
+                        <td data-label="試駕狀況">
+                            <div class="slds-truncate" title="{!loopReser.TestDriveStatus__c}">
+                                {!loopReser.TestDriveStatus__c}
+                            </div>
+                        </td>
+                        <td data-label="下一步">
+                            <div class="slds-truncate" title="下一步">
+                                <button class="slds-button slds-button_neutral" type="button" onclick="{!c.chooseReservation2}" id="{!loopReser.Id}" oid="{!loopReser.Opportunity__c}">下一步</button>
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </span>
+    <span style="{!if(v.selectedReservation !=null, '', 'display:none;')}">
+        <div class="slds-page-header">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity">
+                                <img src="/img/icon/t4v35/standard/opportunity_120.png" title="有望客戶" width="32"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <nav>
+                                <ol class="slds-breadcrumb slds-line-height_reset">
+                                    <li class="slds-breadcrumb__item">
+                                        <span>有望客戶名稱</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                            <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate" title="{!v.selectedReservation.Opportunity__r.Name}">
+                                {!v.selectedReservation.Opportunity__r.Name}
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                </div>
+            </div>
+            <ul class="slds-grid slds-page-header__detail-row">
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="試駕車輛">
+                        試駕車輛
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.Brand__c}">
+                        {!v.selectedReservation.TestCar__r.Name}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="車型">
+                        車型
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.CarType__c}">
+                        {!v.selectedReservation.CarType__c}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="車輛用途">
+                        車輛用途
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.CarGeneration__c}">
+                        {!v.selectedReservation.CarUseType__c}
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="預約時間">
+                        預約時間
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.CarColor__c}">
+                        <ui:outputDateTime value="{!v.selectedReservation.StartTime__c}"/>
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="結束時間">
+                        結束時間
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.UseStatus__c}">
+                        <ui:outputDateTime value="{!v.selectedReservation.EndTime__c}" />
+                    </p>
+                </li>
+                <li class="slds-page-header__detail-block">
+                    <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="試駕狀況">
+                        試駕狀況
+                    </p>
+                    <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.TestDriveStatus__c}">
+                        {!v.selectedReservation.TestDriveStatus__c}
+                    </p>
+                </li>
+            </ul>
+        </div>
+        
+        <span style="{!if(v.isSaved, 'display:none;', '')}">
+            <div style="padding-left: 15px; padding-right: 15px;">
+                還車日期
+                <br/>
+                <ui:outputDateTime value="{!v.selectedReservation.ReturnTime__c}" format="YYYY-MM-DD"/>
+                <br/>
+                
+                <span class="required ">*</span>
+                客戶級別
+                <ui:inputSelect aura:id="customerRating" value="{!v.tempWorkLog.CustomerRating__c}">
+                    <option value="A" text="A"></option>
+                    <option value="B" text="B"></option>
+                    <option value="C" text="C"></option>
+                    <option value="E" text="E"></option>
+                    <option value="F" text="F"></option>
+                </ui:inputSelect>
+                <span class="required ">*</span>
+                洽談內容
+                <force:inputField aura:id="contactDescription" value="{!v.tempWorkLog.Description__c}"/>
+                
+                <span class="required ">*</span>
+                下次聯繫日期
+                <force:inputField aura:id="nextDate" value="{!v.tempWorkLog.ExpectedNextDueDate__c}" />
+                <span class="required ">*</span>
+                下次聯繫主題
+                <ui:inputSelect aura:id="nextSubject" value="{!v.selectedSubjectValue}">
+                    <option value="">--無--</option>
+                    <aura:iteration items="{!v.nextSubjectList}" var="mySubject">
+                        <option value="{!mySubject}" text="{!mySubject}"></option>
+                    </aura:iteration>
+                </ui:inputSelect>
+                不做檢核
+                <force:inputField aura:id="noCheck" value="{!v.tempWorkLog.NoCheck__c}"/>
+                不做檢核原因
+                <force:inputField aura:id="noCheckReason" value="{!v.tempWorkLog.ReasonOfNonCheck__c}"/>
+                <div>&nbsp;</div>
+                <button class="slds-button slds-button_neutral" type="button" onclick="{!c.save}">下一步</button>
+                <div>&nbsp;</div>
+            </div>
+        </span>
+    </span>
+</aura:component>

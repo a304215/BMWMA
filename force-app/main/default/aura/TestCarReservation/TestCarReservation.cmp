@@ -1,0 +1,177 @@
+<aura:component controller="TestCarReservationController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <ltng:require scripts="{!join(',', $Resource.AnyEventCal + '/moment.min.js', $Resource.AnyEventCal + '/moment-timezone.min.js', $Resource.AnyEventCal + '/jquery.min.js', $Resource.AnyEventCal + '/fullcalendar.min.js')}" afterScriptsLoaded="{!c.gotoCalendar}"/>
+    <ltng:require styles="{!$Resource.AnyEventCal + '/fullcalendar.min.css'}"/>
+	<aura:attribute name="Get_Result9" type="String" />
+    <aura:handler event="c:PassTestCar" action="{!c.getResult}"/>
+    <aura:handler name="change" value="{!v.myOPPId}" action="{!c.myOPPCHANGE}"/>
+    
+    <aura:attribute name="relatedList" type="TestDriveReservation__c[]"/>
+    <aura:attribute name="relatedList2" type="Map"/>
+    <aura:attribute name="TestDriveReservation" type="TestDriveReservation__c" default="{ 'sobjectType': 'TestDriveReservation__c' }"/>
+    <aura:attribute name="reservationLabels" type="Map"/>
+    <aura:attribute name="testCarLabels" type="Map"/>
+    <aura:attribute name="idVal" type="String"/>
+    <aura:attribute name="OpportunityID" type="String"/>
+    <aura:attribute name="theTestCar" type="TestCar__c" default="{ 'sobjectType': 'TestCar__c' }"/>
+    <aura:attribute name="isLocked" type="boolean" default="false"/>
+    <aura:attribute name="isActing" type="boolean" default="false"/>
+    <aura:attribute name="isClosed" type="boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+    <aura:attribute name="myOPPId" type="string"/>
+
+    <div class="slds-page-header">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate">
+                <div class="slds-media slds-no-space slds-grow">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <img src="/img/icon/t4v35/custom/custom31_120.png" title="試駕車輛" width="32"/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <nav>
+                            <ol class="slds-breadcrumb slds-line-height_reset">
+                                <li class="slds-breadcrumb__item">
+                                    <span>{!v.testCarLabels.name+' '}</span>
+                                </li>
+                            </ol>
+                        </nav>
+                        <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate" title="{!v.theTestCar.Name}">
+                            {!v.theTestCar.Name}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-no-flex slds-grid slds-align-top">
+            </div>
+        </div>
+        <ul class="slds-grid slds-page-header__detail-row">
+            <li class="slds-page-header__detail-block">
+                <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="{!v.testCarLabels.brand__c+' '}">
+                    {!v.testCarLabels.brand__c+' '}
+                </p>
+                <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.Brand__c}">
+                     {!v.theTestCar.Brand__c}
+                </p>
+            </li>
+            <li class="slds-page-header__detail-block">
+                <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="{!v.testCarLabels.cartype__c+' '}">
+                    {!v.testCarLabels.cartype__c+' '}
+                </p>
+                <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.CarType__c}">
+                     {!v.theTestCar.CarType__c}
+                </p>
+            </li>
+            <li class="slds-page-header__detail-block">
+                <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="{!v.testCarLabels.cargeneration__c+' '}">
+                    {!v.testCarLabels.cargeneration__c+' '}
+                </p>
+                <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.CarGeneration__c}">
+                     {!v.theTestCar.CarGeneration__c}
+                </p>
+            </li>
+            <li class="slds-page-header__detail-block">
+                <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="{!v.testCarLabels.carcolor__c+' '}">
+                    {!v.testCarLabels.carcolor__c+' '}
+                </p>
+                <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.CarColor__c}">
+                     {!v.theTestCar.CarColor__c}
+                </p>
+            </li>
+            <li class="slds-page-header__detail-block">
+                <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="{!v.testCarLabels.usestatus__c+' '}">
+                    {!v.testCarLabels.usestatus__c+' '}
+                </p>
+                <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.UseStatus__c}">
+                     {!v.theTestCar.UseStatus__c}
+                </p>
+            </li>
+            <li class="slds-page-header__detail-block">
+                <p class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="{!v.testCarLabels.mileage__c+' '}">
+                   {!v.testCarLabels.mileage__c+' '}
+                </p>
+                <p class="slds-text-body_regular slds-truncate" title="{!v.theTestCar.Mileage__c}">
+                     {!v.theTestCar.Mileage__c}
+                </p>
+            </li>
+        </ul>
+    </div>
+    
+	
+    <div id="calendar" class="anyCalendar slds-scrollable">&nbsp;</div>
+    <div aura:id="modal" class="slds-modal">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                    <lightning:buttonIcon size="large" iconName="utility:close" variant="bare" onclick="{!c.closeModal}" alternativeText="Close window." class="slds-modal__close" />
+                <h2 id="header43" class="slds-text-heading--medium">預約試駕&nbsp;</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <div class="slds-form--stacked">
+                    <aura:if isTrue="{!v.errorMessage!=''}">
+                        <ui:message aura:id="errorMessage" title="錯誤" severity="error">
+                            <aura:unescapedHtml value="{!v.errorMessage}" />
+                        </ui:message>
+                    </aura:if>
+                    
+                    <c:strike_lookup aura:id="myTestCar" label="{!v.reservationLabels.testcar__c+' '}" object="TestCar__c" searchField="Name" placeholder="{!'搜尋'+v.reservationLabels.testcar__c}"
+                                     iconName="custom:custom31" subtitleField="Brand__c" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true" disabled="{!or(v.isLocked, v.isClosed)}"/>
+                    
+                    <c:strike_lookup aura:id="myOPP" label="{!v.reservationLabels.opportunity__c+' '}" object="Opportunity" searchField="Name" placeholder="{!'搜尋'+v.reservationLabels.opportunity__c}"
+                                     iconName="standard:opportunity" subtitleField="SearchDisplay__c" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true" disabled="{!or(v.isLocked, v.isClosed)}"
+                                     value="{!v.myOPPId}"/>
+                    
+                    <ui:inputText aura:id="drivePerson" label="{!v.reservationLabels.testdriveperson__c+' '}" value="{!v.TestDriveReservation.TestDrivePerson__c}" disabled="{!v.isClosed}"/>
+                    {!v.reservationLabels.carusetype__c+' '}
+                    <span style="{!if(v.isClosed, '', 'display:none;')}">
+                    	<ui:inputSelect label="" disabled="{!v.isClosed}">
+                            <ui:inputSelectOption text="{!v.TestDriveReservation.CarUseType__c}" label="{!v.TestDriveReservation.CarUseType__c}" value="true"/>
+                        </ui:inputSelect>
+                    </span>
+                    <span style="{!if( v.isClosed, 'display:none;', '')}">
+                    	<force:inputField aura:id="carType" value="{!v.TestDriveReservation.CarUseType__c}"/>
+                    </span>
+                    <ui:inputTextArea aura:id="description" label="{!v.reservationLabels.description__c+' '}" value="{!v.TestDriveReservation.Description__c}" rows="3" disabled="{!v.isClosed}"/>
+                    {!v.reservationLabels.starttime__c+' '}
+                    <div style="clear:both;"></div>
+                    <div style="float:left; width:45%;">
+                        <ui:inputDate value="{!v.TestDriveReservation.StartTime__c}" displayDatePicker="true" required="true" disabled="{!or(v.isLocked, v.isClosed)}"/>
+                    </div>
+                    <div style="float:left; width:5%;">
+                        &nbsp;
+                    </div>
+                    <div style="float:left; width:45%;">
+                        <ui:inputSelect label="" aura:id="InputSelectDynamic1" disabled="{!v.isClosed}"/>
+                    </div>
+                    <div style="clear:both;"></div>
+                    {!v.reservationLabels.endtime__c+' '}
+                    <div style="clear:both;"></div>
+                    <div style="float:left; width:45%;">
+                        <ui:inputDate value="{!v.TestDriveReservation.EndTime__c}" displayDatePicker="true" required="true" disabled="{!or(v.isLocked, v.isClosed)}"/>
+                    </div>
+                    <div style="float:left; width:5%;">
+                        &nbsp;
+                    </div>
+                    <div style="float:left; width:45%;">
+                        <ui:inputSelect label="" aura:id="InputSelectDynamic2" disabled="{!v.isClosed}"/>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <span style="{!if(and(v.idVal !='', v.TestDriveReservation.TestDriveStatus__c =='已預約') , '', 'display:none;')}">
+                	<lightning:button value="{!v.idVal}" onclick="{!c.cancelRecord}" label="取消預約" variant="destructive" class="slds-float--left slds-float_left" disabled="{!or(v.isActing, v.isClosed)}"/>
+                </span>
+                
+                <!-- 由其他地方填寫問卷。
+                <span style="{!if(v.TestDriveReservation.TestDriveStatus__c =='已還車', '', 'display:none;')}">
+                	<lightning:button onclick="{!c.openActionWindow}" label="填寫問卷" variant="neutral"/>
+                </span>
+				-->
+                <lightning:button onclick="{!c.closeModal}" label="關閉視窗" variant="neutral" disabled="{!v.isActing}"/>
+                <lightning:button value="{!v.idVal}" onclick="{!c.createRecord}" label="儲存" variant="brand" disabled="{!or(v.isActing, v.isClosed)}"/>
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop" aura:id="backdrop"></div>
+
+</aura:component>

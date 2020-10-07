@@ -1,0 +1,50 @@
+<apex:page controller="LiffExchangeController" cache="false" showHeader="false">
+<header>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+</header>
+<body>
+    <script>
+        window.onload = function() {
+            liff.init({liffId: '{!LIFFID}'}, function () {
+                checkLiffLogin(liff.getContext().userId)
+            }).then(() => {
+            }).catch((err) => {
+                checkLiffLogin(liff.getContext().userId);
+            });
+        };
+
+        function checkLiffLogin(mLineID)
+        {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.LiffExchangeController.exchangePage}',
+                mLineID,
+                '{!cId}',
+                '{!TagId}',
+                function(result, event){
+                    if(event.status){
+                        if(result === "NONE")
+                        {
+                            alert('ERR');
+                        }
+                        else
+                        {
+                            window.location = htmlDecode(result);
+                        }
+                    }
+                },
+                {escape: true}
+            );
+        }
+
+        function htmlDecode(input){
+            var e = document.createElement('textarea');
+            e.innerHTML = input;
+            // handle case of empty input
+            return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+        }
+
+        //htmlDecode("&lt;img src='myimage.jpg'&gt;"); 
+    </script>
+</body>
+</apex:page>

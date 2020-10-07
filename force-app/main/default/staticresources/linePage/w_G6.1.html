@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- css -->
+  <link rel="stylesheet" href="main_login.css" />
+  <link rel="stylesheet" href="main_login-mobile.css" />
+  <link rel="stylesheet" href="font.css">
+
+  <!-- lity lightbox -->
+  <link href="lity/dist/lity.css" rel="stylesheet">
+  <script src="lity/vendor/jquery.js"></script>
+  <script src="lity/dist/lity.js"></script>
+
+  <!-- icon font -->
+  <link href="webfont/css/all.css" rel="stylesheet">
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="alert">
+    <img src="img/check.svg"><span>修改成功！</span>
+  </div>
+
+  <!-- container-->
+  <div class="container">
+    <div class="welcome">
+      <!-- svg -->
+      <img src="img/bmw-white-logo.svg" class="BMW_White_Logo" />
+      <p class="hello-tittle">
+        BMW會員登入
+      </p>
+      <p class="hello-tittle_m" style="display: none;">
+        BMW會員登入
+      </p>
+    </div>
+
+    <div class="right_login">
+      <div class="main">
+        <div class="main-tittle">
+
+          <div id="tittle-1-2">
+            <span class="tittlebold">忘記密碼嗎？</span><br>
+            <span>輸入註冊時填寫的手機，我們將傳送一次性的密碼給你</span>
+          </div>
+          <div id="tittle-2-1" style="display: none;"><span>輸入密碼</span><br>已將一次性登入密碼送至<span
+              class="blue">0912-•••-888</span></div>
+          <div id="tittle-3-1" style="display: none;"><span class="tittlebold">重新設定密碼</span><br>
+            <span>請重新設定你的登入密碼</span></div>
+        </div>
+        <!-- step-1 -->
+        <div class="add-step" id="addinfo-1">
+          <div class="G61step1-input-1">
+            <label for"phonenumber">手機號碼</label>
+            <input type="text" id="phonenumber" name="phonenumber" placeholder="0000-000-000">
+          </div>
+          <button id="checkok-1" type="submit" value="下一步">下一步</button>
+          <div class="go-to-login"><i class="fas fa-chevron-right"></i><a href="w_A2.1.html">登入</a></div>
+          <div class="already-yet">尚未註冊嗎？<a href="#"
+              style="color:#1c69d4;border-bottom: solid 1px #1c69d4;text-decoration: none;">註冊</a>
+          </div>
+        </div>
+
+        <!-- step-2 -->
+        <div class="add-step" id="addinfo-2" style="display: none;">
+          <div class="add-information">
+            <div class="step-input">
+              <label for"password">一次性密碼</label>
+              <input type="text" id="password" name="password" placeholder=" "><img src="img/hide.svg"
+                id="passwordhide-0"><img src="img/show.svg" id="passwordshow-0" style="display: none;">
+            </div>
+
+            <button id="checkok-2" type="submit" value="下一步">下一步</button>
+          </div>
+        </div>
+
+        <!-- step-3 -->
+        <div class="add-step" id="addinfo-3" style="display: none;">
+          <div class="add-information">
+            <div class="step-input">
+              <label for"password">新的密碼</label>
+              <input type="text" id="password" name="password" placeholder="輸入6-8位英數密碼"><img src="img/hide.svg"
+                id="passwordhide-1"><img src="img/show.svg" id="passwordshow-1" style="display: none;">
+              <span class="passwordmini">密碼需 6 - 8 碼，英數混合，不可包含特殊字元 ！@#$%& 等</span><br>
+            </div>
+            <div class="step-input">
+              <label for"recheck-password">再次輸入密碼</label>
+              <input type="text" id="recheck-password" name="recheck-password" placeholder="再次輸入密碼"><img
+                src="img/hide.svg" id="passwordhide-2"><img src="img/show.svg" id="passwordshow-2"
+                style="display: none;">
+            </div>
+            <button id="checkok-3" type="submit" value="確認">確認</button>
+          </div>
+        </div>
+
+      </div>
+
+
+      <script>
+        $("#checkok-1").click(function () {
+          $("#tittle-2-1, #addinfo-2").show();
+          $("#tittle-1-2, #tittle-3, #tittle-4, #addinfo-1, #addinfo-3, #addinfo-4").hide();
+        });
+
+        $("#checkok-2").click(function () {
+          $("#tittle-3-1, #addinfo-3").show();
+          $("#tittle-1-2, #tittle-2-1, #tittle-4, #addinfo-1, #addinfo-2, #addinfo-4").hide();
+        });
+
+        $("#passwordhide-0").click(function () {
+          $("#passwordshow-0").show();
+          $("#passwordhide-0").hide();
+        });
+
+
+        $("#passwordhide-1").click(function () {
+          $("#passwordshow-1").show();
+          $("#passwordhide-1").hide();
+        });
+
+        $("#passwordhide-2").click(function () {
+          $("#passwordshow-2").show();
+          $("#passwordhide-2").hide();
+        });
+      </script>
+
+    </div>
+
+  </div>
+  <!--footer -->
+  <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+    <ul class="BMW">
+      <li><a href="#">BMW官網</a></li>
+      <li><a href="#">全台展示中心</a></li>
+      <li><a href="#">預約賞車</a></li>
+      <li><a href="#">網站聲明</a></li>
+    </ul>
+  </footer>
+  <script>
+    $(function () {
+          var $li = $('ul.step li');
+          $($li.eq(0).addClass('active').siblings('.addstep').hide(); $li.click(function () {
+              $($(this).show().siblings('.addstep').hide(); $(this).addClass('active').siblings('.active')
+                .removeClass('active');
+              });
+          });
+  </script>
+</body>
+
+</html>

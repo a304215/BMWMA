@@ -1,0 +1,5 @@
+<design:component label="Upload Image Component">
+    <design:attribute name="ComponentName" label="ComponentName" description="The Name want to show" />
+    <design:attribute name="objectName" label="objectName" description="The Object API you want to upload image" />
+    <design:attribute name="fieldName" label="fieldName" description="The Field API you want to upload image" />
+</design:component>

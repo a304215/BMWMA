@@ -1,0 +1,327 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0">
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- css -->
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main-mobile.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/font.css'}" />
+
+  <!-- lity lightbox -->
+  <link href="{! $Resource.linePageLity + '/lity/dist/lity.css'}" rel="stylesheet"/>
+  <script src="{! $Resource.linePageLity + '/lity/vendor/jquery.js'}"></script>
+  <script src="{! $Resource.linePageLity + '/lity/dist/lity.js'}"></script>
+
+  <!-- icon font -->
+  <link href="{! $Resource.linePageWebFont + '/webfont/css/all.css'}" rel="stylesheet"/>
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+
+</head>
+
+<body>
+  <apex:form >
+  <!-- container-->
+  <div class="w_G-51-">
+    <!-- svg -->
+    <div class="member-header-pattern-copy">
+      <img src="{! $Resource.linePage + '/img/bmw-white-logo.svg'}" class="BMW_White_Logo" />
+      <p class="header-tittle">會員資料</p>
+    </div>
+    <div class="Rectangle">
+      <div class="main">
+        <ul class="main-tittle" id="toptittle">
+          <li><a href="#member">基本資料</a>
+          </li>
+          <li><a href="#lovecars">愛車資料</a>
+          </li>
+        </ul>
+        <!-- 愛車資料..新增車牌號碼..點新增才會打開-->
+        <ul class="main-go-back-tittle" style="display: none;">
+          <a href="w_G5.1.html">
+            <li><i class="fas fa-chevron-left" style="margin-right: 10px;"></i>返回</li>
+          </a>
+        </ul>
+
+        <!-- 基本資料-->
+        <div class="lovecars" id="member">
+          <div class="member">
+            <div class="member-information">
+              <div class="a1">
+                <label for="lastname">姓氏</label>
+                    <input type="text" id="lastname" name="laster" placeholder="陳" disabled="disabled"/></div>
+              <div class="a2">
+                <label for="firstname">名字</label>
+                    <input type="text" id="firstname" name="firstname" placeholder="立明" disabled="disabled"/> </div>
+              <div class="a3">
+                <label for="male">性別</label>
+                <select id="male" name="male" disabled="disabled">
+                  <option value="male">男</option>
+                  <option value="femal">女</option>
+                </select>
+              </div>
+            </div>
+            <div class="member-information-2">
+              <div class="a4">
+                <label for="birthday">生日</label>
+                    <input type="text" id="birthday" name="birthday" placeholder="19900101" disabled="disabled"/></div>
+              <div class="a5">
+                <label for="email">E-mail</label>
+                    <input type="text" id="email" name="email" placeholder="abcde@xyz.com" disabled="disabled"/></div>
+              <div class="a6">
+                <label for="add">地址</label>
+                    <input type="text" id="address" name="address" placeholder="桃園市中山路113號2F" disabled="disabled"/></div>
+            </div>
+          </div>
+          <div class="buttons">
+                    <button class="edit" id="member-edit"><img src="{! $Resource.linePage + '/img/edit.svg'}" id="edit"/><img src="{! $Resource.linePage + '/img/edit.svg'}"
+                    id="edit-hover"/><a>編輯</a></button>
+            <button class="save" id="member-save" type="submit" style="display: none;"><a>儲存</a></button>
+            <button class="cancel" id="member-cancel" style="display: none;">取消</button>
+          </div>
+        </div>
+
+        <!-- 愛車資料-->
+        <div class="lovecars" id="lovecars">
+          <div class="member-lovecars">
+            <div class="car-choice" id="car-1">
+                    <input type="checkbox" value="1" name="chooce" id="chooce1" style="display: none;"/><br/>
+                    <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <div class="car_m">
+                <div class="car-firstline_m">
+                  <a class="car-name_m">車牌</a>
+                  <a class="car-name-detail_m">AAA-1111</a>
+                </div>
+                <div class="car-secondline_m">
+                  <a class="car-style_m">車型</a> <a class="car-style-detail_m">X2 sDrive18i</a>
+                </div>
+              </div>
+
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">AAA-1111</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">118i</a>
+            </div>
+            <div class="car-choice" id="car-2">
+                    <input type="checkbox" value="1" name="chooce" id="chooce2" style="display: none;"/><br/>
+                    <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <div class="car_m">
+                <div class="car-firstline_m">
+                  <a class="car-name_m">車牌</a>
+                  <a class="car-name-detail_m">AAA-1111</a>
+                </div>
+                <div class="car-secondline_m">
+                  <a class="car-style_m">車型</a> <a class="car-style-detail_m">X2 sDrive18i</a>
+                </div>
+              </div>
+
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">BBB-2222</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">X2 sDrive18i</a>
+            </div>
+            <div class="car-choice" id="car-3">
+                    <input type="checkbox" value="1" name="chooce" id="chooce3" style="display: none;"/><br/>
+                    <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <div class="car_m">
+                <div class="car-firstline_m">
+                  <a class="car-name_m">車牌</a>
+                  <a class="car-name-detail_m">AAA-1111</a>
+                </div>
+                <div class="car-secondline_m">
+                  <a class="car-style_m">車型</a> <a class="car-style-detail_m">X2 sDrive18i</a>
+                </div>
+              </div>
+
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">CCC-3333</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">i3s</a>
+            </div>
+
+                    <button class="add-car" id="add-car"><img src="{! $Resource.linePage + '/img/add.svg'}" class="addcar-image"/><a>新增車輛</a></button>
+          </div>
+          <div class="buttons">
+                    <button class="edit" id="car-edit"><img src="{! $Resource.linePage + '/img/edit.svg'}" id="edit-2"/><img src="{! $Resource.linePage + '/img/edit.svg'}"
+                    id="edit-hover-2"/><a>編輯</a></button>
+            <button class="delet" href="#inline" data-lity="true" style="display: none;"><img src="{! $Resource.linePage + '/img/trashcan.svg'}"
+                    id="trashcan"/><img src="{! $Resource.linePage + '/img/trashcan.svg'}" id="trashcan-hover"/><a>移除</a></button>
+            <button class="cancel" id="carmove-cancel" style="display: none;">取消</button>
+
+          </div>
+
+          <!--lity hide box -->
+          <div id="inline" class="lity-hide">
+            <p>移除原因</p>
+            <div class="checkboxinlity">
+                    <div class="whydelet"><input type="checkbox" value="1" name="whydelet-a" id="whydelet-a"/>車輛售出</div>
+                    <div class="whydelet"><input type="checkbox" value="1" name="whydelet-b" id="whydelet-b"/>轉移使用人</div>
+                    <div class="whydelet"><input type="checkbox" value="1" name="whydelet-c" id="whydelet-c"/>其他</div>
+            </div>
+
+            <div class="whydelet-other">
+                    <p>補充說明移除原因</p><input type="text" name="whydelet-other" id="whydelet-othertext"/>
+            </div>
+            <button class="sandout" id="sandout" onclick="location.href='w_G5.1.html'" type="submit"
+              html-data-lity-close="true">送出</button>
+          </div>
+          <div class="showoffflex">
+            <div class="system-notice" style="display: none;">
+              您的車牌號碼: AAA-1111、BBB-2222正在處理中，為提供給您更好的服務與個資保護，我們將會有服務專人與您聯繫確認相關事宜，感謝您的耐心等待！</div>
+
+            <button id="go-to-book" onclick="location.href='#'">前往線上售後預約服務<img src="{! $Resource.linePage + '/img/external-link.svg'}"
+                    id="external"/><img src="{! $Resource.linePage + '/img/external-link.svg'}" id="external-hover"/></button>
+          </div>
+        </div>
+
+        <!-- 新增車牌號碼..點新增才會打開-->
+        <div class="lovecars" id="addcar-number" style="display: none;">
+          <div class="member-addcars">
+            <div class="a7">
+              <label for="updated-number">請輸入要新增的車牌號碼</label>
+                    <input type="text" id="updated-number" name="updated-number" placeholder="請輸入車牌號碼"/></div>
+            <div class="buttons">
+              <button class="updated" type="submit" onclick="location.href='w_G5.1.html'"><a>確認新增</a></button>
+            </div>
+          </div>
+        </div>
+                    
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/> 
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+			<script type="text/javascript">
+				window.onload = function (e) {
+                    liff.init({liffId: '{!LIFFID}'}, function () {
+						 checkLiffLogin(liff.getContext().userId);
+					});
+				};
+
+				function checkLiffLogin(mLineID)
+                 {
+                     document.getElementById('{!$Component.userLineID}').value = mLineID;
+                     Visualforce.remoting.Manager.invokeAction(
+		                '{!$RemoteAction.Line_webBase.checkLinkLine}',
+						mLineID,
+		                function(result, event){
+		                     if(event.status){
+		                         if(result === "NO_CustomerUser")
+		                           {
+                                       //document.getElementById('needLoginDiv').style.display = '';
+                                       //document.getElementById('myDiv').style.display = '';
+									   alert('請先登入會員');
+                                       //window.location = 'lineLogin?loginStep=1';   
+		                           }
+                                   else if(result === "NOPwd")
+                                   {
+                                       alert('您尚未設定密碼, 請先設定密碼'); 
+                                       window.location = 'LinePassword'; 
+                                   }
+		                           else
+		                           {
+		                           	   var d = new Date();
+									   d.setTime(d.getTime()+(1*24*60*60*1000));
+									   var expires = "expires="+d.toGMTString();
+									   //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+									   //網頁關掉就清掉cookies
+									   document.cookie = "apex__sessionID="+result+"; path=/";
+									   window.location = 'LineModify';
+		                           }
+							}
+						},
+		                    {escape: true}
+	                    );
+					}
+                              
+                   function closeLIFF()
+                   {
+                      liff.closeWindow();
+                   }
+			</script>
+        </apex:outputPanel>
+
+        <!--jq hide buttons, and add attr-->
+        <script>
+          $("#member-edit").click(function () {
+            $("#member-cancel, #member-save").show();
+            $("#member-edit").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', false);
+          });
+
+          $("#member-save, #member-cancel").click(function () {
+            $("#member-edit").show();
+            $("#member-save, #member-cancel").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', true);
+          });
+
+          $(document).ready(function () {
+            $("#car-1, #car-2, #car-3").click(function () {
+              $(".system-notice").fadeToggle('slow');
+            });
+            $("#toptittle, #add-car").click(function () {
+              $(".system-notice").hide();
+            });
+          });
+
+          $("#add-car").click(function () {
+            $(".main-go-back-tittle, #addcar-number").show();
+            $(".main-tittle, #member, #lovecars").hide();
+          });
+
+
+          $(".main-go-back-tittle").click(function () {
+            $(".main-tittle, #member, #lovecars").show();
+            $(".main-go-back-tittle, #addcar-number").hide();
+          });
+
+          $("#car-edit").click(function () {
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").show();
+            $("#car-edit").hide();
+          });
+          $("#carmove-cancel, #sandout").click(function () {
+            $("#car-edit").show();
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").hide();
+          });
+        </script>
+
+      </div>
+    </div>
+    <!--footer -->
+    <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+      <ul class="BMW">
+        <li><a href="#">BMW官網</a></li>
+        <li><a href="#">全台展示中心</a></li>
+        <li><a href="#">預約賞車</a></li>
+        <li><a href="#">網站聲明</a></li>
+      </ul>
+    </footer>
+    <script>
+      $(function () {
+        var $li = $('ul.main-tittle li');
+        $($li.eq(0).addClass('active').find('a').attr('href')).siblings('.lovecars').hide();
+
+        $li.click(function () {
+          $($(this).find('a').attr('href')).show().siblings('.lovecars').hide();
+          $(this).addClass('active').siblings('.active').removeClass('active');
+        });
+      });
+    </script>
+</div>
+</apex:form>
+</body>
+
+</html>
+</apex:page>

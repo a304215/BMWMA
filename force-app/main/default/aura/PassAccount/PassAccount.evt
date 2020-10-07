@@ -1,0 +1,6 @@
+<aura:event type="APPLICATION" description="Event template">
+    <aura:attribute name="PassAccount" type="String" />
+    <aura:attribute name="PassOpportunity" type="String" />
+    <aura:attribute name="PassChageCarDate" type="Date" />
+    <aura:attribute name="PassDeliveryDate" type="Date" />
+</aura:event>

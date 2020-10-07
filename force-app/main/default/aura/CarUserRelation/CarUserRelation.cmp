@@ -1,0 +1,5 @@
+<aura:component controller="CarRelationshipController">
+	<aura:attribute name="MyPersonRelation" type="Relationship__c" />
+    <aura:handler event="c:PassOPPforRelation" action="{!c.scriptsLoaded}"/>
+    <force:inputField aura:id="relation" value="{!v.MyPersonRelation.Relation__c}" />
+</aura:component>

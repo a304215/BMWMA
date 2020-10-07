@@ -1,0 +1,58 @@
+<aura:component controller="MobileTestDriveController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickAction">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="allWeekDays" type="string[]" description="all weekDays" />
+    <aura:attribute name="choosenDate" type="Date" default=""/>
+    <aura:attribute name="theIndex" type="integer" default="0"/>
+    
+    <aura:registerEvent name="passMyDate" type="c:PassTestDriveChangeDate" />
+    
+    <div style="padding-left: 80px;">
+        <a onclick="{!c.LastMonth}">
+            <lightning:icon iconName="utility:chevronleft" size="x-small" />
+        </a>
+        <strong style="font-size:large;">
+            <ui:outputDate value="{!v.choosenDate}" format="YYYY年MM月"/>
+        </strong>
+        <a onclick="{!c.NextMonth}">
+            <lightning:icon iconName="utility:chevronright"   size="x-small" />
+        </a>
+    </div>
+    <div style="clear:both;"></div>
+    <a style="float:left;" onclick="{!c.LastWeek}">
+        <lightning:icon iconName="utility:chevronleft" size="medium" />
+    </a>
+    <div style="float:left;">
+        <table style="width:260px;">
+            <tr>
+                <td>日</td>
+                <td>一</td>
+                <td>二</td>
+                <td>三</td>
+                <td>四</td>
+                <td>五</td>
+                <td>六</td>
+            </tr>
+            <tr>
+                <aura:iteration items="{!v.allWeekDays}" var="loopWeekDay" indexVar="myIndex">
+                    <td>
+                        <aura:if isTrue="{!myIndex==v.theIndex}">
+                            <span style="color:red;">
+                                <ui:outputDate value="{!loopWeekDay}" format="DD"/>
+                            </span>
+                            <aura:set attribute="else">
+                                <a onclick="{!c.clickChange}" data-value="{!loopWeekDay}" name="{!loopWeekDay}">
+                                    <ui:outputDate value="{!loopWeekDay}" format="DD"/>
+                                </a>
+                            </aura:set>
+                        </aura:if>
+                    </td>
+                </aura:iteration>
+            </tr>
+        </table>
+    </div>
+    <a style="float:left;" onclick="{!c.NextWeek}">
+        <lightning:icon iconName="utility:chevronright"   size="medium"/>
+    </a>
+    <div style="clear:both;"></div>
+</aura:component>

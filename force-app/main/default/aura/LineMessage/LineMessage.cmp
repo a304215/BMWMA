@@ -1,0 +1,1091 @@
+<aura:component controller="LineKeyWordController" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" access="global">
+    <!-- Attribute -->
+    <aura:attribute name="GCPSettingName" type="String"/>
+    <aura:attribute name="GCPBucket" type="String"/>
+    <aura:attribute name="GCPFolder" type="String"/>
+    
+    <aura:attribute name="TheContent" type="LineKeyWordController.msgObject"/>
+    <aura:attribute name="TheUserID" type="String"/>
+    <aura:attribute name="ShowEMOJI" type="Boolean" default="false"/>
+    <aura:attribute name="StringTextCount" type="Integer" default="0"/>
+    <aura:attribute name="StringTextCount2" type="Integer" default="0"/>
+    <aura:attribute name="IMOJIlist" type="string[]" />
+    <aura:attribute name="StickerList11537" type="string[]" />
+    <aura:attribute name="StickerList11538" type="string[]" />
+    <aura:attribute name="StickerList11539" type="string[]" />
+    <aura:attribute name="ShowSticker" type="boolean" default="false"/>
+    <aura:attribute name="ShowStickerPackage" type="string" default="11537"/>
+    <aura:attribute name="isSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="TheContentList" type="LineMessageContent__c[]" default=""/>
+    <aura:attribute name="contentCount" type="Integer" default="0"/>
+
+    <aura:attribute name="ShowPicTextA" type="Boolean" default="false"/>
+    <aura:attribute name="ShowPicTextB" type="Boolean" default="false"/>
+    <aura:attribute name="ShowPicTextC" type="Boolean" default="false"/>
+    <aura:attribute name="ShowPicTextD" type="Boolean" default="false"/>
+    <aura:attribute name="ShowPicTextE" type="Boolean" default="false"/>
+    <aura:attribute name="ShowPicTextF" type="Boolean" default="false"/>
+
+    <aura:attribute name="PicTextOld_Type" type="String" />
+    <aura:attribute name="PicTextOld_Title" type="String" />
+    <aura:attribute name="PicTextOld_Text" type="String" />
+
+    <aura:handler name="change" value="{!v.TheContent.theMessage.Text__c}" action="{!c.countText}"/>
+    <aura:handler name="change" value="{!v.TheContent.theMessage.ConfirmText__c}" action="{!c.countText2}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:registerEvent name="passEvent" type="c:PassEvent"/>
+    <aura:handler name="passEvent1" event="c:DeleteMessageContent" action="{!c.removeMessageContent}"/>
+
+    <aura:if isTrue="{!v.TheContent.theMessage.isDeleted__c==false}">
+        <div class="slds-card">
+            <div class="{!v.isSpinner ? 'demo-only demo--inverse' : 'slds slds-hide'}" style="height:6rem">
+                <div role="status" class="slds-spinner slds-spinner_medium">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            
+            <button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog" onclick="{!c.removeMe}">
+                X
+                <span class="slds-assistive-text">Remove</span>
+            </button>
+            
+            <div class="slds-p-around_medium">
+                <div class="slds-button-group" role="group">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ChoseText}">文字</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ChoseTexture}">貼圖</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ChosePic}">圖片</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ChosePicText}">圖文</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ChoseVideo}">影片</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ChoseConfirm}">確認</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ChoseCarousel}">輪播</button>
+                </div>
+                <div>&nbsp;</div>
+                {!v.TheContent.theMessage.MessageType__c}
+                <div class="{!v.TheContent.theMessage.MessageType__c=='文字' ? 'slds-form-element' : 'slds-form-element slds-hide'}">
+                    <div class="slds-form-element__control">
+                        <ui:inputTextArea rows="5" class="slds-textarea" updateOn="change, keyup" placeholder="請輸入訊息內容" value="{!v.TheContent.theMessage.Text__c}" maxlength="500" ></ui:inputTextArea>
+                        {!v.StringTextCount} / 500
+                    </div>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ShowEMOJI}" >表情</button>
+                </div>
+
+                <div class="{!v.ShowEMOJI ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px; ">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.HideEMOJI}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">請挑選表情符號</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <aura:iteration items="{!v.IMOJIlist}" var="item">
+                                    <a href="javascript:void(0);" onclick="{!c.choseMe}" >
+                                        <img src="{!$Resource.LineEMOJI_p+ '/'+item+'.png'}" id="{!'0x1000'+item}" width="50"/>
+                                    </a><span>&nbsp;</span>
+                                </aura:iteration>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HideEMOJI}">返回</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+
+                <div class="{!v.TheContent.theMessage.MessageType__c=='貼圖' ? 'slds-form-element' : 'slds-form-element slds-hide'}">
+                    <div class="slds-form-element__control">
+                        <img src="{!$Resource.LineSticker_p+'/'+v.TheContent.theMessage.PackageID__c+'/'+v.TheContent.theMessage.StickerID__c+'.png'}" width="110"/>
+                        <br/>
+                        <button class="slds-button slds-button_neutral" onclick="{!c.ShowSticker}" >選擇貼圖</button>
+                    </div>
+                </div>
+
+                <div class="{!v.ShowSticker ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px; ">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.HideSticker}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">請挑選貼圖</h2>
+                            </header>
+                            
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <ul class="slds-tabs_default__nav" role="tablist">
+                                    <li class="slds-tabs_default__item slds-is-active" title="Item One" role="presentation">
+                                        <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="{!c.ShowSticker37}" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">
+                                            <img src="{!$Resource.LineSticker_p+ '/11537/tab_on.png'}" width="50"/>
+                                        </a>
+                                    </li>
+                                    <li class="slds-tabs_default__item" title="Item Two" role="presentation">
+                                        <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="{!c.ShowSticker38}" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">
+                                            <img src="{!$Resource.LineSticker_p+ '/11538/tab_on.png'}" width="50"/>
+                                        </a>
+                                    </li>
+                                    <li class="slds-tabs_default__item" title="Item Three" role="presentation">
+                                        <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="{!c.ShowSticker39}" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item">
+                                            <img src="{!$Resource.LineSticker_p+ '/11539/tab_on.png'}" width="50"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <aura:if isTrue="{!v.ShowStickerPackage=='11537'}">
+                                    <aura:iteration items="{!v.StickerList11537}" var="item">
+                                        <a href="javascript:void(0);" onclick="{!c.choseMeSticker37}" >
+                                            <img src="{!$Resource.LineSticker_p+ '/11537/520027'+item+'.png'}" id="{!'520027'+item}" width="110"/>
+                                        </a><span>&nbsp;</span>
+                                    </aura:iteration>
+                                </aura:if> 
+                                <aura:if isTrue="{!v.ShowStickerPackage=='11538'}">
+                                    <aura:iteration items="{!v.StickerList11538}" var="item">
+                                        <a href="javascript:void(0);" onclick="{!c.choseMeSticker38}" >
+                                            <img src="{!$Resource.LineSticker_p+ '/11538/51626'+item+'.png'}" id="{!'51626'+item}" width="110"/>
+                                        </a><span>&nbsp;</span>
+                                    </aura:iteration>
+                                </aura:if>
+                                <aura:if isTrue="{!v.ShowStickerPackage=='11539'}">
+                                    <aura:iteration items="{!v.StickerList11539}" var="item">
+                                        <a href="javascript:void(0);" onclick="{!c.choseMeSticker39}" >
+                                            <img src="{!$Resource.LineSticker_p+ '/11539/521141'+item+'.png'}" id="{!'521141'+item}" width="110"/>
+                                        </a><span>&nbsp;</span>
+                                    </aura:iteration>
+                                </aura:if>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HideSticker}">返回</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+
+                <div class="{!v.TheContent.theMessage.MessageType__c=='圖片' ? 'slds-form-element' : 'slds-form-element slds-hide'}">
+                    <div class="slds-form-element__control">
+                        <div class="slds-file-selector slds-file-selector_files">
+                            <div class="slds-file-selector__dropzone"> 
+                                <lightning:fileUpload name="fileUploader1"
+                                                    accept=".png,.jpg"
+                                                    recordId="{!v.TheUserID}"
+                                                    onuploadfinished="{!c.handleUploadFinished}" 
+                                                    disabled="false" />
+                                <img class="ng-scope" src="{!v.TheContent.theMessage.ImageURL__c}" width="240"></img>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="{!v.TheContent.theMessage.MessageType__c=='圖文' ? 'slds-form-element' : 'slds-form-element slds-hide'}">
+                    <div class="slds-form-element__control">
+                        <div class="slds-file-selector slds-file-selector_files">
+                            <div class="slds-file-selector__dropzone"> 
+                                <lightning:fileUpload label="請上傳1040x1040 的圖片"
+                                                    name="fileUploader1"
+                                                    accept=".png,.jpg"
+                                                    recordId="{!v.TheUserID}"
+                                                    onuploadfinished="{!c.handleUploadFinished}" 
+                                                    disabled="false" />
+                                <img class="ng-scope" src="{!v.TheContent.theMessage.ImageContentURL__c}" width="240"></img>
+                            </div>
+                        </div>
+
+                        <fieldset class="slds-form-element">
+                            <legend class="slds-form-element__legend slds-form-element__label">版型選擇</legend>
+                            <div class="slds-form-element__control">
+                                <div class="slds-radio_button-group">
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose1}">
+                                        <input name="radio" type="radio" id="type1" value="type1" />
+                                        <label class="slds-radio_button__label" for="type1">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type1'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type1.png'}"/>
+                                        </label>
+                                    </a>
+                                    
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose2}">
+                                        <input name="radio" type="radio" id="type2" value="type2" />
+                                        <label class="slds-radio_button__label" for="type2">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type2'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type2.png'}"/>
+                                        </label>
+                                    </a>
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose3}">
+                                        <input name="radio" type="radio" id="type3" value="type3" />
+                                        
+                                        <label class="slds-radio_button__label" for="type3">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type3'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type3.png'}"/>
+                                        </label>
+                                    </a>
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose4}" >
+                                        <input name="radio" type="radio" id="type4" value="type4" />
+                                        <label class="slds-radio_button__label" for="type4">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type4'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type4.png'}"/>
+                                        </label>
+                                    </a>
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose5}">
+                                        <input name="radio" type="radio" id="type5" value="type5" />
+                                        <label class="slds-radio_button__label" for="type5">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type5'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type5.png'}"/>
+                                        </label>
+                                    </a>
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose6}">
+                                        <input name="radio" type="radio" id="type6" value="type6" />
+                                        <label class="slds-radio_button__label" for="type6">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type6'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type6.png'}"/>
+                                        </label>
+                                    </a>
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose7}">
+                                        <input name="radio" type="radio" id="type7" value="type7" />
+                                        <label class="slds-radio_button__label" for="type7">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type7'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type7.png'}"/>
+                                        </label>
+                                    </a>
+                                    <a class="slds-button slds-radio_button" onclick="{!c.picTextChose8}" >
+                                        <input name="radio" type="radio" id="type8" value="type8" />
+                                        <label class="slds-radio_button__label" for="type8">
+                                            <img ng-src="/14644485/sticker/image/0/0/100/1/mobile/stickers/401.gif" class="{!v.TheContent.theMessage.PicTextType__c=='type8'?'ng-scope ChooseMePIC':'ng-scope'}" src="{!$Resource.LinePic_p + '/type8.png'}"/>
+                                        </label>
+                                    </a>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div></div>
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type1'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 600px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA1" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type2'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 600px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheConteTheContent.theMessagent.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA2" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 600px;">
+                                    <a onclick="{!c.ShowPicTextB}">編輯B區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeB__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleB__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextB__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingB2" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type3'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA3" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextB}">編輯B區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeB__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleB__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextB__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingB3" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type4'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 200px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA4" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 200px;">
+                                    <a onclick="{!c.ShowPicTextB}">編輯B區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeB__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleB__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextB__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingB4" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 200px;">
+                                    <a onclick="{!c.ShowPicTextC}">編輯C區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeC__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleC__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeC__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextC__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingC4" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagC__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type5'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA5" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextB}">編輯B區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeB__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleB__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextB__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingB5" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextC}">編輯C區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeC__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleC__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeC__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextC__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingC5" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagC__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextD}">編輯D區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeD__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleD__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeD__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextD__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingD5" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagD__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type6'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA6" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextB}">編輯B區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeB__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleB__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextB__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingB6" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextC}">編輯C區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeC__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleC__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeC__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextC__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingC6" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagC__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type7'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA7" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 200px;">
+                                    <a onclick="{!c.ShowPicTextB}">編輯B區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeB__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleB__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextB__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingB7" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-1" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 200px;">
+                                    <a onclick="{!c.ShowPicTextC}">編輯C區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeC__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleC__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeC__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextC__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingC7" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagC__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="{!v.TheContent.theMessage.PicTextType__c=='type8'?'slds-grid slds-wrap':'slds-grid slds-wrap slds-hide'}" style="width: 600px;">
+                            <div class="slds-size_1-of-3" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextA}">編輯A區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeA__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleA__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextA__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingA8" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-3" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextB}">編輯B區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeB__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleB__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextB__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingB8" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-3" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextC}">編輯C區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeC__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleC__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeC__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextC__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingC8" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagC__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-3" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextD}">編輯D區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeD__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleD__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeD__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                        文字/網址：{!v.TheContent.theMessage.PicTextMTextD__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingD8" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagD__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-3" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextE}">編輯E區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeE__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleE__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeE__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextE__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingE8" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagE__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-3" >
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small NextLine" style="height: 300px;">
+                                    <a onclick="{!c.ShowPicTextF}">編輯F區</a><br/>
+                                    類型：{!v.TheContent.theMessage.PicTextTypeF__c}<br/>
+                                    標籤：{!v.TheContent.theMessage.PicTextTitleF__c}<br/>
+                                    <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeF__c=='TrackingTag'}">
+                                        <aura:set attribute="else">
+                                            文字/網址：{!v.TheContent.theMessage.PicTextMTextF__c}<br/>
+                                        </aura:set>
+                                        <c:strike_lookup aura:id="ViewPicTrackingF8" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                            iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                            disabled = "true"
+                                            value="{!v.TheContent.theMessage.PicTextTrackingTagF__c}"
+                                        />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="{!v.ShowPicTextA ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-a" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CancelPicTextA}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">A區</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-a">
+                                類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleA" change="{!c.onSingleSelectChangeA}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入圖文訊息標籤" value="{!v.TheContent.theMessage.PicTextTitleA__c}" ></ui:inputText>
+                                <br/>
+
+                                <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeA__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        文字/網址：
+                                        <ui:inputText class="slds-text" placeholder="請輸入圖文訊息文字/網址" value="{!v.TheContent.theMessage.PicTextMTextA__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="PicTrackingA" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.PicTextTrackingTagA__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div>    
+                                
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.CancelPicTextA}">取消</button>
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HidePicTextA}">確認</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+                
+                <div class="{!v.ShowPicTextB ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-b" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CancelPicTextB}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">B區</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-b">
+                                類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleB" change="{!c.onSingleSelectChangeB}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入圖文訊息標籤" value="{!v.TheContent.theMessage.PicTextTitleB__c}" ></ui:inputText>
+                                <br/>
+                                
+                                <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeB__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        文字/網址：
+                                        <ui:inputText class="slds-text" placeholder="請輸入圖文訊息文字/網址" value="{!v.TheContent.theMessage.PicTextMTextB__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="PicTrackingB" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.PicTextTrackingTagB__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div> 
+                            
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.CancelPicTextB}">取消</button>
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HidePicTextB}">確認</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+                
+                <div class="{!v.ShowPicTextC ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-c" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CancelPicTextC}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">C區</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-c">
+                                類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleC" change="{!c.onSingleSelectChangeC}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入圖文訊息標籤" value="{!v.TheContent.theMessage.PicTextTitleC__c}" ></ui:inputText>
+                                <br/>
+                                
+                                <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeC__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        文字/網址：
+                                        <ui:inputText class="slds-text" placeholder="請輸入圖文訊息文字/網址" value="{!v.TheContent.theMessage.PicTextMTextC__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="PicTrackingC" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.PicTextTrackingTagC__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div> 
+                            
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.CancelPicTextC}">取消</button>
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HidePicTextC}">確認</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+                
+                <div class="{!v.ShowPicTextD ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-d" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CancelPicTextD}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">D區</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-d">
+                                類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleD" change="{!c.onSingleSelectChangeD}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入圖文訊息標籤" value="{!v.TheContent.theMessage.PicTextTitleD__c}" ></ui:inputText>
+                                <br/>
+                                
+                                <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeD__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        文字/網址：
+                                        <ui:inputText class="slds-text" placeholder="請輸入圖文訊息文字/網址" value="{!v.TheContent.theMessage.PicTextMTextD__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="PicTrackingD" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.PicTextTrackingTagD__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div> 
+                            
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.CancelPicTextD}">取消</button>
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HidePicTextD}">確認</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+                
+                <div class="{!v.ShowPicTextE ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-e" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CancelPicTextE}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">E區</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-e">
+                                類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleE" change="{!c.onSingleSelectChangeE}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入圖文訊息標籤" value="{!v.TheContent.theMessage.PicTextTitleE__c}" ></ui:inputText>
+                                <br/>
+                                
+                                <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeE__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        文字/網址：
+                                        <ui:inputText class="slds-text" placeholder="請輸入圖文訊息文字/網址" value="{!v.TheContent.theMessage.PicTextMTextE__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="PicTrackingE" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.PicTextTrackingTagE__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div> 
+                            
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.CancelPicTextE}">取消</button>
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HidePicTextE}">確認</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+                
+                <div class="{!v.ShowPicTextF ? 'demo-only' : 'demo-only slds-hide'}" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-f" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.CancelPicTextF}">
+                                    X
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">F區</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-f">
+                                類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleF" change="{!c.onSingleSelectChangeF}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入圖文訊息標籤" value="{!v.TheContent.theMessage.PicTextTitleF__c}" ></ui:inputText>
+                                <br/>
+                                
+                                <aura:if isTrue="{!v.TheContent.theMessage.PicTextTypeF__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        文字/網址：
+                                        <ui:inputText class="slds-text" placeholder="請輸入圖文訊息文字/網址" value="{!v.TheContent.theMessage.PicTextMTextF__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="PicTrackingF" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.PicTextTrackingTagF__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div> 
+                            
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.CancelPicTextF}">取消</button>
+                                <button class="slds-button slds-button_neutral" onclick="{!c.HidePicTextF}">確認</button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+                <div class="{!v.TheContent.theMessage.MessageType__c=='影片' ? 'slds-form-element' : 'slds-form-element slds-hide'}">
+                    <div class="slds-form-element__control">
+                        <div class="slds-file-selector slds-file-selector_files">
+                            <div class="slds-file-selector__dropzone"> 
+                                <lightning:fileUpload label="請上傳影片"
+                                                    name="fileUploader3"
+                                                    accept=".mp4"
+                                                    recordId="{!v.TheUserID}"
+                                                    onuploadfinished="{!c.handleUploadFinished}" 
+                                                    disabled="false" />
+                                <span class="{!v.TheContent.theMessage.VideoURL__c != '' ? 'slds' : 'slds-hide'}">
+                                    <a class="ng-scope" href="{!v.TheContent.theMessage.VideoURL__c}">Download</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="slds-form-element__control">
+                        <div class="slds-file-selector slds-file-selector_files">
+                            <div class="slds-file-selector__dropzone"> 
+                                <lightning:fileUpload label="請上傳影片縮圖"
+                                                    name="fileUploader4"
+                                                    accept=".png,.jpg"
+                                                    recordId="{!v.TheUserID}"
+                                                    onuploadfinished="{!c.handleUploadFinished2}" 
+                                                    disabled="false" />
+                                <img class="ng-scope" src="{!v.TheContent.theMessage.VideoImageURL__c}" width="240"></img>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="{!v.TheContent.theMessage.MessageType__c=='確認' ? 'slds-form-element' : 'slds-form-element slds-hide'}">
+                    <div class="slds-form-element__control">
+                        <ui:inputTextArea rows="5" class="slds-textarea" updateOn="change, keyup" placeholder="請輸入訊息內容" value="{!v.TheContent.theMessage.ConfirmText__c}" maxlength="240" ></ui:inputTextArea>
+                        {!v.StringTextCount2} / 240
+                    </div>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-size_1-of-2" >
+                            <div class="slds-p-around_medium">
+                                確認按鈕1類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleConfirmA" change="{!c.onSingleSelectChangeConfirmA}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="postback" text="postbak"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                確認按鈕1標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入按鈕標籤" value="{!v.TheContent.theMessage.ConfirmActionLabelA__c}" ></ui:inputText>
+                                <br/>
+                                確認按鈕1文字/網址：
+                                <aura:if isTrue="{!v.TheContent.theMessage.ConfirmActionTypeA__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        <ui:inputText class="slds-text" placeholder="請輸入按鈕文字/網址" value="{!v.TheContent.theMessage.ConfirmActionTextA__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="ConfirmTrackingA" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.ConfirmActionTrackingTagA__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div>
+                        </div>
+                        <div class="slds-size_1-of-2" >
+                            <div class="slds-p-around_medium">
+                                確認按鈕2類型：
+                                <ui:inputSelect class="single" aura:id="InputSelectSingleConfirmB" change="{!c.onSingleSelectChangeConfirmB}">
+                                    <ui:inputSelectOption label="NONE" text="" />
+                                    <ui:inputSelectOption label="文字" text="文字"/>
+                                    <ui:inputSelectOption label="網址" text="網址"/>
+                                    <ui:inputSelectOption label="postback" text="postbak"/>
+                                    <ui:inputSelectOption label="Tracking Tag" text="TrackingTag"/>
+                                </ui:inputSelect>
+                                <br/>
+                                確認按鈕2標籤：
+                                <ui:inputText class="slds-text" placeholder="請輸入按鈕標籤" value="{!v.TheContent.theMessage.ConfirmActionLabelB__c}" ></ui:inputText>
+                                <br/>
+                                確認按鈕2文字/網址：
+                                <aura:if isTrue="{!v.TheContent.theMessage.ConfirmActionTypeB__c=='TrackingTag'}">
+                                    <aura:set attribute="else">
+                                        <ui:inputText class="slds-text" placeholder="請輸入按鈕文字/網址" value="{!v.TheContent.theMessage.ConfirmActionTextB__c}" ></ui:inputText>
+                                    </aura:set>
+                                    <c:strike_lookup aura:id="ConfirmTrackingB" label="TrackingTag" object="Tracking_Tag__c" searchField="Name" placeholder="輸入Tracking Tag"
+                                        iconName="standard:opportunity" order="Name" limit="5" loadingMessage="Loading..." errorMessage="錯誤的輸入" showRecentRecords="true"
+                                        allowNewRecords="true"
+                                        value="{!v.TheContent.theMessage.ConfirmActionTrackingTagB__c}"
+                                    />
+                                </aura:if>
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="{!v.TheContent.theMessage.MessageType__c=='輪播' ? 'slds-form-element' : 'slds-form-element slds-hide'}">
+                    <div class="slds-form-element__control">
+                        訊息寬度：
+                        <ui:inputSelect class="single" aura:id="InputSelectSingleFlexWidth" change="{!c.onSingleSelectChangeFlexWidth}">
+                            <ui:inputSelectOption label="NONE" text="" />
+                            <ui:inputSelectOption label="nano" text="nano"/>
+                            <ui:inputSelectOption label="micro" text="micro"/>
+                            <ui:inputSelectOption label="kilo" text="kilo"/>
+                            <ui:inputSelectOption label="mega" text="mega"/>
+                            <ui:inputSelectOption label="giga" text="giga"/>
+                        </ui:inputSelect>
+                        <div style="padding-top: 15px;">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.addNewMessageContent}" disabled="{!v.contentCount>=10}">新增圖卡({!v.contentCount}/10)</button>
+                        </div>
+                        <div style="padding-top: 15px;">
+                            <div class="slds-grid slds-wrap">
+                                <aura:iteration items="{!v.TheContentList}" var="loopMessage">
+                                    <c:LineMessageContent TheContent="{!loopMessage}" TheUserID="{!v.TheUserID}"
+                                        GCPSettingName="{!v.GCPSettingName}" GCPBucket="{!v.GCPBucket}" GCPFolder="{!v.GCPFolder}"
+                                    />
+                                </aura:iteration>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

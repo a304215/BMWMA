@@ -1,0 +1,118 @@
+<aura:component controller="LineContentController" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" access="global">
+    <!-- Attribute -->
+    <aura:attribute name="LineContentID" type="String"/>
+    <aura:attribute name="TheContent" type="Line_Content__c"/>
+    <aura:attribute name="TheContentList" type="Line_Content_Detail__c[]"/>
+    <aura:attribute name="TheUserID" type="String"/>
+    <aura:attribute name="isNext" type="Boolean" default="false"/>
+    <aura:attribute name="lineAccountList" type="Line_Account__c[]" />
+    <aura:attribute name="reportList" type="Report[]" />
+    <aura:attribute name="messageCount" type="Integer" default="0"/>
+
+    <aura:attribute name="showPreview" type="String" />
+    <aura:attribute name="previewText1" type="string" />
+    <aura:attribute name="previewText2" type="string" />
+    <aura:attribute name="previewText3" type="string" />
+    <aura:attribute name="previewText4" type="string" />
+    <aura:attribute name="previewText5" type="string" />
+    <aura:attribute name="IMOJIlist" type="string[]" />
+    <aura:attribute name="StickerList11537" type="string[]" />
+    <aura:attribute name="StickerList11538" type="string[]" />
+    <aura:attribute name="StickerList11539" type="string[]" />
+    <aura:attribute name="isSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="errMSG" type="string" default=""/>
+
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:handler name="passEvent" event="c:PassEvent" action="{!c.removeMe}"/>
+    <!-- Content -->
+    
+    <div style="padding: 15px; width:59%; float:left;">
+    	<div class="{!v.isSpinner ? 'demo-only demo--inverse' : 'slds slds-hide'}" style="height:6rem">
+			<div role="status" class="slds-spinner slds-spinner_medium">
+				<span class="slds-assistive-text">Loading</span>
+				<div class="slds-spinner__dot-a"></div>
+				<div class="slds-spinner__dot-b"></div>
+			</div>
+		</div>
+        <div class="{!v.isNext ? 'slds slds-hide' : 'slds '}">
+            <span class="LargeFonts">請設定文案名稱</span><br/>
+            {!v.TheContent.Status__c}<br/>
+            <ui:inputText class="slds-text" placeholder="請輸入文案名稱" value="{!v.TheContent.Name}"></ui:inputText>
+            <br/>
+            <span class="LargeFonts">Line Account</span><br/>
+            <ui:inputSelect class="single" aura:id="InputSelectSingle" change="{!c.onSingleSelectChange}">
+                <ui:inputSelectOption label="None" text=""/>
+                <aura:iteration items="{!v.lineAccountList}" var="loopRep">
+                    <ui:inputSelectOption label="{!loopRep.Name}" text="{!loopRep.Id}" value="{!v.TheContent.Line_Account__c==loopRep.Id?'true':''}"/>
+                </aura:iteration>
+            </ui:inputSelect>
+            <ui:inputText class="slds-hide" aura:id="singleResult" value="{!v.TheContent.Line_Account__c}" />
+            <br/>
+            <span class="LargeFonts">傳送對象</span><br/>
+            <ui:inputSelect class="single" aura:id="InputSelectSingle2" change="{!c.onSingleSelectChange2}" disabled="{!v.TheContent.Line_Account__c==''}">
+                <ui:inputSelectOption label="Marketing Cloud" text=""/>
+                <aura:iteration items="{!v.reportList}" var="loopRep">
+                    <ui:inputSelectOption label="{!loopRep.Name}" text="{!loopRep.Id}" value="{!v.TheContent.ReportId__c==loopRep.Id?'true':''}"/>
+                </aura:iteration>
+            </ui:inputSelect>
+            <ui:inputText class="slds-hide" aura:id="singleResult2" value="{!v.TheContent.ReportId__c}" />
+            <br/>
+            <span class="LargeFonts">立即寄送</span>
+            <ui:inputCheckbox aura:id="checkbox" value="{!v.TheContent.SendNow__c}" />
+            <br/>
+            <span class="LargeFonts">請設定寄送時間</span><br/>
+            <ui:inputDateTime aura:id="today" class="field" value="{!v.TheContent.ScheduleTime__c}" displayDatePicker="true" disabled="{!v.TheContent.SendNow__c}"/>
+            <br/>
+            <div style="padding-top: 15px;">
+                <button class="slds-button slds-button_neutral" onclick="{!c.BackToTheFuture}" >返回清單</button>
+                <button class="slds-button slds-button_neutral" onclick="{!c.addNewContent}" disabled="{!v.messageCount>=5}">新增訊息</button>
+                <button class="slds-button slds-button_neutral" onclick="{!c.saveAllContent}" disabled="{!v.TheContent.Status__c!='草稿'}">暫存</button>
+                <button class="slds-button slds-button_neutral" onclick="{!c.previewMe}">預覽</button>
+                <button class="slds-button slds-button_neutral" onclick="{!c.completeAllContent}" disabled="{!v.TheContent.Status__c!='草稿'}">完成</button>
+            </div>
+            <br/>
+            <span class="LargeFonts">請設定文案內容</span>
+            <br/>
+            <div>
+                <aura:iteration items="{!v.TheContentList}" var="loopContent">
+                    <c:Line_Content_Detail TheContent="{!loopContent}" TheUserID="{!v.TheUserID}" IMOJIlist="{!v.IMOJIlist}"
+                    StickerList11537="{!v.StickerList11537}" 
+                    StickerList11538="{!v.StickerList11538}" 
+                    StickerList11539="{!v.StickerList11539}"/>
+                </aura:iteration>
+                <div style="padding-top: 15px;">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.BackToTheFuture}" >返回清單</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.addNewContent}" disabled="{!v.messageCount>=5}">新增訊息</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.saveAllContent}" disabled="{!v.TheContent.Status__c!='草稿'}">暫存</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.previewMe}">預覽</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.completeAllContent}" disabled="{!v.TheContent.Status__c!='草稿'}">完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: 15px; width:39%; float:right;">
+        <div class="{!v.isNext ? 'slds slds-hide' : 'slds '}">
+            <span class="LargeFonts">預覽</span><br/>
+            
+            <div class="slds-page-header slds-page-header_object-home cLineChatWindow" data-aura-rendered-by="1115:0" data-aura-class="cLineChatWindow">
+                <div class="slds-grid" data-aura-rendered-by="1137:0">
+                       <div id="message_div" class="slds-textarea form-control message-font">
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText1}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText2}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText3}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText4}">
+                        </lightning:formattedRichText>
+                        <lightning:formattedRichText class="slds-scrollable slds-textarea2" value="{!v.previewText5}">
+                        </lightning:formattedRichText>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

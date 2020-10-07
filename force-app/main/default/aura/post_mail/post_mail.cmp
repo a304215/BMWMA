@@ -1,0 +1,99 @@
+<aura:component  implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,forceCommunity:availableForAllPageTypes" access="global" controller = "post_mail_controller">
+ 	<aura:attribute name="TheUserID" type="String"/>
+ 	<aura:attribute name="ContentID" type="String"/>
+ 	<aura:attribute name="PushNO" type="String"/>
+ 	<aura:attribute name="PushTitle" type="String"/>
+ 	<aura:attribute name="PushType" type="String"/>
+ 	<aura:attribute name="ClickURL" type="String"/>
+ 	<aura:attribute name="ClickText" type="String"/>
+ 	<aura:attribute name="PushContent" type="String"/>
+	<aura:attribute name="ImageURL" type="String" default=""/>
+	<aura:attribute name="showPreview" type="String" />
+	<aura:attribute name="previewText" type="string" />
+	<aura:attribute name="isSpinner" type="Boolean" default="false"/>
+ 	<aura:attribute name="isPushNOBlank" type="Boolean" default="false"/>
+ 	<aura:attribute name="isPushTitleBlank" type="Boolean" default="false"/>
+ 	<aura:attribute name="isPushTypeBlank" type="Boolean" default="false"/>
+ 	<aura:attribute name="isClickURLBlank" type="Boolean" default="false"/>
+ 	<aura:attribute name="isClickTextBlank" type="Boolean" default="false"/>
+ 	<aura:attribute name="isPushContentBlank" type="Boolean" default="false"/>
+ 	<aura:attribute name="isIMGBlank" type="Boolean" default="false"/>
+ 	<aura:attribute name="fieldHelpText" type="map" />
+	<aura:attribute name="goNextDisable" type="Boolean" default="false"/>
+	<aura:attribute name="isNext" type="Boolean" default="false"/>
+	<aura:attribute name="useJourneyBuilder" type="Boolean" default="false"/>
+	<aura:attribute name="uploadMemberWays" type="List" default="[{'label': '報告', 'value': 'report'},{'label': 'CSV', 'value': 'csv'}]"/>
+	<aura:attribute name="uploadMemberWay" type="String" default="report"/>
+	<aura:attribute name="reportList" type="Report[]" />
+	<aura:attribute name="line_user" type="string[]"/>
+	<aura:attribute name="reportId" type="String" default=""/>
+	<aura:attribute name="reportCount" type="Integer" default="0"/>
+	<aura:attribute name="contentVersionId" type="String" default=""/>
+	<!--<aura:attribute name="csvCounts" type="Integer" default="0"/>-->
+	<aura:attribute name="pushCycleKinds" type="List" default="[{'label': '單次發送', 'value': 'once'},{'label': '循環發送', 'value': 'cycle'}]"/>
+	<aura:attribute name="pushCycleKind" type="String" default="once"/>
+	<aura:attribute name="setDatetime" type="Datetime"/>
+	<aura:attribute name="pushImmediately" type="Boolean" default="false"/>
+	<aura:attribute name="pushPeriods" type="List" default="[{'label': '每日', 'value': 'daily'},{'label': '每周', 'value': 'weekly'},{'label': '每月', 'value': 'monthly'},{'label': '每年', 'value': 'yearly'},{'label': '每月月底', 'value': 'endOfMonth'}]"/>
+	<aura:attribute name="pushPeriod" type="String" default="daily"/>
+	<aura:attribute name="scheduleStartDate" type="Date"/>
+	<aura:attribute name="scheduleEndDate" type="Date"/>
+	<aura:attribute name="scheduleStartTime" type="Time"/>
+	<aura:attribute name="isTest" type="Boolean" default="false"/>
+ 	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 	<div style="padding: 15px;">
+		<div class="slds">
+			<div class="{!v.useJourneyBuilder ? 'slds slds-hide' : 'slds'}">
+				<h1 class = "font-20">請設定文案名稱</h1>
+				<h1 class = "font-16">草稿</h1>
+				<lightning:input name="reportCount" value="{!v.reportCount}" variant="label-hidden" />
+				<h1 class = "font-20">傳送對象1(Report)</h1>
+				<lightning:select name="InputSelectSingle" aura:id="InputSelectSingle" onchange="{!c.onSingleSelectChange}" value="{!v.reportId}">
+						<option label="None" text=""/>
+						<aura:iteration items="{!v.reportList}" var="loopRep">
+						<option label="{!loopRep.Name}" value="{!loopRep.Id}" selected="{!v.reportId == loopRep.Id}"/>
+					</aura:iteration>
+				</lightning:select>
+				<h1 class = "font-20">傳送對象2(CSV)</h1>
+				<div class="slds-file-selector slds-file-selector_files">
+					<div class="slds-file-selector__dropzone"> 
+						<table>
+							<tr>
+								<td>
+									<div class="{!v.contentVersionId ? 'slds' : 'slds slds-hide'}">
+										<lightning:icon iconName="doctype:csv" class="slds-align_absolute-center" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<lightning:fileUpload name="fileUploader"
+														accept=".csv"
+														recordId="{!v.ContentID}"
+														onuploadfinished="{!c.handleUploadCSV}" 
+														disabled="false"/>
+								</td>
+								<td>
+									<button style="margin-top:20px; margin-left:20px;" class="slds-button slds-button_neutral" onclick="{!c.clearCSV}">清除</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<br />
+				<h1 class = "font-20">立即寄送</h1>
+				<ui:inputCheckbox aura:id="checkbox" value="{!v.pushImmediately}"/>
+				<h1 class = "font-20">請設定寄送時間</h1>
+				<lightning:input type="datetime" aura:id="setDatetime" class="field" value="{!v.setDatetime}" disabled="{!v.pushImmediately}"/>
+			</div>
+            <div>
+				<lightning:textarea name = "input1" label = "文字"></lightning:textarea>
+			</div>
+			<br />
+			<br />
+            <div class="slds-button-group" role="group">
+				<button class="slds-button slds-button_brand" onclick="{!c.saveCompleted}">完成</button>
+			</div>
+        </div>
+    </div>
+</aura:component>

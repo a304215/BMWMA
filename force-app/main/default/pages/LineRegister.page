@@ -1,0 +1,521 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0" action="{!checkIsLogin}">
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- css -->
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main_login.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main_login-mobile.css'}" /> 
+  <link rel="stylesheet" href="{! $Resource.linePage + '/font.css'}" />
+
+  <!-- lity lightbox -->
+  <link href="{! $Resource.linePageLity + '/lity/dist/lity.css'}" rel="stylesheet"/>
+  <script src="{! $Resource.linePageLity + '/lity/vendor/jquery.js'}"></script>
+  <script src="{! $Resource.linePageLity + '/lity/dist/lity.js'}"></script>
+
+  <!-- icon font -->
+  <link href="{! $Resource.linePageWebFont + '/webfont/css/all.css'}" rel="stylesheet"/>
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    
+  <style type="text/css">
+      
+    .hello-tittle_mCus {
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_hv",
+          "Noto Sans TC";
+        font-weight: 700;
+        letter-spacing: 0px;
+        font-size: 26px;
+        line-height: 1.46;
+        letter-spacing: 0px;
+        color: #0066b1;
+        margin: 20 auto 0 auto;
+        text-align: center;
+        display: block !important;
+    }
+    
+    .longField {
+        width: 570px;
+        height: 40px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid 1px #262626;
+    }
+    
+    .shortField {
+        width: 176px;
+        height: 40px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid 1px #262626;
+        color: #ccc;
+    }
+    
+    .checkok {
+        width: 240px;
+        height: 50px;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background-color: #1c69d4;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+        .checknotok {
+        width: 240px;
+        height: 50px;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background-color: #8e8e8e;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+      .inline {
+        position: fixed;
+        background: #fff;
+        width: 315px;
+        height: auto;
+        box-shadow: 0 10px 20px 0 rgba(5, 45, 84, 0.2);
+        border: solid 1px #d8dce0;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+      .waitfor {
+        width: 200px;
+        height: 50px;
+        border: none;
+        outline: none;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+          "Noto Sans TC";
+        font-size: 16px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 1px;
+        text-align: center;
+        color: #fff;
+        background-color: #1c69d4;
+        margin-top: 20px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+  }
+    </style>
+      
+    <style type="text/css" media=" screen and (max-width:376px)">      
+    .hello-tittle_mCus {
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_hv",
+          "Noto Sans TC";
+        font-weight: 700;
+        letter-spacing: 0px;
+        font-size: 26px;
+        line-height: 1.46;
+        letter-spacing: 0px;
+        color: #0066b1;
+        margin: 20 auto 0 auto;
+        text-align: center;
+        display: block !important;
+    }
+    
+    .longField {
+        width: 315px;
+        height: 40px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid 1px #262626;
+    }
+    
+    .shortField {
+        width: 95px;
+        height: 40px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid 1px #262626;
+        color: #ccc;
+    }
+    
+    .checkok {
+        width: 240px;
+        height: 50px;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background-color: #1c69d4;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+        .checknotok {
+        width: 240px;
+        height: 50px;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background-color: #8e8e8e;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+      .inline {
+        position: fixed;
+        background: #fff;
+        width: 315px;
+        height: auto;
+        box-shadow: 0 10px 20px 0 rgba(5, 45, 84, 0.2);
+        border: solid 1px #d8dce0;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+      .waitfor {
+        width: 200px;
+        height: 50px;
+        border: none;
+        outline: none;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+          "Noto Sans TC";
+        font-size: 16px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 1px;
+        text-align: center;
+        color: #fff;
+        background-color: #1c69d4;
+        margin-top: 20px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+  }
+
+  </style>
+    
+</head>
+
+<body>
+  <apex:form >
+  <!-- container-->
+  <div class="container">
+    <!-- 系統訊息 -->
+    <div class="Welcome" style="width: 375px;background: url({! $Resource.linePage + '/img/gray-bkg-pattern-mobile.svg'}) no-repeat center center;">    
+      <!-- svg -->
+      <img src="{! $Resource.linePage + '/img/bmw-white-logo.svg'}" class="BMW_White_Logo" style=" align-items: center;justify-content: center;display: flex;margin-top:20px;margin-bottom:0px"/>
+      <p class="hello-tittle" >
+        你好！<br />
+        歡迎加入BMW會員
+      </p>
+      <p class="hello-tittle_mCus" style="display: none">
+        你好！歡迎加入BMW會員
+      </p>
+    </div>
+
+    <div class="right_login">
+      <div class="main">
+        <div class="main-tittle">
+          <div id="tittle-1">註冊會員即可使用線上預約保養、活動報名等車主專屬禮遇</div>
+          <div id="tittle-2" style="display: none;">已發送驗證碼至以下號碼 <span>0912-•••-888</span></div>
+            <div id="tittle-3" style="display: none;"><span class="phoneok">手機驗證成功！</span><br/>
+            <span>接下來，設定你的會員密碼，以後使用手機跟密碼就可以登入</span></div>
+            <div id="tittle-4" style="display: none;"><span class="passwordok">密碼設定成功！</span><br/>
+            <span>最後一步了，填寫以下資料，未來就有機會獲得更多專屬好禮與驚喜喔！</span></div>
+        </div>
+        <ul class="step">
+          <li><img src="{! $Resource.linePage + '/img/step-1-actived.svg'}" id="step1-active" />
+              <img src="{! $Resource.linePage + '/img/step-1.svg'}" id="step1" style="display: none;"/></li>
+          <div class="step-line"></div>
+          <li><img src="img/step-2-actived.svg" id="step2-active" style="display: none;" /><img src="img/step-2.svg" />
+          </li>
+          <div class="step-line"></div>
+          <li><img src="img/step-3-actived.svg" id="step3-active" style="display: none;" /><img src="img/step-3.svg" />
+          </li>
+          <div class="step-line"></div>
+          <li><img src="img/step-4-actived.svg" id="step4-active" style="display: none;" /><img src="img/step-4.svg" />
+          </li>
+        </ul>
+        <!-- step-1 -->
+        <div class="add-step" id="addinfo">
+          <div class="step1-input-1">
+            <label for="phonenumber">手機</label>
+                <apex:inputText id="Mobile" value="{!loginCustomer.Mobile__c}" html-placeholder="輸入您的手機號碼" styleclass="longField">
+                <apex:actionSupport event="onchange" reRender="linkPanel"/>
+                </apex:inputText>
+                <!--提示先拿掉 style="display: none;"-->
+                <span id="MobileErr" class="redwords" style="display: none;">手機號碼錯誤，請重新輸入！</span>
+                </div>
+          <div class="step1-input-2">
+            <div class="add-information-2">
+              <div class="a1">
+                <label for="lastname">姓氏</label>
+                <apex:inputText id="FirstName" value="{!loginCustomer.LastName__c}" styleclass="shortField">
+                <apex:actionSupport event="onchange" reRender="linkPanel"/></apex:inputText></div>
+                
+              <div class="a2">
+                <label for="firstname">名字</label>
+                <apex:inputText id="LastName" value="{!loginCustomer.FirstName__c}" styleclass="shortField">
+                <apex:actionSupport event="onchange" reRender="linkPanel"/></apex:inputText></div>
+              <div class="a3">
+                <label for="firstname">性別</label>
+                <apex:selectList id="Gender" value="{!loginCustomer.Gender__c}" size="1" styleclass="shortField" style="height: 45px">
+                <apex:selectOptions value="{!GenderList}"/>
+                <apex:actionSupport event="onchange" reRender="linkPanel"/>
+                </apex:selectList>
+              </div>
+            </div>
+          </div>
+          <div class="step1-input-3">
+            <label for="phonenumber">車牌號碼</label>
+                <apex:inputText id="Name" value="{!myAsset}" html-placeholder="輸入車牌號碼" styleclass="longField">
+                <apex:actionSupport event="onchange" reRender="linkPanel"/>
+                </apex:inputText></div>   
+          <div class="personal">  
+                <apex:inputCheckbox id="checkMyform" value="{!loginCustomer.Agreement__c}">
+                <apex:actionSupport event="onchange" reRender="linkPanel"/>
+                </apex:inputCheckbox>
+                <a style="font-size: 12px;color: #262626;margin-left: 6px;line-height: 1.43;">我同意個資</a>
+                <apex:commandLink action="{!gotoDisclaimer}" value="蒐集告知" style="border-bottom: solid 1px #262626;text-decoration: none;color: #262626;font-size: 12px" />  
+          </div>
+                <span id="formErr" class="redwords" style="display: none;">請同意個資蒐集告知！</span>
+                
+          <apex:outputPanel id="linkPanel">
+          <apex:commandLink styleclass="checkok" value="下一步，輸入驗證碼" onclick="return checkValue();" action="{!LineRegister}" id="register" style="text-decoration: none" rendered="{!and(loginCustomer.Mobile__c !=null, loginCustomer.LastName__c != null, loginCustomer.FirstName__c != null, loginCustomer.Gender__c !=null, myAsset != null, loginCustomer.Agreement__c = true)}"/>
+                <apex:outputText styleclass="checknotok" value="下一步，輸入驗證碼" rendered="{!or(loginCustomer.Mobile__c == null, loginCustomer.LastName__c == null, loginCustomer.FirstName__c == null, loginCustomer.Gender__c ==null, myAsset == null, loginCustomer.Agreement__c = false)}"/>
+                </apex:outputPanel>
+                
+          <div class="already-1">已經是會員？
+                <apex:commandLink action="{!gotoLogin}" value="立即登入" style="color:#1c69d4;border-bottom: solid 1px #1c69d4;text-decoration: none;"/>
+          </div>
+        </div>
+                
+        <!--lity hide box -->
+        <apex:outputPanel styleClass="inline" layout="block" rendered="{!displayPopUp}" >
+          <apex:commandLink action="{!gotoRegister}" oncomplete="window.location.reload();" 
+                  styleclass="fas fa-times pressX" style="display: block;margin: 0 0 0 auto;font-size: 20px;text-decoration:none;color: #262626">
+          </apex:commandLink>
+          <div class="lityinfo">
+                <div id="messageDiv" >
+                            <p>
+                                <div id="myMessage" style="text-align: center;">
+                            </div>
+                        </p>
+                    </div>
+          </div>
+          <apex:commandLink styleclass="waitfor" value="確定" action="{!gotoRegister}" style="text-decoration:none"/>
+        </apex:outputPanel>
+                
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/> 
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+            <script type="text/javascript">
+                window.onload = function (e) {
+                    liff.init({liffId: '{!LIFFID}'}, function () {
+                         checkLiffLogin(liff.getContext().userId);
+                    });
+                };
+
+                function checkLiffLogin(mLineID)
+                 {
+                     document.getElementById('{!$Component.userLineID}').value = mLineID;
+                     Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.Line_webBase.checkLinkLine}',
+                        mLineID,
+                        function(result, event){
+                             if(event.status){
+                                 if(result === "NO_CustomerUser")
+                                   {
+                                       //document.getElementById('needLoginDiv').style.display = '';
+                                       //document.getElementById('myDiv').style.display = '';
+                                       //alert('請先登入會員');
+                                       //window.location = 'lineLogin?loginStep=1';   
+                                   }
+                                   else if(result === "NOPwd")
+                                   {
+                                       alert('您尚未設定密碼, 請先設定密碼'); 
+                                       window.location = 'LinePassword'; 
+                                   }
+                                   else
+                                   {
+                                       var d = new Date();
+                                       d.setTime(d.getTime()+(1*24*60*60*1000));
+                                       var expires = "expires="+d.toGMTString();
+                                       //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+                                       //網頁關掉就清掉cookies
+                                       document.cookie = "apex__sessionID="+result+"; path=/";
+                                       var sid = setInterval(function(){ 
+                                       clearInterval(sid); 
+                                       window.location = 'LineRegister';
+                                                             }, 350);
+                                   }
+                            }
+                        },
+                            {escape: true}
+                        );
+                    }
+                              
+                   function closeLIFF()
+                   {
+                      liff.closeWindow();
+                   }
+            </script>
+        </apex:outputPanel>
+    
+        <script type="text/javascript">
+            function checkValue() 
+            {
+                var errMsg = '';
+                var MobileElement = document.getElementById('{!$Component.Mobile}');
+                if(MobileElement.value.length === 10)
+                {
+                    document.getElementById('{!$Component.Mobile}').style.borderColor = '';
+                    document.getElementById('MobileErr').style.display = 'none';   
+                }
+                else
+                {
+                    errMsg = '手機錯誤';
+                    document.getElementById('{!$Component.Mobile}').style.borderColor = 'red';
+                    document.getElementById('MobileErr').style.display = '';
+                }
+                if(document.getElementById('{!$Component.checkMyform}').checked)
+                {    
+                    document.getElementById('{!$Component.checkMyform}').style.borderColor = '';
+                    document.getElementById('formErr').style.display = 'none';
+                }
+                else
+                {
+                    errMsg = '未同意條款';
+                    document.getElementById('{!$Component.checkMyform}').style.borderColor = 'red';
+                    document.getElementById('formErr').style.display = '';
+                }
+                
+                if(errMsg != '')
+                {
+                    return false;
+                }
+            }
+            
+        </script>
+    
+        <script type="text/javascript">
+        function showMessageDiv()
+        {
+            document.getElementById('messageDiv').style.display = '';
+        }
+        function hideMessageDiv()
+        {
+            document.getElementById('messageDiv').style.display = 'none';
+        }
+        </script>
+        
+        <script type="text/javascript">
+        function showMessage()
+        {
+            if('{!Response}' === "")
+            {
+                
+            }
+            else
+            {
+                document.getElementById('myMessage').innerHTML = '{!Response}';
+                showMessageDiv();
+            }
+        }
+        
+        showMessage();
+        </script>
+
+        <script>
+          $("#checkok-1").click(function () {
+            $("#tittle-2, #addinfo-2").show();
+            $("#tittle-1, #tittle-3, #tittle-4, #addinfo, #addinfo-3, #addinfo-4").hide();
+          });
+
+          $("#checkok-2").click(function () {
+            $("#tittle-3, #addinfo-3").show();
+            $("#tittle-1, #tittle-2, #tittle-4, #addinfo, #addinfo-2, #addinfo-4").hide();
+          });
+
+          $("#checkok-3").click(function () {
+            $("#tittle-4, #addinfo-4").show();
+            $("#tittle-1, #tittle-2, #tittle-3, #addinfo, #addinfo-2, #addinfo-3").hide();
+          });
+
+          $("#passwordhide-1").click(function () {
+            $("#passwordshow-1").show();
+            $("#passwordhide-1").hide();
+          });
+
+          $("#passwordhide-2").click(function () {
+            $("#passwordshow-2").show();
+            $("#passwordhide-2").hide();
+          });
+        </script>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!--footer -->
+  <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+    <ul class="BMW">
+      <li><a href="#">BMW官網</a></li>
+      <li><a href="#">全台展示中心</a></li>
+      <li><a href="#">預約賞車</a></li>
+      <li><a href="#">網站聲明</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    $(function () {
+          var $li = $('ul.step li');
+          $($li.eq(0).addClass('active').siblings('.addstep').hide();
+
+            $li.click(function () {
+                $($(this).show().siblings('.addstep').hide(); $(this).addClass('active').siblings('.active')
+                  .removeClass('active');
+                });
+            });
+  </script>
+</apex:form>
+</body>
+
+</html>
+</apex:page>

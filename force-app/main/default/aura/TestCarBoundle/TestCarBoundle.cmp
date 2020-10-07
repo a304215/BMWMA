@@ -1,0 +1,17 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" action="{!c.getMyRecordId}" value="{!this}" />
+    <aura:attribute name="OpportunityID" type="String"/>
+    <div class="slds">
+        <div class="slds-card">
+            <!--
+			<c:TestCarSelection />
+			-->
+            <c:DependentPicklist />
+        </div>
+    </div>
+    <div class="slds">
+        <div class="slds-card">
+    		<c:TestCarReservation OpportunityID="{!v.OpportunityID}"/>
+        </div>
+    </div>
+</aura:component>

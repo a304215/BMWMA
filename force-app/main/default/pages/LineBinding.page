@@ -1,0 +1,306 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0" action="{!checkIsLogin}">
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- css -->
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main-mobile.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/font.css'}" />
+
+  <!-- lity lightbox -->
+  <link href="{! $Resource.linePageLity + '/lity/dist/lity.css'}" rel="stylesheet"/>
+  <script src="{! $Resource.linePageLity + '/lity/vendor/jquery.js'}"></script>
+  <script src="{! $Resource.linePageLity + '/lity/dist/lity.js'}"></script>
+
+  <!-- icon font -->
+  <link href="{! $Resource.linePageWebFont + '/webfont/css/all.css'}" rel="stylesheet"/>
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    
+  <style type="text/css">
+        
+      .updated-number {
+          font-family: "BMWTypeNextLatinTT-Regular", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          width: 315px;
+          height: 50px;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: solid 1px #d6d6d6;
+       }
+    
+        .inline {
+          position: fixed;
+          background: #fff;
+          width: 315px;
+          height: auto;
+          box-shadow: 0 10px 20px 0 rgba(5, 45, 84, 0.2);
+          border: solid 1px #d8dce0;
+          padding: 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+	}
+    
+      .waitfor {
+          width: 284px;
+          height: 50px;
+          border: none;
+          outline: none;
+          font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+            "Noto Sans TC";
+          font-size: 16px;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.67;
+          letter-spacing: 1px;
+          text-align: center;
+          color: #fff;
+          background-color: #1c69d4;
+          margin-top: 20px;
+          align-items: center;
+          display: flex;
+          justify-content: center;
+  }
+    
+      .noneed {
+          color: #1c69d4;
+          font-size: 15px;
+          border-bottom: solid 1px #1c69d4;
+          margin-top: 20px;
+  }
+    
+      .alert {
+          width: 355px;
+          height: 45px;
+          box-shadow: 0 10px 20px 0 rgba(5, 45, 84, 0.15);
+          background-color: #eaeef3;
+          position: absolute;
+          left: calc(50% - 177.5px);
+          top: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+  }
+
+    </style>
+    
+</head>
+
+<body>
+  <apex:form >
+  <!-- container-->
+  <div class="w_G-51-">
+    <!-- svg -->
+    <div class="member-header-pattern-copy">
+      <img src="{! $Resource.linePage + '/img/bmw-white-logo.svg'}" class="BMW_White_Logo" />
+      <p class="header-tittle">會員資料</p>
+    </div>
+    <div class="Rectangle">
+      <div class="main">
+        <!-- 愛車資料..新增車牌號碼..點新增才會打開-->
+        <ul class="main-go-back-tittle">
+          <a href="w_G5.1.html">
+            <li><i class="fas fa-chevron-left" style="margin-right: 10px;"></i>
+              <apex:commandLink value="返回" action="{!gotoBinding}" />
+            </li>
+          </a>
+        </ul>
+              
+        <!-- 新增車牌號碼..點新增才會打開-->
+        <div class="lovecars" id="addcar-number">
+          <div class="member-addcars">
+            <div class="a7">
+              <label for="updated-number">請輸入要新增的車牌號碼</label>
+                    <apex:inputText styleclass="updated-number" value="{!myasset}" html-placeholder="輸入車牌號碼"/></div>
+            <div class="buttons">
+              <apex:commandLink styleclass="updated" value="確認新增" action="{!BindingAsset}">
+              </apex:commandLink>
+            </div>
+          </div>
+        </div>
+                  
+        <!--lity hide box -->
+        <apex:outputPanel styleClass="inline" layout="block" rendered="{!displayCasePopUp}" >
+          <apex:commandLink action="{!gotoBinding}" oncomplete="window.location.reload();" 
+                  styleclass="fas fa-times pressX" style="display: block;margin: 0 0 0 auto;font-size: 20px;text-decoration:none;color: #262626">
+          </apex:commandLink>
+          <p style="font-size: 20px;margin-bottom: 30px;margin-top: 0;">車牌號碼認證中</p>
+          <div class="lityinfo">您註冊的車牌號碼正在處理中，為提供給您更好的服務與個資保護，我們將會有服務專人與您聯繫確認相關事宜，感謝您的耐心等待！
+          </div>
+          <apex:commandLink styleclass="waitfor" value="等專人與我聯繫" action="{!CreateAssetCase}" oncomplete="window.location='LineAsset'"/>
+          <apex:commandLink styleclass="noneed" value="暫時不用，下次再說" action="{!gotoBinding}" />
+          <!--
+          <button id="waitfor" type="submit" value="完成送出" data-lity-close="true">等專人與我聯繫</button>
+          <a class="noneed" data-lity-close="true">暫時不用，下次再說</a>
+          -->
+        </apex:outputPanel>
+        
+        
+        <!--lity hide box
+        <apex:outputPanel styleClass="inline" layout="block" rendered="{!displayPopUp}" >
+          <apex:commandLink action="{!gotoBinding}" oncomplete="window.location.reload();" 
+                  styleclass="fas fa-times pressX" style="display: block;margin: 0 0 0 auto;font-size: 20px;text-decoration:none;color: #262626">
+          </apex:commandLink>
+          <div class="lityinfo">綁定成功！
+          </div>
+          <apex:commandLink styleclass="waitfor" value="完成" action="{!gotoBinding}"/>
+        </apex:outputPanel>
+        -->
+    
+    <apex:outputPanel styleClass="alert" rendered="{!displayPopUp}" > 
+                  <img src="{! $Resource.linePage + '/img/check.svg'}"/><span>新增車輛成功！</span>
+    <script type="text/javascript">
+                      var sid = setInterval(function(){ 
+					  clearInterval(sid); 
+                      window.location = 'LineAsset';
+                      }, 1000);
+    </script>
+    </apex:outputPanel>
+               
+                  
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/> 
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+			<script type="text/javascript">
+				window.onload = function (e) {
+                    liff.init({liffId: '{!LIFFID}'}, function () {
+						 checkLiffLogin(liff.getContext().userId);
+					});
+				};
+
+				function checkLiffLogin(mLineID)
+                 {
+                     document.getElementById('{!$Component.userLineID}').value = mLineID;
+                     Visualforce.remoting.Manager.invokeAction(
+		                '{!$RemoteAction.Line_webBase.checkLinkLine}',
+						mLineID,
+		                function(result, event){
+		                     if(event.status){
+		                         if(result === "NO_CustomerUser")
+		                           {
+                                       //document.getElementById('needLoginDiv').style.display = '';
+                                       //document.getElementById('myDiv').style.display = '';
+									   alert('請先登入會員');
+                                       //window.location = 'lineLogin?loginStep=1';   
+		                           }
+                                   else if(result === "NOPwd")
+                                   {
+                                       alert('您尚未設定密碼, 請先設定密碼'); 
+                                       window.location = 'LinePassword'; 
+                                   }
+		                           else
+		                           {
+		                           	   var d = new Date();
+									   d.setTime(d.getTime()+(1*24*60*60*1000));
+									   var expires = "expires="+d.toGMTString();
+									   //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+									   //網頁關掉就清掉cookies
+									   document.cookie = "apex__sessionID="+result+"; path=/";
+		                           	   var sid = setInterval(function(){ 
+									   clearInterval(sid); 
+                                       window.location = 'LineModify';
+                                                             }, 350);
+		                           }
+							}
+						},
+		                    {escape: true}
+	                    );
+					}
+                              
+                   function closeLIFF()
+                   {
+                      liff.closeWindow();
+                   }
+			</script>
+        </apex:outputPanel>               
+
+        <!--jq hide buttons, and add attr-->
+        <script>
+          $("#member-edit").click(function () {
+            $("#member-cancel, #member-save").show();
+            $("#member-edit").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', false);
+          });
+
+          $("#member-save, #member-cancel").click(function () {
+            $("#member-edit").show();
+            $("#member-save, #member-cancel").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', true);
+          });
+
+          $(document).ready(function () {
+            $("#car-1, #car-2, #car-3").click(function () {
+              $(".system-notice").fadeToggle('slow');
+            });
+            $("#toptittle, #add-car").click(function () {
+              $(".system-notice").hide();
+            });
+          });
+
+          $("#add-car").click(function () {
+            $(".main-go-back-tittle, #addcar-number").show();
+            $(".main-tittle, #member, #lovecars").hide();
+          });
+
+
+          $(".main-go-back-tittle").click(function () {
+            $(".main-tittle, #member, #lovecars").show();
+            $(".main-go-back-tittle, #addcar-number").hide();
+          });
+
+          $("#car-edit").click(function () {
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").show();
+            $("#car-edit").hide();
+          });
+          $("#carmove-cancel, #sandout").click(function () {
+            $("#car-edit").show();
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").hide();
+          });
+        </script>
+
+      </div>
+    </div>
+    <!--footer -->
+    <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+      <ul class="BMW">
+        <li><a href="#">BMW官網</a></li>
+        <li><a href="#">全台展示中心</a></li>
+        <li><a href="#">預約賞車</a></li>
+        <li><a href="#">網站聲明</a></li>
+      </ul>
+    </footer>
+    <script>
+      $(function () {
+        var $li = $('ul.main-tittle li');
+        $($li.eq(0).addClass('active').find('a').attr('href')).siblings('.lovecars').hide();
+
+        $li.click(function () {
+          $($(this).find('a').attr('href')).show().siblings('.lovecars').hide();
+          $(this).addClass('active').siblings('.active').removeClass('active');
+        });
+      });
+    </script>
+
+</div>
+</apex:form>
+</body>
+
+</html>
+</apex:page>

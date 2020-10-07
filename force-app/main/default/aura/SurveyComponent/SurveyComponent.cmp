@@ -1,0 +1,11 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="iframeUrl" type="String"/>
+    <aura:attribute name="surveyId" type="String"/>
+    <aura:attribute name="opptyid" type="String"/>
+    <aura:attribute name="rId" type="String"/>
+    <aura:attribute name="totalURL" type="String"/>
+    <aura:handler event="c:PassSurvey" action="{!c.getResult}"/>    
+    <span style="{!if(v.iframeUrl !=null, '', 'display:none;')}">
+        <iframe src="{!v.totalURL}" width="100%" height="500px;" frameBorder="0"/>
+    </span>
+</aura:component>

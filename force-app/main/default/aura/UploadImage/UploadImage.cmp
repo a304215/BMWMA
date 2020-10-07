@@ -1,0 +1,52 @@
+<aura:component controller="uploadImageController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:attribute name="ComponentName" type="String"/>
+	<aura:attribute name="theRecordId" type="String"/>
+	<aura:attribute name="objectName" type="String"/>
+    <aura:attribute name="fieldName" type="String"/>
+	<aura:attribute name="TheUserID" type="String"/>
+    <aura:attribute name="IMGURL" type="String" />
+    
+    <aura:handler name="init" action="{!c.init}" value="{!this}" />
+    
+    
+    <div class="slds-card">
+        <div class="slds-p-around_medium">
+            <div class="slds-form-element">
+            	<div style="padding:15px;">
+                    <div style="padding-bottom:10px;">
+                    	<header class="slds-media slds-media--center slds-has-flexi-truncate" data-aura-rendered-by="2834:0">
+                            <div class="slds-media__figure" data-aura-rendered-by="2835:0">
+                                <div class="extraSmall forceEntityIcon" style="background-color: #BAAC93" data-aura-rendered-by="3117:0" data-aura-class="forceEntityIcon">
+                                    <span data-aura-rendered-by="3120:0" class="uiImage" data-aura-class="uiImage">
+                                        <img data-aura-rendered-by="3118:0" src="/img/icon/t4v35/standard/file_120.png" class="icon " alt="{!v.ComponentName}" title="{!v.ComponentName}"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="slds-media__body" data-aura-rendered-by="2836:0">
+                                <h2 id="header_2826:0" data-aura-rendered-by="2837:0">
+                                    <a class="slds-card__header-link baseCard__header-title-container" data-aura-rendered-by="2838:0" href="javascript:void(0);">
+                                        <span class="slds-card__header-title slds-truncate slds-m-right--xx-small" title="{!v.ComponentName}" data-aura-rendered-by="2839:0">
+                                            {!v.ComponentName}
+                                        </span>
+                                    </a>
+                                </h2>
+                            </div>
+                        </header>
+		                <div></div>
+		                <div class="slds-file-selector slds-file-selector_files">
+		                    <div class="slds-file-selector__dropzone"> 
+		                        <lightning:fileUpload name="fileUploader"
+		                                              accept=".png,.jpg,.gif"
+		                                              recordId="{!v.theRecordId}"
+		                                              onuploadfinished="{!c.handleUploadFinished}" 
+		                                              disabled="false"
+		                                              />
+		                        <img class="ng-scope" src="{!v.IMGURL}" width="240"></img>
+		                    </div>
+		                </div>
+		            </div>
+		    	</div>
+            </div>                    
+        </div>
+    </div>
+</aura:component>

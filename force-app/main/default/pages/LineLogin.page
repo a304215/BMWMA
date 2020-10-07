@@ -1,0 +1,184 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0" action="{!checkIsLogin}">
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- css -->
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main_login.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main_login-mobile.css'}" /> 
+  <link rel="stylesheet" href="{! $Resource.linePage + '/font.css'}" />
+
+  <!-- lity lightbox -->
+  <link href="{! $Resource.linePageLity + '/lity/dist/lity.css'}" rel="stylesheet"/>
+  <script src="{! $Resource.linePageLity + '/lity/vendor/jquery.js'}"></script>
+  <script src="{! $Resource.linePageLity + '/lity/dist/lity.js'}"></script>
+
+  <!-- icon font -->
+  <link href="{! $Resource.linePageWebFont + '/webfont/css/all.css'}" rel="stylesheet"/>
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+</head>
+
+  <style type="text/css">
+      
+    .phonenumber {
+        width: 315px;
+        height: 40px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid 1px #262626;
+    }	
+    
+    .checkok {
+        width: 240px;
+        height: 50px;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background-color: #1c69d4;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+  </style>
+    
+
+<body>
+<apex:form >
+  <!-- container-->
+  <div class="container">
+    <div class="welcome">
+      <!-- svg -->
+      <img src="{! $Resource.linePage + '/img/bmw-white-logo.svg'}" class="BMW_White_Logo" />
+      <p class="hello-tittle">
+        BMW會員登入 </p>
+      <p class="hello-tittle_m" style="display: none;">
+        BMW會員登入
+      </p>
+    </div>
+
+    <div class="right_login">
+      <div class="main">
+        <div class="main-tittle">
+          <div id="tittle-5">請輸入註冊時的手機號碼與密碼，就可開始體驗服務旅程</div>
+        </div>
+        <!-- step-1 -->
+        <div class="add-step" id="addinfo">
+          <div class="step1-input-1">
+            <label for="phonenumber">手機號碼</label>
+                <apex:inputText id="Mobile" value="{!myPhone}" html-placeholder="0911-111-111" styleclass="phonenumber"/>
+                <span class="redwords" style="display: none;">手機號碼錯誤，請重新輸入！</span></div>
+          <div class="step1-input-2">
+            <label for="password">密碼</label>
+                <apex:inputText id="Pwd" value="{!MyPassword}" html-placeholder="請輸入密碼" styleclass="phonenumber"/>
+                <img src="{! $Resource.linePage + '/img/show.svg'}"
+                id="memberlogin-passwordshow" style="display: none;"/><img src="{! $Resource.linePage + '/img/hide.svg'}"
+                id="memberlogin-passwordhide"/></div>
+ 
+          <script>
+            $("#memberlogin-passwordhide").click(function () {
+              $("#memberlogin-passwordshow").show();
+              $("#memberlogin-passwordhide").hide();
+            });
+          </script>
+
+        </div>
+        <div class="already">
+            <apex:commandLink action="{!gotoForgetPassword}" value="忘記密碼？" style="color:#1c69d4;border-bottom: solid 1px #1c69d4;text-decoration: none;"/>
+        </div>
+        <apex:commandLink styleclass="checkok" value="登入" action="{!LineLogin}" style="text-decoration: none"/>
+    
+        <div class="already-yet">尚未註冊嗎？        
+            <apex:commandLink action="{!gotoRegister}" value="註冊" style="color:#1c69d4;border-bottom: solid 1px #1c69d4;text-decoration: none;"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/> 
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+			<script type="text/javascript">
+				window.onload = function (e) {
+                    liff.init({liffId: '{!LIFFID}'}, function () {
+						 checkLiffLogin(liff.getContext().userId);
+					});
+				};
+
+				function checkLiffLogin(mLineID)
+                 {
+                     document.getElementById('{!$Component.userLineID}').value = mLineID;
+                     Visualforce.remoting.Manager.invokeAction(
+		                '{!$RemoteAction.Line_webBase.checkLinkLine}',
+						mLineID,
+		                function(result, event){
+		                     if(event.status){
+		                         if(result === "NO_CustomerUser")
+		                           {
+                                       //document.getElementById('needLoginDiv').style.display = '';
+                                       //document.getElementById('myDiv').style.display = '';
+									   alert('請先登入會員');
+                                       //window.location = 'lineLogin?loginStep=1';   
+		                           }
+                                   else if(result === "NOPwd")
+                                   {
+                                       alert('您尚未設定密碼, 請先設定密碼'); 
+                                       window.location = 'LinePassword'; 
+                                   }
+		                           else
+		                           {
+		                           	   var d = new Date();
+									   d.setTime(d.getTime()+(1*24*60*60*1000));
+									   var expires = "expires="+d.toGMTString();
+									   //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+									   //網頁關掉就清掉cookies
+									   document.cookie = "apex__sessionID="+result+"; path=/";
+		                           	   var sid = setInterval(function(){ 
+									   clearInterval(sid); 
+                                       window.location = 'LineMember';
+                                                             }, 350);
+		                           }
+							}
+						},
+		                    {escape: true}
+	                    );
+					}
+                              
+                   function closeLIFF()
+                   {
+                      liff.closeWindow();
+                   }
+			</script>
+        </apex:outputPanel> 
+
+  <!--footer -->
+  <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+    <ul class="BMW">
+      <li><a href="#">BMW官網</a></li>
+      <li><a href="#">全台展示中心</a></li>
+      <li><a href="#">預約賞車</a></li>
+      <li><a href="#">網站聲明</a></li>
+    </ul>
+  </footer>
+
+</apex:form>
+</body>
+
+</html>
+</apex:page>

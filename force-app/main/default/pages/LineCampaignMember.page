@@ -1,0 +1,169 @@
+<apex:page controller="Line_actWebBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <title>BMW 會員報到系統</title> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+        <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+        
+        <style type="text/css">
+            .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 8%;
+            padding:10px;
+            position: absolute;
+            width: 300px;          
+            top:100px; 
+            }
+            body{
+            text-align: center;
+            }
+            html {
+            text-align: center;
+            }
+        </style>
+    </head> 
+    <body>
+        <apex:form >
+            <div>
+                請確認以下活動報到資訊
+            </div>
+            
+            <apex:outputPanel rendered="{!CampaignMember.size == 0}">
+                <div>
+                    目前無需報到活動場次
+                </div>
+            </apex:outputPanel>
+            <apex:repeat value="{!CampaignMember}" var="loopCampaignMember" >
+                <div style="margin-top:10px">
+                    <span>
+                        姓名：
+                        {!if(loopCampaignMember.camp_member_name__c==null, loopCampaignMember.FirstName+loopCampaignMember.LastName, loopCampaignMember.camp_member_name__c)}
+                    </span>
+                </div>
+                <div>
+                    <span >
+                        活動場次：
+                        {!loopCampaignMember.Campaign.Name}</span>
+                </div> 
+                <div>
+                    <span>
+                        報到狀態：
+                        {!if(loopCampaignMember.Registered__c, '已報到', '未報到')}</span>
+                </div>  
+            </apex:repeat>
+            
+            <apex:commandButton style="margin-top:50px" value="確認報到" action="{!checkMember}" />
+            
+            <apex:outputPanel id="popup">
+                    <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                        <div id="messageDiv" >
+                            <p>
+                                <div id="myMessage">
+                            </div>
+                        </p>
+                    </div>
+                    <apex:commandButton value="確定" rerender="popup"/>
+                </apex:outputPanel>
+            </apex:outputPanel>
+          
+            <apex:inputhidden id="userLineID" value="{!userLineID}"/>
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+            <script type="text/javascript">
+            window.onload = function (e) {
+					liff.init({liffId: '{!LIFFID}'}, function () {
+                        checkLiffLogin(liff.getContext().userId);
+                    }).then(() => {
+                    }).catch((err) => {
+                        checkLiffLogin(liff.getContext().userId);
+                        
+                    });
+				};
+            
+            function checkLiffLogin(mLineID)
+            {
+                document.getElementById('{!$Component.userLineID}').value = mLineID;
+                        //alert(document.getElementById('{!$Component.userLineID}').value);
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.Line_actWebBase.checkLinkLine}',
+                    mLineID,
+                    function(result, event){
+                        if(event.status){
+                            if(result === "NO_CustomerUser")
+                            {
+                                //document.getElementById('needLoginDiv').style.display = '';
+                                //document.getElementById('myDiv').style.display = '';
+                                //alert('請先登入會員');
+                                //window.location = 'lineLogin?loginStep=1';   
+                            }
+                            else
+                            {
+                                var d = new Date();
+                                d.setTime(d.getTime()+(1*24*60*60*1000));
+                                var expires = "expires="+d.toGMTString();
+                                //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+                                //網頁關掉就清掉cookies
+                                document.cookie = "apex__ACTsessionID="+result+"; path=/";
+                                alert('您已登入，為您跳轉會員資料');
+                                window.location = 'LineCampaignMember?id={!MemberID}';
+                            }
+                        }
+                    },
+                    {escape: true}
+                );
+            }
+            
+            function closeLIFF()
+            {
+                liff.closeWindow();
+            }
+            </script>
+        </apex:outputPanel>
+        
+        <!--有帶參數的話, 就不管有沒有isLogin都要跑initial抓LIFFID-->
+        <apex:outputPanel rendered="{!isLogin}">
+            <script type="text/javascript">
+             window.onload = function (e) {
+					liff.init({liffId: '{!LIFFID}'}, function () {
+                    }).then(() => {
+                    }).catch((err) => {
+
+                    });
+				};
+                        </script>
+        </apex:outputPanel>
+        
+        
+        <script type="text/javascript">
+            function showMessageDiv()
+            {
+                document.getElementById('messageDiv').style.display = '';
+            }
+            function hideMessageDiv()
+            {
+                document.getElementById('messageDiv').style.display = 'none';
+            }
+        </script>
+            
+        <script type="text/javascript">
+            function showMessage()
+            {
+                if('{!Response}' === "")
+                {
+                    
+                }
+                else
+                {
+                    document.getElementById('myMessage').innerHTML = '{!Response}';
+                    showMessageDiv();
+                }
+            }      
+            showMessage();
+        </script>
+    </apex:form>    
+  </body>   
+</apex:page>

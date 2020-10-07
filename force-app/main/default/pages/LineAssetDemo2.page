@@ -1,0 +1,190 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0" action="{!checkIsLogin}">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <title>BMW 車主登入</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+        <script src="https://static.line-scdn.net/liff/edge/versions/2.4.0/sdk.js"></script>
+      
+       <style type="text/css">
+           .customPopup{
+                background-color: white;
+                border-style: solid;
+                border-width: 2px;
+                left: 8%;
+                padding:10px;
+                position: absolute;
+                width: 300px;          
+                top:100px; 
+            }
+            body{
+            text-align: center;
+            }
+            html {
+            text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <apex:form >
+            
+            <div>
+                請輸入註冊時的手機號碼與密碼, 就可以開始體驗服務旅程
+            </div>
+            
+            <div>
+               <label class="label">手機號碼 </label>
+               <apex:inputText id="Mobile" style="margin-top:10px" value="{!myPhone}"/>
+            </div>
+            
+            <div>
+                 <label id="MobileErr" style="color:red; display:none;">{!Response}</label>
+            </div>
+            
+            <div>
+               <label class="label">密碼 </label>
+                <apex:inputText id="Pwd" style="margin-top:10px" value="{!MyPassword}"/>
+            </div>
+            
+            <div>
+                 <label id="PwdErr" style="color:red; display:none;">{!Response}</label>
+            </div>
+            
+            <apex:commandButton style="margin-top:10px;margin-left:10px" value="登入" action="{!LineLogin}" onclick="return checkValue();"/>
+             
+            <div>
+                <apex:commandLink value="忘記密碼" action="{!gotoForgetPassword}"/> 
+            </div> 
+            
+            <div>
+                尚未註冊嗎?<apex:commandLink value="註冊" action="{!gotoRegister}"/>
+            </div>
+            liff:{!LIFFID};uid:{!userLineID}
+        <!--   
+            <div>
+                <apex:commandButton style="margin-top:10px" value="重設密碼" action="{!gotoResetPassword}" onclick="return checkValue();"/>
+            </div>
+        
+        <apex:outputPanel id="popup">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                <div id="messageDiv" >
+                    <p>
+                        <div id="myMessage">
+                        </div>
+                    </p>
+               </div>
+                <apex:commandButton value="確定" action="{!gotoLogin}" rerender="popup"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+-->
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/>
+        
+        <script type="text/javascript">
+                function showResponse()
+                {
+                    if('{!Status}' === "2" || '{!Status}' === "4")
+                    {
+                        document.getElementById('MobileErr').style.display = '';
+                        document.getElementById('{!$Component.Mobile}').style.borderColor = 'red';
+                    }
+                    else
+                    {
+
+                    }
+                    if('{!Status}' === "3")
+                    {
+                        document.getElementById('PwdErr').style.display = '';
+                        document.getElementById('{!$Component.Pwd}').style.borderColor = 'red';
+                    }
+                    else
+                    {
+
+                    }
+                }
+                
+                showResponse();
+            </script>
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+			<script type="text/javascript">
+				window.onload = function (e) {
+					liff.init({liffId: '{!LIFFID}'}, function () {
+						checkLiffLogin(liff.getContext().userId);
+                    }).then(() => {
+                    }).catch((err) => {
+                        checkLiffLogin(liff.getContext().userId);
+                    });
+				};
+
+				function checkLiffLogin(mLineID)
+                 {
+                     document.getElementById('{!$Component.userLineID}').value = mLineID;
+                     Visualforce.remoting.Manager.invokeAction(
+		                '{!$RemoteAction.Line_webBase.checkLinkLine}',
+						mLineID,
+		                function(result, event){
+		                     if(event.status){
+		                         if(result === "NO_CustomerUser")
+		                           {
+                                       //document.getElementById('needLoginDiv').style.display = '';
+                                       //document.getElementById('myDiv').style.display = '';
+                                       //alert('請先登入會員');
+                                       //window.location = 'lineLogin?loginStep=1';  
+		                           }
+		                           else
+		                           {
+                                       var d = new Date();
+									   d.setTime(d.getTime()+(1*24*60*60*1000));
+									   var expires = "expires="+d.toGMTString();
+									   //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+									   //網頁關掉就清掉cookies
+									   document.cookie = "apex__sessionID="+result+"; path=/";
+		                           	   var sid = setInterval(function(){ 
+									   clearInterval(sid); 
+                                       window.location = 'LineLogin';
+                                                             }, 350);
+		                           }
+							}
+						},
+		                    {escape: true}
+	                    );
+					}
+                              
+                   function closeLIFF()
+                   {
+                      liff.closeWindow();
+                   }
+			</script>
+		</apex:outputPanel>
+
+             <script type="text/javascript">
+                    function showMessageDiv()
+                    {
+                        document.getElementById('messageDiv').style.display = '';
+                    }
+                    function hideMessageDiv()
+                    {
+                        document.getElementById('messageDiv').style.display = 'none';
+                    }
+            </script>
+
+            <script type="text/javascript">
+                function showMessage()
+                {
+                    if('{!Response}' === "")
+                    {
+
+                    }
+                    else
+                    {
+                        document.getElementById('myMessage').innerHTML = '{!Response}';
+                        showMessageDiv();
+                    }
+                }
+
+                showMessage();
+            </script>
+        </apex:form>    
+    </body>   
+</apex:page>

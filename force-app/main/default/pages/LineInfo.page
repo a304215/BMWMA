@@ -1,0 +1,409 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <title>會員資料</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+        <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+        
+        <!--用Apex:Tab & javascript 會有衝突QQ -->
+        <script type="text/javascript" language="javascript">
+        if(jQuery) {
+            jQuery.noConflict();
+        }
+        </script>
+        
+        <style type="text/css">
+            .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 8%;
+            padding:10px;
+            position: absolute;
+            width: 300px;          
+            top:100px; 
+            }
+            body{
+            text-align: center;
+            }
+            html {
+            text-align: center;
+            }
+        </style>
+    </head>
+    
+    <apex:tabPanel switchType="server" selectedTab="{!selectedTab}" id="dataTabPanel" >
+        <apex:tab label="基本資料" id="Tab1"> 
+            <body>
+                <apex:form >
+                    <apex:outputPanel id="thePanelWrapper" layout="none" rendered="{!isEdit==false}">
+                        <div>
+                            <label class="label">姓氏 </label>
+                            <apex:outputField style="margin-top:10px" value="{!loginCustomer.LastName__c}"/>
+                        </div>
+                        <div>
+                            <label class="label">名字 </label>
+                            <apex:outputField style="margin-top:10px" value="{!loginCustomer.FirstName__c}"/>
+                        </div>
+                        <div>
+                            <label class="label">生日 </label>
+                            <apex:outputField style="margin-top:10px" value="{!loginCustomer.Birthday__c}"/>
+                        </div>
+                        <div>
+                            <label class="label">Email </label>
+                            <apex:outputField style="margin-top:10px" value="{!loginCustomer.Email__c}"/>
+                            
+                        </div>
+                        <div>
+                            <label class="label">住址 </label>
+                            <apex:outputField style="margin-top:10px" value="{!loginCustomer.Address__c}"/>
+                        </div>
+                        
+                        <apex:commandButton style="margin-top:10px;margin-left:10px" value="修改" action="{!EditMe}"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel layout="none" rendered="{!isEdit}">
+                        <div>
+                            <label class="label">姓氏 </label>
+                            <apex:inputText id="LastName" style="margin-top:10px" value="{!loginCustomer.LastName__c}"/>
+                        </div>
+                        <div>
+                            <label class="label">名字 </label>
+                            <apex:inputText id="FirstName" style="margin-top:10px" value="{!loginCustomer.FirstName__c}"/>
+                        </div>
+                        <div>
+                            <label class="label">生日 </label>
+                            <apex:inputField id="Birthday" style="margin-top:10px" value="{!loginCustomer.Birthday__c}"/>
+                        </div>
+                        <div>
+                            <label class="label">Email </label>
+                            <apex:inputText id="Email-1" style="margin-top:10px" value="{!loginCustomer.Email__c}"/>
+                            
+                        </div>
+                        <div>
+                            <label class="label">住址 </label>
+                            <apex:inputText id="Address" style="margin-top:10px" value="{!loginCustomer.Address__c}"/>
+                        </div>
+                        
+                        <apex:commandButton style="margin-top:10px;margin-left:10px" value="確認修改" action="{!SaveRegisterMember}" onclick="return checkValue();"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel id="popup">
+                        <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}" >
+                            <div id="messageDiv" >
+                                <p>
+                                    <div id="myMessage">
+                                </div>
+                            </p>
+                        </div>
+                        <apex:commandButton value="確定" action="{!gotoBinding}" rerender="popup" />
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                <apex:inputHidden id="userLineID" value="{!userLineID}"/>
+                
+                <apex:outputPanel rendered="{!not(isLogin)}">
+                    <script type="text/javascript">
+                    window.onload = function (e) {
+                        liff.init({liffId: '{!LIFFID}'}, function () {
+                            checkLiffLogin(liff.getContext().userId);
+                        });
+                    };
+                    
+                    function checkLiffLogin(mLineID)
+                    {
+                        document.getElementById('{!$Component.userLineID}').value = mLineID;
+                        Visualforce.remoting.Manager.invokeAction(
+                            '{!$RemoteAction.Line_webBase.checkLinkLine}',
+                            mLineID,
+                            function(result, event){
+                                if(event.status){
+                                    if(result === "NO_CustomerUser")
+                                    {
+                                        //document.getElementById('needLoginDiv').style.display = '';
+                                        //document.getElementById('myDiv').style.display = '';
+                                        alert('請先登入會員');
+                                        //window.location = 'lineLogin?loginStep=1';   
+                                    }
+                                    else
+                                    {
+                                        var d = new Date();
+                                        d.setTime(d.getTime()+(1*24*60*60*1000));
+                                        var expires = "expires="+d.toGMTString();
+                                        //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+                                        //網頁關掉就清掉cookies
+                                        document.cookie = "apex__sessionID="+result+"; path=/";
+                                        window.location = 'LineInfo';
+                                    }
+                                }
+                            },
+                            {escape: true}
+                        );
+                    }
+                    
+                    function closeLIFF()
+                    {
+                        liff.closeWindow();
+                    }
+                    </script>
+                </apex:outputPanel>
+                
+                <script type="text/javascript">
+                function showMessageDiv()
+                {
+                    document.getElementById('messageDiv').style.display = '';
+                }
+                function hideMessageDiv()
+                {
+                    document.getElementById('messageDiv').style.display = 'none';
+                }
+                </script>
+                
+                <script type="text/javascript">
+                function showMessage()
+                {
+                    if('{!Response}' === "")
+                    {
+                        
+                    }
+                    else
+                    {
+                        document.getElementById('myMessage').innerHTML = '{!Response}';
+                        showMessageDiv();
+                    }
+                }
+                
+                showMessage();
+                
+                </script>
+                
+            </apex:form> 
+        </body>
+    </apex:tab>
+    
+    <apex:tab label="愛車資料" id="Tab2"> 
+        <body>
+            <apex:form >
+                <apex:outputPanel rendered="{!BindingAssetList.size ==0}">
+                    目前尚無車輛綁定紀錄。        
+                </apex:outputPanel>
+                <apex:repeat value="{!BindingAssetList}" var="loopBindingAsset" rendered="{!isEditAsset==false}">
+                    <div>
+                        <span>
+                            車牌：
+                            {!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '未驗證'+'('+loopBindingAsset.Asset_UserText__c+')', loopBindingAsset.Asset__r.NumberPlate__c)}
+                        </span>
+                    </div>
+                    <div>
+                        <span style="margin-left:10px">
+                            車型：
+                            {!if(loopBindingAsset.Asset__r.CarType__c==null, '未驗證', loopBindingAsset.Asset__r.CarType__c)}</span>
+                    </div>
+                    <div>
+                        {!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '我們正在處理您的車牌號碼'+'：'+loopBindingAsset.Asset_UserText__c+' 認證作業，請稍後，認證完成就可以開始進行線上預約囉！', loopBindingAsset.Asset__r.CarType__c)}
+       				</div>   
+                    <!--
+                    <div>
+                        <span>
+                            掛牌日：
+                            <apex:outputText value="{0,date,yyyy/MM/dd}">
+                                <apex:param value="{!loopBindingAsset.Asset__r.PurchaseDate }"/>
+                            </apex:outputText>
+                        </span>
+                    </div> 
+-->
+                    <!--
+                    <div>
+                        <apex:commandButton value="移除車輛" action="{!deleteBindingAsset}" onclick="passMe('{!loopBindingAsset.id}');"/>
+                    </div>
+                    -->
+                    <!--
+                    <div>
+                        <apex:commandButton value="移除車輛" action="{!ChooseDeleteReason}" onclick="passMe('{!loopBindingAsset.id}');"/>
+                    </div>
+-->
+                    <br/>    
+                </apex:repeat>
+                
+                <apex:repeat value="{!BindingAssetList}" var="loopBindingAsset" rendered="{!isEditAsset}">
+                    <div>
+                        <span>
+                            車牌：
+                            {!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '未驗證'+'('+loopBindingAsset.Asset_UserText__c+')', loopBindingAsset.Asset__r.NumberPlate__c)}
+                        </span>
+                    </div>
+                    <div>
+                        <span style="margin-left:10px">
+                            車型：
+                            {!if(loopBindingAsset.Asset__r.CarType__c==null, '未驗證', loopBindingAsset.Asset__r.CarType__c)}</span>
+                    </div>
+                    <div>
+                        {!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '我們正在處理您的車牌號碼'+'：'+loopBindingAsset.Asset_UserText__c+' 認證作業，請稍後，認證完成就可以開始進行線上預約囉！', loopBindingAsset.Asset__r.CarType__c)}
+                    </div>   
+                    <!--
+                    <div>
+                        <span>
+                            掛牌日：
+                            <apex:outputText value="{0,date,yyyy/MM/dd}">
+                                <apex:param value="{!loopBindingAsset.Asset__r.PurchaseDate }"/>
+                            </apex:outputText>
+                        </span>
+                    </div> 
+-->
+                    <!--
+                    <div>
+                        <apex:commandButton value="移除車輛" action="{!deleteBindingAsset}" onclick="passMe('{!loopBindingAsset.id}');"/>
+                    </div>
+                    -->
+                    <div>
+                        <apex:commandButton value="移除車輛" action="{!ChooseDeleteReason}" onclick="passMe('{!loopBindingAsset.id}');"/>
+                    </div>
+                    <br/>    
+                </apex:repeat>
+                
+                <apex:commandButton style="margin-top:50px" value="編輯" action="{!EditAsset}" rendered="{!isEditAsset==false}"/>
+                <apex:commandButton style="margin-top:50px" value="新增綁定車輛" action="{!BindingPopup}" onclick="return checkValue();"/>
+                
+                <apex:inputHidden id="deleteBindingId" value="{!deleteBindingId}" />         
+                
+                <apex:outputPanel id="popup">
+                    <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}" >
+                        <div id="messageDiv" >
+                            <p>
+                                <div id="myMessage">
+                            </div>
+                        </p>
+                    </div>
+                    <apex:commandButton value="確定" action="{!gotoBinding}" rerender="popup" />
+                </apex:outputPanel>
+            </apex:outputPanel>
+            
+            <apex:outputPanel id="Casepopup">
+                <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayCasePopUp}" >
+                    <div id="messageDiv" >
+                        <p>
+                            <div id="myMessage">
+                        </div>
+                    </p>
+                </div>
+                <apex:commandButton value="返回" action="{!gotoBinding}" rerender="Casepopup" />
+                <apex:commandButton value="新增客服個案" action="{!CreateCase}" rerender="Casepopup" oncomplete="window.location.reload();"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        
+        <apex:outputPanel id="Bindingpopup">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayBindingPopUp}" >
+                <div>
+                    新增車輛
+                </div>    
+                <div>
+                    <label class="label">車牌號碼 </label>
+                    <apex:inputText id="Name" styleClass="form-control" value="{!myasset}" html-placeholder="輸入車牌號碼"/> 
+                    
+                    <apex:commandButton style="margin-top:10px;margin-left:10px" value="驗證" action="{!BindingAsset}" onclick="return checkValue();"/>
+                </div>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        
+        <apex:outputPanel id="Reasonpopup">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayReasonPopUp}" >
+                <div>
+                    移除原因
+                </div>    
+                <div>
+                    <apex:selectRadio value="{!reason}">
+                        <apex:selectoptions value="{!ReasonList}"></apex:selectoptions>
+                    </apex:selectRadio>
+                    <apex:commandButton value="取消" action="{!gotoBinding}" rerender="Casepopup" />
+                    <apex:commandButton style="margin-top:10px;margin-left:10px" value="送出" action="{!deleteBindingAsset}"/>
+                </div>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/>
+        <apex:outputPanel rendered="{!not(isLogin)}">
+            <script type="text/javascript">
+            window.onload = function (e) {
+                liff.init({liffId: '{!LIFFID}'}, function () {
+                    checkLiffLogin(liff.getContext().userId);
+                });
+            };
+            
+            function checkLiffLogin(mLineID)
+            {
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.Line_webBase.checkLinkLine}',
+                    mLineID,
+                    function(result, event){
+                        if(event.status){
+                            if(result === "NO_CustomerUser")
+                            {
+                                //document.getElementById('needLoginDiv').style.display = '';
+                                //document.getElementById('myDiv').style.display = '';
+                                alert('請先登入會員');
+                                //window.location = 'lineLogin?loginStep=1';   
+                            }
+                            else
+                            {
+                                var d = new Date();
+                                d.setTime(d.getTime()+(1*24*60*60*1000));
+                                var expires = "expires="+d.toGMTString();
+                                //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+                                //網頁關掉就清掉cookies
+                                document.cookie = "apex__sessionID="+result+"; path=/";
+                                window.location = 'LineInfo';
+                            }
+                        }
+                    },
+                    {escape: true}
+                );
+            }
+            
+            function closeLIFF()
+            {
+                liff.closeWindow();
+            }
+            </script>
+        </apex:outputPanel>
+        
+        
+            <script type="text/javascript">
+            function showMessageDiv()
+            {
+                document.getElementById('messageDiv').style.display = '';
+            }
+            function hideMessageDiv()
+            {
+                document.getElementById('messageDiv').style.display = 'none';
+            }
+            </script>
+            
+            <script type="text/javascript">
+            function showMessage()
+            {
+                if('{!Response}' === "")
+                {
+                    
+                }
+                else
+                {
+                    document.getElementById('myMessage').innerHTML = '{!Response}';
+                    showMessageDiv();
+                }
+            }
+            
+            showMessage();
+            </script>
+            
+            <script type="text/javascript">
+            function passMe(obj)
+            {
+                document.getElementById('{!$Component.deleteBindingId}').value = obj;
+            }
+            </script>
+                 </apex:form>    
+            </body>   
+        </apex:tab>
+    </apex:tabPanel>  
+</apex:page>

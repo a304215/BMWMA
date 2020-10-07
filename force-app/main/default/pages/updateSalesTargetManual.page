@@ -1,0 +1,25 @@
+<apex:page standardController="SalesTarget__c" extensions="updateSalesTargetManual" action="{!checkScheduleStatus}">
+    <apex:includeScript value="{! $Resource.SurveyForce_jquery}"/>
+    <apex:stylesheet value="{! $Resource.SurveyForce_SLDS + '/assets/styles/salesforce-lightning-design-system-vf.min.css'}"/>    
+
+  <!-- Begin Default Content REMOVE THIS -->
+    <apex:form >
+        <apex:outputLabel >計算年份：</apex:outputLabel>
+        <apex:inputField value="{!SalesTarget__c.TargetYear__c}" /> <br />
+        <apex:outputLabel >計算月份：</apex:outputLabel>
+        <apex:inputField value="{!SalesTarget__c.TargetMonth__c}" />
+        <br/>
+        <apex:commandButton styleClass="slds-button slds-button--brand" action="{!startCalculate}" value="開始計算" />
+        <br/>
+        <apex:commandButton styleClass="slds-button slds-button--brand" action="{!scheduleClearWaveSource}" value="開始排程" />
+
+    </apex:form>
+  <h1>手動計算指定月份之業務銷售目標</h1>
+    {!CalculateResult}
+  <br/>
+  <br/>
+  <h1>手動計算指定月份之WaveKPISorce</h1>
+  <br/>
+    {!CalculateResult2}
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

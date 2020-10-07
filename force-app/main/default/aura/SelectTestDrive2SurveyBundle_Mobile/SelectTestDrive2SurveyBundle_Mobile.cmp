@@ -1,0 +1,10 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<div class="slds">
+        <div class="slds-card">
+            <c:SelectTestDriveReservation_Mobile />
+        </div>
+    </div>
+    <ui:scrollerWrapper class="sWrapTest">
+        <c:SurveyComponent_Mobile iframeUrl="https://pangerman--lead01.lightning.force.com/apex/takesurvey" surveyId="a071s000000xR4MAAU"/>
+    </ui:scrollerWrapper>
+</aura:component>

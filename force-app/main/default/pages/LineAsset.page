@@ -1,0 +1,517 @@
+<apex:page controller="Line_webBase" cache="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0" action="{!checkIsLogin}">
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <title>BMW</title>
+  <meta name="description" content=" " />
+  <meta name="author" content=" " />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- css -->
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/main-mobile.css'}" />
+  <link rel="stylesheet" href="{! $Resource.linePage + '/font.css'}" />
+
+  <!-- lity lightbox -->
+  <link href="{! $Resource.linePageLity + '/lity/dist/lity.css'}" rel="stylesheet"/>
+  <script src="{! $Resource.linePageLity + '/lity/vendor/jquery.js'}"></script>
+  <script src="{! $Resource.linePageLity + '/lity/dist/lity.js'}"></script>
+
+  <!-- icon font -->
+  <link href="{! $Resource.linePageWebFont + '/webfont/css/all.css'}" rel="stylesheet"/>
+
+  <!--google font-->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!--jq-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    
+  <style type="text/css">
+      .editbtn{    
+          width: 115px;
+          height: 40px;
+          background-color: #1c69d4;
+          color: #fff;
+          outline: none;
+          border: solid 2px #1c69d4;
+          font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+              "Noto Sans TC";
+          font-size: 15px;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.67;
+          letter-spacing: 1.5px;
+          text-align: center;
+          margin-right: 10px;
+          display: flex;
+          align-items: center;
+          padding-left: 12px;
+          justify-content: center;
+      }
+    
+    .go-to-bookBtn {
+        outline: none;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+            "Noto Sans TC";
+        color: #1c69d4;
+        letter-spacing: 1.5px;
+        font-size: 15px;
+        width: 315px;
+        height: 45px;
+        border: solid 2px #1c69d4;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        top: 0;
+        left: calc(50% - 157.5px);
+        margin: 30px 0 0 0;
+     }
+    
+      .inline {
+        position: fixed;
+        background: #fff;
+        width: 315px;
+        height: auto;
+        box-shadow: 0 10px 20px 0 rgba(5, 45, 84, 0.2);
+        border: solid 1px #d8dce0;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+	}
+    
+    .whydelet-othertext {
+        width: 275px;
+        height: 95px;
+        border: solid 1px #8e8e8e;
+    }
+    
+    .sandoutBtn {
+        width: 275px;
+        height: 45px;
+        border: solid 2px #1c69d4;
+        outline: none;
+        font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+            "Noto Sans TC";
+        font-size: 16px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 1.5px;
+        text-align: center;
+        color: #1c69d4;
+        background-color: #fff;
+        margin-top: 20px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+  }
+    
+    .showoffflexArea {
+      display: block;
+      width: 375px;
+      height: auto;
+      position: relative;
+      left: calc(50% - 187.5px);
+  }
+    
+    .cancelBtn {
+      width: 153px;
+      height: 45px;
+      border: solid 2px #1c69d4;
+      outline: none;
+      font-family: "BMWTypeNextLatinTT-Bold", "arudjingxiheipe1xg30_md",
+        "Noto Sans TC";
+      font-size: 15px;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.67;
+      letter-spacing: 1.5px;
+      text-align: center;
+      color: #1c69d4;
+      background-color: #fff;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+  }
+    
+    .squaredTwo {
+      width: 28px;
+      height: 28px;
+      position: relative;
+      margin: 20px ;
+      background: #ffffff;
+      label {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      &amp;after {
+      content: '';
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border: 3px solid #ffffff;
+      background: #86ad1d;
+      border-top: none;
+      border-right: none;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+    &amp;hover::after {
+      opacity: 0.3;
+    }
+  }
+  input[type=checkbox] {
+    visibility: hidden;
+    &amp;checked + label:after {
+      opacity: 1;
+    }    
+  }
+}
+  </style>
+
+</head>
+
+<body>
+  <apex:form >
+  <!-- container-->
+  <div class="w_G-51-">
+    <!-- svg -->
+    <div class="member-header-pattern-copy">
+      <img src="{! $Resource.linePage + '/img/bmw-white-logo.svg'}" class="BMW_White_Logo" />
+      <p class="header-tittle">會員資料</p>
+    </div>
+    <div class="Rectangle">
+      <div class="main">
+        <ul class="main-tittle" id="toptittle">
+          <li style="border-bottom: solid 4px #d6d6d6" >
+            <a href="#member">
+          	<apex:commandLink action="{!gotoLineModify}" value=" 基本資料" style="text-decoration:none; color: #8e8e8e"/></a>
+          </li>
+          <li class="active">
+              <a href="#lovecars">愛車資料</a>     
+          </li>
+        </ul>
+        <!-- 愛車資料..新增車牌號碼..點新增才會打開-->
+        <ul class="main-go-back-tittle" style="display: none;">
+          <a href="w_G5.1.html">
+            <li><i class="fas fa-chevron-left" style="margin-right: 10px;"></i>返回</li>
+          </a>
+        </ul>
+
+        <!-- 愛車資料-->
+        <apex:outputPanel rendered="{!BindingAssetListSuccess.size == 0}">
+          <p style="margin-bottom:30px">
+            目前尚無愛車資料。
+          </p>
+        </apex:outputPanel>
+        <apex:repeat value="{!BindingAssetListSuccess}" var="loopBindingAsset" rendered="{!isEditAsset==false}">
+        <div class="lovecars" id="lovecars">
+          <div class="member-lovecars">
+            <div class="car-choice" id="car-1">
+                    <input type="checkbox" value="1" name="chooce" id="chooce1" style="display: none;"/><br/>
+                    <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <div class="car_m">
+                <div class="car-firstline_m">
+                  <a class="car-name_m">車牌</a>
+                  <a class="car-name-detail_m">{!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '未驗證'+'('+loopBindingAsset.Asset_UserText__c+')', loopBindingAsset.Asset__r.NumberPlate__c)}</a>
+                </div>
+                <div class="car-secondline_m">
+                  <a class="car-style_m">車型</a> <a class="car-style-detail_m">{!if(loopBindingAsset.Asset__r.CarType__c==null, '未驗證', loopBindingAsset.Asset__r.CarType__c)}</a>
+                </div>
+              </div>
+
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">{!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '未驗證'+'('+loopBindingAsset.Asset_UserText__c+')', loopBindingAsset.Asset__r.NumberPlate__c)}</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">{!if(loopBindingAsset.Asset__r.CarType__c==null, '未驗證', loopBindingAsset.Asset__r.CarType__c)}</a>
+            </div>
+          </div>
+        </div>
+      </apex:repeat>
+              
+      <apex:outputPanel rendered="{!and(isEditAsset==false,BindingAssetList.size > 0)}" >
+          <div class="showoffflexArea" style="bottom:20px;">
+            <div class="system-notice">
+              您的車牌號碼: 
+                <apex:repeat value="{!BindingAssetList}" var="loopBindingAsset">
+                    {!IF(BindingAsset_index_map[loopBindingAsset] == lastindexofBindingAsset,loopBindingAsset.Asset_UserText__c,loopBindingAsset.Asset_UserText__c+'、')}   
+                </apex:repeat>正在處理中，為提供給您更好的服務與個資保護，我們將會有服務專人與您聯繫確認相關事宜，感謝您的耐心等待！  
+          </div>      
+        </div>
+      </apex:outputPanel>
+              
+      <apex:repeat value="{!BindingAssetListSuccess}" var="loopBindingAsset" rendered="{!isEditAsset}">
+        <div class="lovecars" id="lovecars">
+          <div class="member-lovecars">
+            <div class="car-choice" id="car-1">
+                    <apex:inputCheckbox styleclass="squaredTwo" id="deleteBindingId" onclick="passMe('{!loopBindingAsset.id}');" />
+                        <label for="squaredTwo"></label>
+                    <img src="{! $Resource.linePage + '/img/bmw-car.svg'}" class="bmw-car"/>
+              <div class="car_m">
+                <div class="car-firstline_m">
+                  <a class="car-name_m">車牌</a>
+                  <a class="car-name-detail_m">{!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '未驗證'+'('+loopBindingAsset.Asset_UserText__c+')', loopBindingAsset.Asset__r.NumberPlate__c)}</a>
+                </div>
+                <div class="car-secondline_m">
+                  <a class="car-style_m">車型</a> <a class="car-style-detail_m">{!if(loopBindingAsset.Asset__r.CarType__c==null, '未驗證', loopBindingAsset.Asset__r.CarType__c)}</a>
+                </div>
+              </div>
+
+              <a class="car-name">車牌</a>
+              <a class="car-name-detail">{!if(loopBindingAsset.Asset__r.NumberPlate__c==null, '未驗證'+'('+loopBindingAsset.Asset_UserText__c+')', loopBindingAsset.Asset__r.NumberPlate__c)}</a>
+              <a class="car-style">車型</a>
+              <a class="car-style-detail">{!if(loopBindingAsset.Asset__r.CarType__c==null, '未驗證', loopBindingAsset.Asset__r.CarType__c)}</a>
+            </div>
+          </div>
+        </div>
+      </apex:repeat>
+      
+      <apex:inputHidden id="deleteBindingId" value="{!deleteBindingId}" />
+              
+          <!--把圖案放左邊 但連結只有字有效QQ    
+          <div class="add-car">
+              <apex:image value="{! $Resource.linePage + '/img/add.svg'}" style="margin-left:100px"/>
+                  <apex:commandLink styleclass="add-car" id="add-car" action="{!gotoLineBinding}" value="新增車輛" style="margin-right:100px"/> 
+          </div>
+          -->
+          
+          <!--全區可以連結 但圖案在右邊QQ -->
+          <div class="add-car" >
+              <apex:commandLink styleclass="add-car" id="member-edit" action="{!gotoLineBinding}" value="新增車輛">
+                  <apex:image value="{! $Resource.linePage + '/img/add.svg'}"/>
+              </apex:commandLink>
+          </div>
+     
+                  <br/>
+                  
+          <div class="buttons">
+            <apex:commandLink styleclass="editbtn" id="car-edit" value="編輯" action="{!EditAsset}" rendered="{!isEditAsset==false}">
+                <apex:image id="theImage" value="{! $Resource.linePage + '/img/edit.svg'}" />
+            </apex:commandLink>
+
+            <apex:commandLink styleclass="editbtn" style="width: 153px;height: 45px" id="car-delete" value="移除" action="{!ChooseDeleteReason}" rendered="{!isEditAsset}">
+                <apex:image value="{! $Resource.linePage + '/img/trashcan.svg'}" />
+            </apex:commandLink>
+                    
+            <apex:commandLink styleclass="cancelBtn" id="car-cancel" value="取消" action="{!gotoBinding}" rendered="{!isEditAsset}">
+            </apex:commandLink>
+          </div>
+                    
+      <div class="buttons">      
+          <apex:commandLink styleclass="go-to-bookBtn" action="{!gotoService}" value="前往線上售後預約服務">
+              <apex:image value="{! $Resource.linePage + '/img/external-link.svg'}" />            
+          </apex:commandLink>          
+      </div>
+                       
+      <!--           
+      <div class="buttons">
+                    <button class="edit" id="car-edit"><img src="{! $Resource.linePage + '/img/edit.svg'}" id="edit-2"/><img src="{! $Resource.linePage + '/img/edit.svg'}"
+                    id="edit-hover-2"/><a>編輯</a></button>
+            <button class="delet" href="#inline" data-lity="true" style="display: none;"><img src="{! $Resource.linePage + '/img/trashcan.svg'}"
+                    id="trashcan"/><img src="{! $Resource.linePage + '/img/trashcan.svg'}" id="trashcan-hover"/><a>移除</a></button>
+            <button class="cancel" id="carmove-cancel" style="display: none;">取消</button>
+
+          </div>
+       -->
+ 
+          <!--lity hide box -->
+          <apex:outputPanel styleClass="inline" layout="block" rendered="{!displayReasonPopUp}" >
+            <apex:commandLink action="{!gotoBinding}" oncomplete="window.location.reload();" 
+                  styleclass="fas fa-times pressX" style="margin: 0 0 0 auto;font-size: 20px;text-decoration:none;color: #262626">
+            </apex:commandLink>
+            <p>移除原因</p>
+            <div class="checkboxinlity">      
+                <apex:selectRadio value="{!reason}" layout="pageDirection" styleclass="whydelet" style="margin-left:0px">
+                    <apex:selectoptions value="{!ReasonList}" ></apex:selectoptions>
+                        <apex:actionSupport event="onchange" reRender="panelID" />
+                </apex:selectRadio>            
+                <!--
+                    <div class="whydelet"><input type="checkbox" value="1" name="whydelet-a" id="whydelet-a"/>車輛售出</div>
+                --> 
+            </div>
+
+            <div class="whydelet-other">
+                <apex:outputpanel id="panelID">
+                    <apex:outputtext rendered="{!reason=='其他'}">
+                        <p>補充說明移除原因</p>
+                        </apex:outputtext>
+                    <apex:inputText value="{!reasonText}" rendered="{!reason=='其他'}" styleclass="whydelet-othertext"/>
+                </apex:outputpanel>
+            </div>          
+                <apex:commandLink styleclass="sandoutBtn" id="car-editBtn" action="{!deleteBindingAsset}" value="送出" />
+          </apex:outputPanel>
+              
+        <!-- 新增車牌號碼..點新增才會打開-->
+        <div class="lovecars" id="addcar-number" style="display: none;">
+          <div class="member-addcars">
+            <div class="a7">
+              <label for="updated-number">請輸入要新增的車牌號碼</label>
+                    <input type="text" id="updated-number" name="updated-number" placeholder="請輸入車牌號碼"/></div>
+            <div class="buttons">
+              <button class="updated" type="submit" onclick="location.href='w_G5.1.html'"><a>確認新增</a></button>
+            </div>
+          </div>
+        </div>
+                  
+        <apex:outputPanel id="pwdpopup">
+          <apex:outputPanel styleClass="inline" layout="block" rendered="{!displayPwdPopUp}" >
+            <div>
+                您尚未完成註冊, 請先設定一組密碼並填寫個人基本資料
+            </div>
+            <apex:commandButton value="確定" action="{!gotoPassword}" rerender="popup" />
+          </apex:outputPanel>
+        </apex:outputPanel>
+        
+        <apex:inputHidden id="userLineID" value="{!userLineID}"/> 
+        
+        <apex:outputPanel rendered="{!not(isLogin)}">
+			<script type="text/javascript">
+				window.onload = function (e) {
+					liff.init({liffId: '{!LIFFID}'}, function () {
+						checkLiffLogin(liff.getContext().userId);
+                    }).then(() => {
+                    }).catch((err) => {
+                        checkLiffLogin(liff.getContext().userId);
+                    });
+				};
+
+				function checkLiffLogin(mLineID)
+                 {
+                     document.getElementById('{!$Component.userLineID}').value = mLineID;
+                     Visualforce.remoting.Manager.invokeAction(
+		                '{!$RemoteAction.Line_webBase.checkLinkLine}',
+						mLineID,
+		                function(result, event){
+		                     if(event.status){
+		                         if(result === "NO_CustomerUser")
+		                           {
+                                       //document.getElementById('needLoginDiv').style.display = '';
+                                       //document.getElementById('myDiv').style.display = '';
+									   alert('請先登入會員');
+                                       //window.location = 'lineLogin?loginStep=1';   
+		                           }
+                                   else if(result === "NOPwd")
+                                   {
+                                       alert('您尚未設定密碼, 請先設定密碼'); 
+                                       window.location = 'LinePassword'; 
+                                   }
+		                           else
+		                           {
+		                           	   var d = new Date();
+									   d.setTime(d.getTime()+(1*24*60*60*1000));
+									   var expires = "expires="+d.toGMTString();
+									   //document.cookie = "apex__sessionID="+result+"; expires="+expires+"; path=/";
+									   //網頁關掉就清掉cookies
+									   document.cookie = "apex__sessionID="+result+"; path=/";
+		                           	   var sid = setInterval(function(){ 
+									   clearInterval(sid); 
+                                       window.location = 'LineAsset';
+                                                             }, 350);
+                    
+		                           }
+							}
+						},
+		                    {escape: true}
+	                    );
+					}
+                              
+                   function closeLIFF()
+                   {
+                      liff.closeWindow();
+                   }
+			</script>
+        </apex:outputPanel>
+
+        <!--jq hide buttons, and add attr-->
+        <script>
+          $("#member-edit").click(function () {
+            $("#member-cancel, #member-save").show();
+            $("#member-edit").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', false);
+          });
+
+          $("#member-save, #member-cancel").click(function () {
+            $("#member-edit").show();
+            $("#member-save, #member-cancel").hide();
+            $("#lastname, #firstname, #male, #birthday, #email, #address").attr('disabled', true);
+          });
+
+          $(document).ready(function () {
+            $("#car-1, #car-2, #car-3").click(function () {
+              $(".system-notice").fadeToggle('slow');
+            });
+            $("#toptittle, #add-car").click(function () {
+              $(".system-notice").hide();
+            });
+          });
+
+          $("#add-car").click(function () {
+            $(".main-go-back-tittle, #addcar-number").show();
+            $(".main-tittle, #member, #lovecars").hide();
+          });
+
+
+          $(".main-go-back-tittle").click(function () {
+            $(".main-tittle, #member, #lovecars").show();
+            $(".main-go-back-tittle, #addcar-number").hide();
+          });
+
+          $("#car-edit").click(function () {
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").show();
+            $("#car-edit").hide();
+          });
+          $("#carmove-cancel, #sandout").click(function () {
+            $("#car-edit").show();
+            $("#chooce1, #chooce2, #chooce3, .delet, .cancel").hide();
+          });
+        </script>
+
+      </div>
+    </div>
+    <!--footer -->
+    <footer><a class="BMW-">BMW台灣總代理 汎德</a>
+      <ul class="BMW">
+        <li><a href="#">BMW官網</a></li>
+        <li><a href="#">全台展示中心</a></li>
+        <li><a href="#">預約賞車</a></li>
+        <li><a href="#">網站聲明</a></li>
+      </ul>
+    </footer>
+    <script>
+      $(function () {
+        var $li = $('ul.main-tittle li');
+        $($li.eq(0).addClass('active').find('a').attr('href')).siblings('.lovecars').hide();
+
+        $li.click(function () {
+          $($(this).find('a').attr('href')).show().siblings('.lovecars').hide();
+          $(this).addClass('active').siblings('.active').removeClass('active');
+        });
+      });
+    </script>
+
+    <script type="text/javascript">
+      function passMe(obj)
+        {
+           document.getElementById('{!$Component.deleteBindingId}').value = obj;
+        }
+    </script>
+</div>
+</apex:form>
+</body>
+
+</html>
+</apex:page>
