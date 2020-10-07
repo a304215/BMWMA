@@ -17,7 +17,7 @@
                 console.log(record);
                 component.set("v.line_user",record);
                 console.log("finish");
-                // this.SendMail(component);
+                this.SendMail(component);
             }
             else {
                 console.log("Failed with state: " + state);
@@ -27,7 +27,7 @@
     },
     SendMail:function(component){
         console.log("in sendMail");
-        let action = component.get('c.getRecordDetail');
+        let action = component.get('c.send_mail_with_line_user');
         action.setParams({line_user_record : component.get("v.line_user") });
         action.setCallback(this,function(response){
             var state = response.getState();

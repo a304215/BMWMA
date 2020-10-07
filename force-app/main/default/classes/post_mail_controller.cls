@@ -7,12 +7,14 @@ public with sharing class post_mail_controller {
         List<Report> returnReports = new List<Report>();
         List<Folder> matchFolders = [SELECT Id FROM Folder WHERE name =: 'BMWLinePush'];
         List<Report> qeuryAllReports = [SELECT Id, Name FROM Report WHERE OwnerId = :matchFolders.get(0).Id AND Format != 'MultiBlock'];
+        System.debug(qeuryAllReports);
         for(Report report : qeuryAllReports) {
             String reportId = (String) report.get('Id');
             Reports.ReportDescribeResult results = Reports.ReportManager.describeReport(reportId);
             Reports.ReportMetadata rm = results.getReportMetadata();
             Integer matchColumnNumber = 0;
             for(String columnName : rm.getDetailColumns()) {
+                System.debug(columnName);
                 if('Line_User__c.CustomerUser__c.Name'.equalsIgnoreCase(columnName)) {
                     matchColumnNumber++;
                 }
@@ -49,13 +51,15 @@ public with sharing class post_mail_controller {
     }
     @AuraEnabled
     public static void send_mail_with_line_user(list<string> line_user_record){
-        System.debug(line_user_record);
+        System.debug('line_user_record is'+line_user_record);
         list<string> send_mail_list = new list<string>();
         for(Integer i = 0 ; i < line_user_record.size();i++){
             if(!send_mail_list.contains(line_user_record[i])){
                 send_mail_list.add(line_user_record[i]);
             }
         }
-        System.debug(send_mail_list);
+        for(string list_email : send_mail_list){
+            
+        }
     }
 }
